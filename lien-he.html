@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Gửi yêu cầu hỗ trợ hoặc báo lỗi hệ thống GachaTracker.">
+    <title>Liên hệ | GachaTracker</title>
+</head>
+<body>
+    <header><strong>GachaTracker</strong> - Quản lý vận may của bạn!</header>
+    <nav>
+        <ul>
+            <li><a href="index.html">Trang chủ</a></li>
+            <li><a href="danh-sach.html">Danh sách Sự kiện</a></li>
+            <li><a href="chi-tiet.html">Chi tiết Vật phẩm</a></li>
+            <li><a href="gioi-thieu.html">Giới thiệu</a></li>
+            <li><a href="lien-he.html">Liên hệ & Báo lỗi</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h1>Liên hệ & Báo lỗi Gacha</h1>
+        <p>Hãy gửi thông tin nếu bạn phát hiện lịch sử quay gacha bị sai lệch.</p>
+
+        <!-- Form đầy đủ tiêu chuẩn -->
+        <form action="#" method="post">
+            <fieldset>
+                <legend>Thông tin báo lỗi</legend>
+                
+                <!-- Control 1: Text -->
+                <p>
+                    <label for="uid">UID Game (Tài khoản) *:</label>
+                    <input type="text" id="uid" name="uid" required pattern="[0-9]{9}" title="Vui lòng nhập đúng 9 chữ số UID">
+                </p>
+
+                <!-- Control 2: Email -->
+                <p>
+                    <label for="email">Email liên hệ *:</label>
+                    <input type="email" id="email" name="email" required>
+                </p>
+
+                <!-- Control 3: Number (kèm min/max) -->
+                <p>
+                    <label for="pity">Số lượt quay bị lỗi:</label>
+                    <input type="number" id="pity" name="pity" min="1" max="90">
+                </p>
+
+                <!-- Control 4: Date -->
+                <p>
+                    <label for="ngayloi">Ngày xảy ra lỗi:</label>
+                    <input type="date" id="ngayloi" name="ngayloi">
+                </p>
+
+                <!-- Control 5: Radio (nhóm radio) -->
+                <p>Mức độ nghiêm trọng:</p>
+                <ul>
+                    <li>
+                        <input type="radio" id="muc_nhe" name="mucdo" value="nhe" checked>
+                        <label for="muc_nhe">Nhẹ (Hiển thị sai)</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="muc_nang" name="mucdo" value="nang">
+                        <label for="muc_nang">Nghiêm trọng (Mất vật phẩm)</label>
+                    </li>
+                </ul>
+
+                <button type="submit">Gửi báo cáo</button>
+            </fieldset>
+        </form>
+    </main>
+
+    <footer><p>&copy; 2026 Nhóm 05 - Khoa Toán - Tin</p></footer>
+</body>
+</html>
