@@ -4,17 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Biểu mẫu báo cáo sự cố hoặc yêu cầu nhập thêm hàng hóa cho kho.">
+    <meta name="description"
+        content="Biểu mẫu báo cáo sự cố hoặc yêu cầu nhập thêm hàng hóa cho kho.">
     <title>Liên hệ & Báo cáo | MiniPos</title>
 </head>
 
 <body>
-    <header><strong>MiniPos</strong> - Quản lý bán hàng thông minh</header>
+    <header>
+        <strong>MiniPos</strong> - Quản lý bán hàng thông minh
+    </header>
 
     <nav>
         <ul>
             <li><a href="index.html">Trang chủ</a></li>
-            <li><a href="danh-sach.html">Quản lý Sản phẩm</a></li>
+            <li><a href="danh-sach.html">Danh sách Sản phẩm</a></li>
             <li><a href="chi-tiet.html">Chi tiết Hàng hóa</a></li>
             <li><a href="gioi-thieu.html">Giới thiệu Nhóm</a></li>
             <li><a href="lien-he.html">Báo cáo & Liên hệ</a></li>
@@ -23,7 +26,11 @@
 
     <main>
         <h1>Báo cáo sự cố hoặc Yêu cầu nhập kho</h1>
-        <p>Nhân viên sử dụng biểu mẫu này để gửi yêu cầu xử lý lỗi hệ thống hoặc báo cáo hết hàng tới Admin.</p>
+
+        <p>
+            Nhân viên sử dụng biểu mẫu này để gửi yêu cầu xử lý lỗi hệ thống
+            hoặc báo cáo hết hàng tới Admin.
+        </p>
 
         <form action="#" method="post">
             <fieldset>
@@ -31,38 +38,73 @@
 
                 <p>
                     <label for="manv">Mã Nhân Viên *:</label>
-                    <input type="text" id="manv" name="manhanvien" required pattern="NV[0-9]{3}"
+                    <input type="text"
+                        id="manv"
+                        name="manhanvien"
+                        required
+                        pattern="NV[0-9]{3}"
                         title="Định dạng hợp lệ: NV kèm 3 chữ số, ví dụ NV001">
                 </p>
 
                 <p>
                     <label for="email">Email công việc *:</label>
-                    <input type="email" id="email" name="email" required>
+                    <input type="email"
+                        id="email"
+                        name="email"
+                        required>
                 </p>
 
                 <p>
                     <label for="ngaybc">Ngày báo cáo:</label>
-                    <input type="date" id="ngaybc" name="ngaybaocao">
+                    <input type="date"
+                        id="ngaybc"
+                        name="ngaybaocao">
                 </p>
 
                 <p>
                     <label for="mucdo">Mức độ khẩn cấp (1 - 5):</label>
-                    <input type="number" id="mucdo" name="mucdouutien" min="1" max="5" value="3">
+                    <input type="number"
+                        id="mucdo"
+                        name="mucdouutien"
+                        min="1"
+                        max="5"
+                        value="3">
+                </p>
+
+                <p>
+                    <label for="noidung">Nội dung báo cáo *:</label><br>
+                    <textarea
+                        id="noidung"
+                        name="noidung"
+                        rows="5"
+                        cols="50"
+                        required
+                        placeholder="Nhập nội dung sự cố hoặc yêu cầu nhập hàng..."></textarea>
                 </p>
 
                 <p>Loại yêu cầu:</p>
+
                 <ul>
                     <li>
-                        <input type="radio" id="loi_ht" name="loaiyeucau" value="loi" checked>
+                        <input type="radio"
+                            id="loi_ht"
+                            name="loaiyeucau"
+                            value="loi"
+                            checked>
                         <label for="loi_ht">Lỗi phần mềm tính tiền</label>
                     </li>
+
                     <li>
-                        <input type="radio" id="nhap_kho" name="loaiyeucau" value="nhapkho">
+                        <input type="radio"
+                            id="nhap_kho"
+                            name="loaiyeucau"
+                            value="nhapkho">
                         <label for="nhap_kho">Yêu cầu nhập thêm hàng</label>
                     </li>
                 </ul>
 
                 <button type="submit">Gửi phiếu báo cáo</button>
+
             </fieldset>
         </form>
     </main>
