@@ -1,0 +1,362 @@
+/* ==========================================================================
+   1. BẢNG MÀU CHUNG CỦA NHÓM (Cập nhật mã màu của nhóm bạn vào đây nếu cần)
+   ========================================================================== */
+:root {
+  --primary-color: #0056b3;       /* Màu chủ đạo (Xanh dương) */
+  --secondary-color: #f8f9fa;     /* Màu nền phụ (Xám nhạt) */
+  --accent-color: #e9ecef;        /* Màu tạo điểm nhấn */
+  --text-color: #212529;          /* Màu chữ chính */
+  --text-light: #6c757d;          /* Màu chữ phụ */
+  --border-color: #dee2e6;        /* Màu đường viền */
+  --bg-color: #ffffff;            /* Màu nền trang */
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --border-radius: 8px;
+}
+
+
+
+
+/* ==========================================================================
+   2. RESET & CẤU HÌNH CHUNG
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+
+
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  background-color: var(--secondary-color);
+  padding: 20px;
+}
+
+
+
+
+/* ==========================================================================
+   3. BỐ CỤC CHÍNH (FLEXBOX & GRID)
+   ========================================================================== */
+header {
+  text-align: center;
+  padding: 20px 0;
+  background-color: var(--bg-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+}
+
+
+
+
+header h1 {
+  color: var(--primary-color);
+  font-size: 1.8rem;
+}
+
+
+
+
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  background-color: var(--bg-color);
+  padding: 10px;
+  border-radius: var(--border-radius);
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+}
+
+
+
+
+nav a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+
+
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+
+
+
+/* Bố cục vùng nội dung chính bằng Grid */
+main {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+
+
+
+@media (min-width: 768px) {
+  main {
+    grid-template-columns: 1.2fr 0.8fr; /* Chia làm 2 cột trên máy tính */
+  }
+ 
+  /* Cho phần thời khóa biểu trải dài hết cả 2 cột */
+  main > section:last-of-type {
+    grid-column: 1 / -1;
+  }
+}
+
+
+
+
+section, article {
+  background-color: var(--bg-color);
+  padding: 20px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+}
+
+
+
+
+section h2, article h2 {
+  color: var(--primary-color);
+  border-bottom: 2px solid var(--accent-color);
+  padding-bottom: 8px;
+  margin-bottom: 15px;
+}
+
+
+
+
+/* ==========================================================================
+   4. CHI TIẾT THÔNG TIN CÁ NHÂN & KỸ NĂNG
+   ========================================================================== */
+/* Căn chỉnh ảnh chân dung */
+img {
+  display: block;
+  border-radius: var(--border-radius);
+  margin-bottom: 15px;
+  object-fit: cover;
+  border: 3px solid var(--accent-color);
+}
+
+
+
+
+main p {
+  margin-bottom: 10px;
+}
+
+
+
+
+main p strong {
+  color: var(--primary-color);
+}
+
+
+
+
+/* Biến đổi danh sách kỹ năng thành dạng lưới (Grid) dễ đọc trên mobile */
+ul {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+
+
+
+ul li {
+  background-color: var(--secondary-color);
+  padding: 10px;
+  border-radius: 6px;
+  border-left: 4px solid var(--primary-color);
+  font-size: 0.9rem;
+}
+
+
+
+
+/* ==========================================================================
+   5. THỜI KHÓA BIỂU TRÊN MOBILE (CUỘN NGANG KHUNG RIÊNG)
+   ========================================================================== */
+/* Bao bọc bảng bằng một class hoặc cấu trúc để kích hoạt cuộn ngang */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto; /* Kích hoạt cuộn ngang khi màn hình nhỏ */
+  -webkit-overflow-scrolling: touch;
+  margin-top: 15px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+}
+
+
+
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 800px; /* Ép bảng giữ kích thước tối thiểu để không bị méo chữ */
+  background-color: var(--bg-color);
+}
+
+
+
+
+caption {
+  font-weight: bold;
+  padding: 10px;
+  color: var(--primary-color);
+}
+
+
+
+
+th, td {
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+
+
+
+thead th {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+
+
+
+tbody th {
+  background-color: var(--accent-color);
+  font-weight: bold;
+}
+
+
+
+
+/* Định dạng các ô có môn học */
+tbody td[rowspan] {
+  background-color: #e6f2ff; /* Màu nền nhẹ cho ô có lịch học */
+  color: #004085;
+  font-weight: 500;
+  border: 1px solid #b8daff;
+}
+
+
+
+
+/* ==========================================================================
+   6. FOOTER
+   ========================================================================== */
+footer {
+  text-align: center;
+  padding: 20px;
+  margin-top: 20px;
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+
+
+
+
+
+.khung-anh-dai-dien {
+    width: 100%;
+    max-width: 180px; /* Thu nhỏ ảnh một chút trên mobile cho cân đối */
+    margin: 0 auto; /* Căn giữa khối ảnh khi ở màn hình dọc */
+}
+
+
+
+
+.khung-anh-dai-dien img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: var(--bo-goc); /* Giữ bo góc vuông bo nhẹ theo style nhóm */
+    border: 3px solid var(--mau-nen-phu);
+    transition: transform 0.2s ease;
+}
+
+
+
+
+.chi-tiet-ca-nhan {
+    width: 100%;
+}
+
+
+
+
+.chi-tiet-ca-nhan p {
+    margin-bottom: 10px; /* Khoảng cách đều giữa các dòng thông tin */
+}
+
+
+
+
+/* Định dạng riêng cho danh sách kỹ năng mới */
+.tieu-de-ky-nang {
+    margin-top: 18px;
+    color: var(--mau-chinh);
+}
+
+
+
+
+.chi-tiet-ca-nhan ul {
+    padding-left: 20px;
+}
+
+
+
+
+.chi-tiet-ca-nhan li {
+    margin-bottom: 6px;
+}
+
+
+
+
+/* ==========================================================================
+   ĐIỂM NGẮT RESPONSIVE (Màn hình máy tính từ 768px trở lên)
+   ========================================================================== */
+@media (min-width: 768px) {
+    .khoi-thong-tin-chinh {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 32px;
+    }
+
+
+
+
+    .khung-anh-dai-dien {
+        flex: 0 0 200px;
+        margin: 0;
+        /* THÊM DÒNG NÀY: Đẩy ảnh xuống dưới khoảng 10px - 15px cho vừa tầm mắt */
+        margin-top: 60px;
+    }
+   
+    .chi-tiet-ca-nhan {
+        flex: 1;
+    }
+}
