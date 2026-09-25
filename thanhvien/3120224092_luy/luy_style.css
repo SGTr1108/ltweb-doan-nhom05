@@ -1,3 +1,739 @@
+
+/* ========================================
+   CSS CÁ NHÂN - TRANG GIỚI THIỆU MINIPOS
+   Giao diện hiện đại, tinh tế & responsive
+   ======================================== */
+
+
+/* ---------- 1. KHAI BÁO BIẾN MÀU ---------- */
+
+:root {
+    --mau-chinh: #1e3a8a;
+    --mau-chinh-dam: #172554;
+    --mau-chinh-nhat: #eff6ff;
+
+    --mau-nhan: #f59e0b;
+    --mau-nhan-hover: #d97706;
+
+    --mau-chu: #1f2937;
+    --mau-chu-phu: #4b5563;
+
+    --mau-nen: #f8fafc;
+    --mau-nen-card: #ffffff;
+    --mau-vien: #e2e8f0;
+
+    --bo-goc: 16px;
+    --khoang-cach: 24px;
+
+    --bong-do:
+        0 10px 25px -5px rgba(30, 58, 138, 0.08),
+        0 8px 10px -6px rgba(30, 58, 138, 0.08);
+
+    --bong-hover:
+        0 20px 35px -10px rgba(30, 58, 138, 0.15);
+}
+
+
+/* ---------- 2. THIẾT LẬP CHUNG ---------- */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
 body {
-    background-color: red !important;
-  }
+    margin: 0;
+    padding: 0;
+
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+
+    color: var(--mau-chu);
+    background: linear-gradient(
+        135deg,
+        #f1f5f9 0%,
+        #f8fafc 100%
+    );
+
+    overflow-x: hidden;
+}
+
+img {
+    max-width: 100%;
+}
+
+
+/* ---------- 3. HEADER ---------- */
+
+header {
+    padding: 36px 20px;
+    text-align: center;
+
+    color: white;
+    background: linear-gradient(
+        135deg,
+        var(--mau-chinh-dam),
+        var(--mau-chinh)
+    );
+
+    border-bottom: 5px solid var(--mau-nhan);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+
+    overflow-wrap: anywhere;
+}
+
+header p {
+    margin: 8px 0 0;
+
+    font-size: 1.05rem;
+    color: #e2e8f0;
+}
+
+
+/* ---------- 4. THANH ĐIỀU HƯỚNG ---------- */
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+    gap: 12px;
+    padding: 14px 20px;
+
+    background-color: var(--mau-nen-card);
+    border-bottom: 1px solid var(--mau-vien);
+
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+nav a {
+    display: inline-block;
+
+    padding: 8px 16px;
+
+    color: var(--mau-chinh);
+    background-color: var(--mau-chinh-nhat);
+
+    font-weight: 600;
+    text-decoration: none;
+
+    border-radius: 8px;
+
+    transition:
+        color 0.25s ease,
+        background-color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+nav a:hover {
+    color: white;
+    background-color: var(--mau-chinh);
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+}
+
+nav a:focus-visible {
+    outline: 3px solid var(--mau-nhan);
+    outline-offset: 3px;
+}
+
+
+/* ---------- 5. NỘI DUNG CHÍNH ---------- */
+
+main {
+    width: min(1100px, calc(100% - 32px));
+    margin: 35px auto;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--khoang-cach);
+}
+
+
+/* ---------- 6. SECTION VÀ ARTICLE ---------- */
+
+section,
+article {
+    width: 100%;
+    min-width: 0;
+
+    padding: 30px;
+
+    background-color: var(--mau-nen-card);
+
+    border: 1px solid var(--mau-vien);
+    border-radius: var(--bo-goc);
+
+    box-shadow: var(--bong-do);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+section:hover,
+article:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--bong-hover);
+}
+
+section h2,
+article h2 {
+    margin-top: 0;
+    margin-bottom: 22px;
+    padding-bottom: 10px;
+
+    color: var(--mau-chinh);
+    font-size: 1.45rem;
+
+    border-bottom: 3px solid var(--mau-nhan);
+
+    position: relative;
+
+    overflow-wrap: anywhere;
+}
+
+section h2::before,
+article h2::before {
+    content: "";
+
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+
+    width: 45px;
+    height: 3px;
+
+    background-color: var(--mau-chinh);
+}
+
+section h3,
+article h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+
+    color: var(--mau-chinh);
+    font-size: 1.15rem;
+}
+
+p {
+    margin: 12px 0;
+    color: var(--mau-chu-phu);
+
+    overflow-wrap: anywhere;
+}
+
+strong {
+    color: var(--mau-chinh);
+}
+
+
+/* ---------- 7. THÔNG TIN SINH VIÊN ---------- */
+
+/*
+   Bố cục trên máy tính:
+   - Tiêu đề chiếm toàn bộ chiều rộng.
+   - Ảnh nằm bên trái.
+   - Thông tin nằm bên phải.
+*/
+
+main > section:first-child {
+    display: grid;
+
+    grid-template-columns: 240px minmax(0, 1fr);
+
+    gap: 28px;
+    align-items: start;
+
+    width: 100%;
+}
+
+
+/* Tiêu đề chiếm cả hai cột */
+
+main > section:first-child h2 {
+    grid-column: 1 / -1;
+
+    margin-bottom: 0;
+}
+
+
+/* Ảnh sinh viên */
+
+main > section:first-child img {
+    display: block;
+
+    grid-column: 1;
+    grid-row: 2;
+
+    width: 100%;
+    max-width: 240px;
+    height: auto;
+
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+
+    margin: 0 auto;
+
+    border: 4px solid var(--mau-nen-card);
+    border-radius: 12px;
+
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+main > section:first-child img:hover {
+    transform: scale(1.02);
+
+    box-shadow:
+        0 15px 30px rgba(30, 58, 138, 0.2);
+}
+
+
+/* Khối thông tin sinh viên */
+
+main > section:first-child .student-info {
+    grid-column: 2;
+    grid-row: 2;
+
+    min-width: 0;
+}
+
+
+/* Các dòng thông tin */
+
+main > section:first-child .student-info p {
+    margin: 0 0 12px;
+
+    padding: 10px 14px;
+
+    background-color: var(--mau-chinh-nhat);
+
+    border-left: 4px solid var(--mau-nhan);
+    border-radius: 6px;
+
+    color: var(--mau-chu);
+
+    overflow-wrap: anywhere;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+main > section:first-child .student-info p:hover {
+    background-color: #e0f2fe;
+    transform: translateX(4px);
+}
+
+
+/*
+   Nếu phần thông tin không có class student-info,
+   các đoạn văn vẫn được hiển thị đúng cột.
+*/
+
+main > section:first-child > p,
+main > section:first-child > ul {
+    grid-column: 2;
+}
+
+
+/* ---------- 8. DANH SÁCH & KỸ NĂNG ---------- */
+
+ul {
+    margin: 10px 0;
+    padding-left: 20px;
+
+    overflow-wrap: anywhere;
+}
+
+li {
+    margin-bottom: 8px;
+    color: var(--mau-chu-phu);
+}
+
+section ul li::marker {
+    color: var(--mau-nhan);
+    font-size: 1.1rem;
+}
+
+
+/* ---------- 9. LIÊN KẾT ---------- */
+
+main a {
+    color: var(--mau-chinh);
+
+    font-weight: 600;
+    text-decoration: none;
+
+    overflow-wrap: anywhere;
+
+    transition: color 0.2s ease;
+}
+
+main a:hover {
+    color: var(--mau-nhan-hover);
+
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+
+/* ---------- 10. BẢNG THỜI KHÓA BIỂU ---------- */
+
+section:has(table) {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    min-width: 700px;
+
+    margin-top: 16px;
+
+    border-collapse: separate;
+    border-spacing: 0;
+
+    table-layout: fixed;
+
+    background-color: var(--mau-nen-card);
+
+    border-radius: 10px;
+    overflow: hidden;
+
+    border: 1px solid var(--mau-vien);
+}
+
+caption {
+    margin-bottom: 14px;
+
+    color: var(--mau-chinh);
+    font-size: 1.15rem;
+    font-weight: 700;
+
+    text-align: left;
+}
+
+th,
+td {
+    padding: 12px 10px;
+
+    text-align: center;
+    vertical-align: middle;
+
+    font-size: 0.92rem;
+
+    border-bottom: 1px solid var(--mau-vien);
+    border-right: 1px solid var(--mau-vien);
+
+    overflow-wrap: anywhere;
+}
+
+th:last-child,
+td:last-child {
+    border-right: none;
+}
+
+th:first-child,
+td:first-child {
+    width: 14%;
+}
+
+th:not(:first-child),
+td:not(:first-child) {
+    width: 12.25%;
+}
+
+thead th {
+    color: white;
+    background-color: var(--mau-chinh);
+
+    font-weight: 700;
+
+    border-bottom: 2px solid var(--mau-nhan);
+}
+
+tbody th {
+    color: var(--mau-chinh);
+    background-color: var(--mau-chinh-nhat);
+
+    font-weight: 700;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #fafbfc;
+}
+
+tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+    background-color: #fef3c7;
+}
+
+
+/* ---------- 11. CÁC KHUNG BÊN DƯỚI ---------- */
+
+/*
+   Các section từ section thứ hai trở đi
+   đều chiếm toàn bộ chiều rộng main.
+*/
+
+main > section:nth-child(n + 2),
+main > article {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-width: 0;
+}
+
+
+/* ---------- 12. FOOTER ---------- */
+
+footer {
+    margin-top: 50px;
+    padding: 32px 20px;
+
+    text-align: center;
+
+    color: white;
+    background-color: var(--mau-chinh-dam);
+
+    border-top: 5px solid var(--mau-nhan);
+}
+
+footer p {
+    margin: 0;
+    color: #e2e8f0;
+}
+
+footer a {
+    color: var(--mau-nhan);
+    font-weight: bold;
+}
+
+footer a:hover {
+    color: white;
+}
+
+
+/* ---------- 13. TABLET ---------- */
+
+@media (max-width: 900px) and (min-width: 768px) {
+    main {
+        width: calc(100% - 32px);
+    }
+
+    section,
+    article {
+        padding: 24px;
+    }
+
+    main > section:first-child {
+        grid-template-columns: 200px minmax(0, 1fr);
+        gap: 24px;
+    }
+
+    main > section:first-child img {
+        max-width: 200px;
+    }
+}
+
+
+/* ---------- 14. ĐIỆN THOẠI ---------- */
+
+@media (max-width: 767px) {
+    body {
+        font-size: 15px;
+    }
+
+    header {
+        padding: 24px 16px;
+    }
+
+    header h1 {
+        font-size: 1.7rem;
+    }
+
+    header p {
+        font-size: 0.95rem;
+    }
+
+    nav {
+        flex-direction: column;
+        align-items: stretch;
+
+        gap: 8px;
+        padding: 12px;
+    }
+
+    nav a {
+        width: 100%;
+        padding: 10px;
+
+        text-align: center;
+    }
+
+    main {
+        width: calc(100% - 20px);
+
+        margin: 20px auto;
+        gap: 16px;
+    }
+
+    section,
+    article {
+        width: 100%;
+        padding: 20px 16px;
+
+        border-radius: 12px;
+    }
+
+    section h2,
+    article h2 {
+        font-size: 1.25rem;
+        line-height: 1.4;
+    }
+
+
+    /* Thông tin sinh viên trên điện thoại */
+
+    main > section:first-child {
+        display: block;
+        width: 100%;
+    }
+
+    main > section:first-child h2 {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    main > section:first-child img {
+        display: block;
+
+        width: 200px;
+        max-width: 100%;
+        height: auto;
+
+        aspect-ratio: 3 / 4;
+
+        margin: 0 auto 24px;
+    }
+
+    main > section:first-child .student-info {
+        width: 100%;
+    }
+
+    main > section:first-child .student-info p {
+        width: 100%;
+
+        margin-bottom: 10px;
+        padding: 9px 12px;
+
+        line-height: 1.5;
+    }
+
+    main > section:first-child > p,
+    main > section:first-child > ul {
+        width: 100%;
+    }
+
+
+    /* Các khung bên dưới */
+
+    main > section:nth-child(n + 2),
+    main > article {
+        width: 100%;
+    }
+
+
+    /* Danh sách */
+
+    ul {
+        padding-left: 20px;
+    }
+
+    li {
+        margin-bottom: 6px;
+    }
+
+
+    /* Bảng có thể cuộn ngang */
+
+    section:has(table) {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    table {
+        min-width: 650px;
+        font-size: 0.82rem;
+    }
+
+    th,
+    td {
+        padding: 8px 6px;
+    }
+
+
+    /* Footer */
+
+    footer {
+        margin-top: 30px;
+        padding: 24px 16px;
+    }
+}
+
+
+/* ---------- 15. ĐIỆN THOẠI RẤT NHỎ ---------- */
+
+@media (max-width: 400px) {
+    main {
+        width: calc(100% - 16px);
+    }
+
+    section,
+    article {
+        padding: 16px 12px;
+    }
+
+    header h1 {
+        font-size: 1.45rem;
+    }
+
+    main > section:first-child img {
+        width: 170px;
+    }
+
+    main > section:first-child .student-info p {
+        font-size: 0.92rem;
+        padding: 8px 10px;
+    }
+}
+
+
+/* ---------- 16. HỖ TRỢ TRUY CẬP BÀN PHÍM ---------- */
+
+:focus-visible {
+    outline: 3px solid var(--mau-nhan);
+    outline-offset: 3px;
+}
