@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Trang giới thiệu cá nhân sinh viên thực hiện đồ án MiniPos.">
+    <title>Giới thiệu Cá nhân | MiniPos</title>
+
+    <!-- 1. Nhúng CSS dùng chung của nhóm (đường dẫn lùi 2 thư mục ra ngoài gốc dự án) -->
+    <link rel="stylesheet" href="../../css/style.css">
+
+    <!-- 2. Nhúng CSS riêng của cá nhân bạn (tạo file style-canhan.css nằm cùng thư mục với file gioithieu.html này) -->
+    <link rel="stylesheet" href="style_canhan.css">
+</head>
+
+<body>
+    <header>
+        <h1>Trang giới thiệu cá nhân</h1>
+    </header>
+
+    <nav>
+        <!-- Liên kết hai chiều: quay về trang chủ của nhóm (lùi 2 cấp thư mục) -->
+        <a href="../../index.html">Quay về Trang chủ Nhóm</a> |
+        <a href="../../gioi-thieu.html">Quay lại Giới thiệu Nhóm</a>
+    </nav>
+
+    <main>
+        <!-- Section: Giới thiệu bản thân và ảnh chân dung -->
+        <section class="profile-header">
+            <!-- Cột 1: Ảnh chân dung -->
+            <div class="profile-avatar">
+                <img src="Sang-avatar.png" alt="Ảnh chân dung sinh viên Trần Xuân Sang" class="profile-img">
+            </div>
+
+            <!-- Cột 2: Nội dung giới thiệu -->
+            <div class="profile-info">
+                <h2>Thông tin sinh viên</h2>
+                <p><strong>Họ và tên:</strong> Trần Xuân Sang</p>
+                <p><strong>Mã sinh viên:</strong> 3120224122</p>
+                <p><strong>Lớp học phần:</strong> Thiết kế và Lập trình Web - Nhóm 05</p>
+                <p>Chào mừng bạn đến với trang cá nhân của mình trong dự án phát triển hệ thống quản lý bán hàng
+                    MiniPos.</p>
+
+                <h3>Kỹ năng chuyên môn</h3>
+                <ul class="skills-list">
+                    <li>Ngôn ngữ: C++, Python</li>
+                    <li>Công cụ: Visual Studio Code, Git/GitHub</li>
+                    <li>Cơ sở dữ liệu: MySQL</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Article: Dự án và Sở thích -->
+        <article>
+            <h2>Định hướng và Sở thích</h2>
+            <p>Trong đồ án nhóm MiniPos, mình đảm nhận việc thiết kế cấu trúc giao diện HTML ngữ nghĩa, đảm bảo các tiêu
+                chuẩn về khả năng truy cập (A11y) và tối ưu hóa SEO on-page.</p>
+            <p>Sở thích cá nhân của mình là tìm hiểu các mô hình kiến trúc phần mềm 3 tầng và phát triển các ứng dụng
+                web thực tế phục vụ đời sống.</p>
+        </article>
+
+        <!-- Bảng: Thời khóa biểu tuần -->
+        <section>
+            <h2>Thời khóa biểu cá nhân</h2>
+            <div class="table-responsive">
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Tiết</th>
+                            <th scope="col">Thứ 2</th>
+                            <th scope="col">Thứ 3</th>
+                            <th scope="col">Thứ 4</th>
+                            <th scope="col">Thứ 5</th>
+                            <th scope="col">Thứ 6</th>
+                            <th scope="col">Thứ 7</th>
+                            <th scope="col">Chủ nhật</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Tiết 1 -->
+                        <tr>
+                            <td class="period">1</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td rowspan="3">
+                                31231330 - 24-0101<br>
+                                Khai phá dữ liệu<br>
+                                Phòng: A5-404B
+                            </td>
+                            <td rowspan="3">
+                                31231398 - 24-0101<br>
+                                Lập trình mạng<br>
+                                Phòng: A5-403
+                            </td>
+                            <td rowspan="3">
+                                31231755 - 24-0102<br>
+                                Thiết kế và lập trình web<br>
+                                Phòng: B3-303
+                            </td>
+                            <td></td>
+                        </tr>
+                        <!-- Tiết 2 -->
+                        <tr>
+                            <td class="period">2</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <!-- Tiết 3 -->
+                        <tr>
+                            <td class="period">3</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <!-- Tiết 4 -->
+                        <tr>
+                            <td class="period">4</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <!-- Tiết 5 -->
+                        <tr>
+                            <td class="period">5</td>
+                            <td></td>
+                            <td rowspan="2">
+                                21221904 - 24-0113<br>
+                                Lịch sử Đảng Cộng sản Việt Nam<br>
+                                Phòng: A6-403
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <!-- Tiết 6 -->
+                        <tr>
+                            <td class="period">6</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <!-- Khoảng trống giữa tiết 6 và 7 -->
+                        <tr class="break-row">
+                            <td colspan="8"></td>
+                        </tr>
+                        <!-- Tiết 7 -->
+                        <tr>
+                            <td class="period">7</td>
+                            <td></td>
+                            <td rowspan="3">
+                                31241283 - 24-0103<br>
+                                Hệ quản trị cơ sở dữ liệu<br>
+                                Phòng: B3-304
+                            </td>
+                            <td></td>
+                            <td rowspan="3">
+                                31231016 - 24-0102<br>
+                                Công nghệ phần mềm<br>
+                                Phòng: B3-503
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <!-- Tiết 8 -->
+                        <tr>
+                            <td class="period">8</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <!-- Tiết 9 -->
+                        <tr>
+                            <td class="period">9</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <!-- Tiết 10 -->
+                        <tr>
+                            <td class="period">10</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <!-- Tiết 11 -->
+                        <tr>
+                            <td class="period">11</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td rowspan="2">
+                                31221010 - 24-0103<br>
+                                An toàn thông tin<br>
+                                Phòng: B3-506
+                            </td>
+                            <td></td>
+                        </tr>
+                        <!-- Tiết 12 -->
+                        <tr>
+                            <td class="period">12</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 [Trần Xuân Sang] - Khoa Toán - Tin, Đại học Sư phạm Đà Nẵng.</p>
+    </footer>
+</body>
+
+</html>

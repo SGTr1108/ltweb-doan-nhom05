@@ -1,0 +1,107 @@
+/* Sử dụng biến CSS chung của nhóm, ví dụ: var(--primary-color), var(--text-color) */
+
+/* Bố cục chính ưu tiên Mobile-first (Flexbox/Grid) */
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 15px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Ảnh chân dung co giãn theo khung */
+.profile-img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+/* Trạng thái Hover và Focus-visible cho liên kết/nút */
+a, .btn-contact {
+    color: var(--primary-color, #007bff);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+a:hover, .btn-contact:hover {
+    color: var(--secondary-color, #0056b3);
+    text-decoration: underline;
+}
+
+a:focus-visible, .btn-contact:focus-visible {
+    outline: 3px solid var(--accent-color, #ffc107);
+    outline-offset: 2px;
+}
+
+/* Xử lý bảng thời khóa biểu trên Mobile (Cuộn ngang) */
+.table-responsive {
+    overflow-x: auto;
+    width: 100%;
+    -webkit-overflow-scrolling: touch; /* Hỗ trợ cuộn mượt trên iOS */
+    margin-bottom: 20px;
+}
+
+/* Bảng thông thường (nếu có) */
+table {
+    width: 100%;
+    min-width: 500px;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+/* --------------------------------------------------- */
+/* BỔ SUNG: Định dạng riêng cho Bảng thời khóa biểu tuần */
+/* --------------------------------------------------- */
+
+.schedule-table {
+    width: 100%;
+    min-width: 900px; /* Chiều rộng tối thiểu lớn hơn để không bị bóp nghẹt chữ trên mobile */
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+.schedule-table th, 
+.schedule-table td {
+    border: 1px solid #a0a0a0;
+    padding: 8px 10px;
+    vertical-align: top;
+}
+
+.schedule-table th {
+    background-color: #2b5c92;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+}
+
+.schedule-table .period {
+    text-align: center;
+    font-weight: normal;
+    width: 40px;
+}
+
+.schedule-table .break-row td {
+    height: 10px;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+/* --------------------------------------------------- */
+
+/* Điểm ngắt Responsive (Tablet/Desktop) */
+@media (min-width: 768px) {
+    .profile-header {
+        display: grid;
+        grid-template-columns: 300px 1fr; /* Grid layout cho màn hình lớn */
+        gap: 30px;
+        align-items: center;
+    }
+}
