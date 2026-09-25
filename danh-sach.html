@@ -8,17 +8,7 @@
         content="Danh sách sản phẩm được quản lý trên hệ thống MiniPos, bao gồm mã sản phẩm, tên sản phẩm, giá bán và tồn kho.">
     <title>Quản lý sản phẩm | MiniPos</title>
 
-    <style>
-        table {
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            border: 1px solid black;
-            padding: 5px;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
@@ -37,91 +27,103 @@
         </ul>
     </nav>
 
-    <main>
+    
+<main class="bao">
+    <h1>Danh sách sản phẩm</h1>
 
-        <h1>Danh sách sản phẩm</h1>
+    <section>
+        <h2>Danh sách các mặt hàng</h2>
 
-        <section>
+        <p>
+            Các sản phẩm đang được kinh doanh và quản lý
+            trên hệ thống MiniPos.
+        </p>
 
-            <h2>
-                Danh sách các mặt hàng hiện đang được kinh doanh và quản lý tại cửa hàng.
-            </h2>
+        <div class="luoi-san-pham">
 
-            <table>
-                <caption>Danh sách sản phẩm trong cửa hàng</caption>
+            <article class="the-san-pham">
+                <img
+                    src="images/lay.png"
+                    alt="Sản phẩm bánh snack"
+                    width="800"
+                    height="533">
 
-                <thead>
-                    <tr>
-                        <th scope="col">STT</th>
-                        <th scope="col">Mã sản phẩm</th>
-                        <th scope="col">Tên sản phẩm</th>
-                        <th scope="col">Đơn giá (VND)</th>
-                        <th scope="col">Tồn kho</th>
-                        <th scope="col">Thao tác</th>
-                    </tr>
-                </thead>
+                <div class="noi-dung-san-pham">
+                    <h3>Bánh snack</h3>
+                    <p class="ma-san-pham">Mã sản phẩm: SP001</p>
+                    <p class="gia-san-pham">15.000đ</p>
+                    <p>Tồn kho: 50</p>
+                    <a href="chi-tiet.html">Xem chi tiết</a>
+                </div>
+            </article>
 
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>SP001</td>
-                        <td>Bánh snack</td>
-                        <td>15.000đ</td>
-                        <td>50</td>
-                        <td>
-                            <a href="chi-tiet.html">Xem chi tiết</a>
-                        </td>
-                    </tr>
+            <article class="the-san-pham">
+                <img
+                    src="images/AQUAFINA.png"
+                    alt="Sản phẩm nước suối"
+                    width="800"
+                    height="533">
 
-                    <tr>
-                        <td>2</td>
-                        <td>SP002</td>
-                        <td>Nước suối</td>
-                        <td>10.000đ</td>
-                        <td>100</td>
-                        <td>
-                            <a href="chi-tiet.html">Xem chi tiết</a>
-                        </td>
-                    </tr>
+                <div class="noi-dung-san-pham">
+                    <h3>Nước suối</h3>
+                    <p class="ma-san-pham">Mã sản phẩm: SP002</p>
+                    <p class="gia-san-pham">10.000đ</p>
+                    <p>Tồn kho: 100</p>
+                    <a href="chi-tiet.html">Xem chi tiết</a>
+                </div>
+            </article>
 
-                    <tr>
-                        <td>3</td>
-                        <td>SP003</td>
-                        <td>Mì ly</td>
-                        <td>20.000đ</td>
-                        <td>30</td>
-                        <td>
-                            <a href="chi-tiet.html">Xem chi tiết</a>
-                        </td>
-                    </tr>
+            <article class="the-san-pham">
+                <img
+                    src="images/myly.jpg"
+                    alt="Sản phẩm mì ly"
+                    width="800"
+                    height="533">
 
-                    <tr>
-                        <td>4</td>
-                        <td>SP004</td>
-                        <td>Trà sữa</td>
-                        <td>25.000đ</td>
-                        <td>20</td>
-                        <td>
-                            <a href="chi-tiet.html">Xem chi tiết</a>
-                        </td>
-                    </tr>
+                <div class="noi-dung-san-pham">
+                    <h3>Mì ly</h3>
+                    <p class="ma-san-pham">Mã sản phẩm: SP003</p>
+                    <p class="gia-san-pham">20.000đ</p>
+                    <p>Tồn kho: 30</p>
+                    <a href="chi-tiet.html">Xem chi tiết</a>
+                </div>
+            </article>
 
-                    <tr>
-                        <td>5</td>
-                        <td>SP005</td>
-                        <td>Bánh kẹo</td>
-                        <td>12.000đ</td>
-                        <td>60</td>
-                        <td>
-                            <a href="chi-tiet.html">Xem chi tiết</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <article class="the-san-pham">
+                <img
+                    src="images/trasua.jpg"
+                    alt="Sản phẩm trà sữa"
+                    width="800"
+                    height="533">
 
-        </section>
+                <div class="noi-dung-san-pham">
+                    <h3>Trà sữa</h3>
+                    <p class="ma-san-pham">Mã sản phẩm: SP004</p>
+                    <p class="gia-san-pham">25.000đ</p>
+                    <p>Tồn kho: 20</p>
+                    <a href="chi-tiet.html">Xem chi tiết</a>
+                </div>
+            </article>
 
-    </main>
+            <article class="the-san-pham">
+                <img
+                    src="images/chug.jpg"
+                    alt="Sản phẩm bánh kẹo"
+                    width="800"
+                    height="533">
+
+                <div class="noi-dung-san-pham">
+                    <h3>Bánh kẹo</h3>
+                    <p class="ma-san-pham">Mã sản phẩm: SP005</p>
+                    <p class="gia-san-pham">12.000đ</p>
+                    <p>Tồn kho: 60</p>
+                    <a href="chi-tiet.html">Xem chi tiết</a>
+                </div>
+            </article>
+
+        </div>
+    </section>
+</main>
 
     <footer>
         <p>

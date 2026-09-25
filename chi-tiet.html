@@ -8,17 +8,7 @@
         content="Chi tiết thông tin sản phẩm Nước suối SP002, bao gồm giá bán, số lượng tồn kho và lịch sử nhập hàng.">
     <title>Chi tiết Nước suối | MiniPos</title>
 
-    <style>
-        table {
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            border: 1px solid black;
-            padding: 5px;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
@@ -37,23 +27,25 @@
         </ul>
     </nav>
 
-    <main>
+    
+<main class="bao">
+    <div class="bo-cuc-chi-tiet">
 
-        <article>
+        <article class="noi-dung-chi-tiet">
 
             <h1>Chi tiết sản phẩm: Nước suối</h1>
 
             <p>
-                Nước suối AQUAFINA vị ngon của sự tinh khiết. Được sản xuất tại PEPSI.
+                Nước suối AQUAFINA vị ngon của sự tinh khiết.
+                Được sản xuất tại PEPSI.
             </p>
 
             <figure>
                 <img
                     src="images/AQUAFINA.png"
-                    alt="Chai nước suối đóng chai"
+                    alt="Chai nước suối đóng chai Aquafina"
                     width="350"
-                    height="400"
-                >
+                    height="400">
 
                 <figcaption>
                     Hình 1: Hình ảnh sản phẩm nước suối Aquafina 500ml.
@@ -62,78 +54,82 @@
 
             <h2>Thông số sản phẩm</h2>
 
-            <table>
-                <caption>Thông tin sản phẩm Nước suối SP002</caption>
+            <div class="bang-vo">
+                <table>
+                    <caption>Thông tin sản phẩm Nước suối SP002</caption>
 
-                <thead>
-                    <tr>
-                        <th scope="col">Thông tin</th>
-                        <th scope="col">Chi tiết</th>
-                    </tr>
-                </thead>
+                    <thead>
+                        <tr>
+                            <th scope="col">Thông tin</th>
+                            <th scope="col">Chi tiết</th>
+                        </tr>
+                    </thead>
 
-                <tbody>
-                    <tr>
-                        <td>Mã sản phẩm</td>
-                        <td>SP002</td>
-                    </tr>
+                    <tbody>
+                        <tr>
+                            <td>Mã sản phẩm</td>
+                            <td>SP002</td>
+                        </tr>
 
-                    <tr>
-                        <td>Tên sản phẩm</td>
-                        <td>Nước suối</td>
-                    </tr>
+                        <tr>
+                            <td>Tên sản phẩm</td>
+                            <td>Nước suối</td>
+                        </tr>
 
-                    <tr>
-                        <td>Giá bán</td>
-                        <td>10.000đ</td>
-                    </tr>
+                        <tr>
+                            <td>Giá bán</td>
+                            <td>10.000đ</td>
+                        </tr>
 
-                    <tr>
-                        <td>Số lượng tồn kho</td>
-                        <td>100 chai</td>
-                    </tr>
+                        <tr>
+                            <td>Số lượng tồn kho</td>
+                            <td>100 chai</td>
+                        </tr>
 
-                    <tr>
-                        <td>Đơn vị tính</td>
-                        <td>Chai</td>
-                    </tr>
-                </tbody>
-            </table>
+                        <tr>
+                            <td>Đơn vị tính</td>
+                            <td>Chai</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
             <h2>Lịch sử nhập kho</h2>
 
-            <table>
-                <caption>Lịch sử nhập nước suối gần nhất</caption>
+            <div class="bang-vo">
+                <table>
+                    <caption>Lịch sử nhập nước suối gần nhất</caption>
 
-                <thead>
-                    <tr>
-                        <th scope="col">Ngày nhập</th>
-                        <th scope="col">Số lượng</th>
-                        <th scope="col">Nhà cung cấp</th>
-                    </tr>
-                </thead>
+                    <thead>
+                        <tr>
+                            <th scope="col">Ngày nhập</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">Nhà cung cấp</th>
+                        </tr>
+                    </thead>
 
-                <tbody>
-                    <tr>
-                        <td>10/09/2026</td>
-                        <td>100 chai</td>
-                        <td>Công ty Nước giải khát Aquafina</td>
-                    </tr>
+                    <tbody>
+                        <tr>
+                            <td>10/09/2026</td>
+                            <td>100 chai</td>
+                            <td>Công ty Nước giải khát Aquafina</td>
+                        </tr>
 
-                    <tr>
-                        <td>25/08/2026</td>
-                        <td>50 chai</td>
-                        <td>Công ty Nước giải khát Aquafina</td>
-                    </tr>
-                </tbody>
-            </table>
+                        <tr>
+                            <td>25/08/2026</td>
+                            <td>50 chai</td>
+                            <td>Công ty Nước giải khát Aquafina</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
             <h2>Video giới thiệu sản phẩm</h2>
 
             <iframe
                 width="560"
                 height="315"
-                src="https://www.youtube.com/embed/wlZ__35Aav8?si=NT5w9ZYqQ_Pa1K0J"
+                src="https://www.youtube.com/embed/wlZ__35Aav8?origin=http://localhost"
                 title="YouTube video giới thiệu sản phẩm nước suối"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 referrerpolicy="strict-origin-when-cross-origin"
@@ -142,7 +138,34 @@
 
         </article>
 
-    </main>
+        <aside class="thong-tin-phu">
+            <h2>Thông tin nhanh</h2>
+
+            <ul>
+                <li>Mã sản phẩm: SP002</li>
+                <li>Tên sản phẩm: Nước suối</li>
+                <li>Giá bán: 10.000đ</li>
+                <li>Tồn kho: 100 chai</li>
+                <li>Đơn vị tính: Chai</li>
+            </ul>
+
+            <h2>Liên kết</h2>
+
+            <p>
+                <a href="danh-sach.html">
+                    Quay lại danh sách sản phẩm
+                </a>
+            </p>
+
+            <p>
+                <a href="lien-he.html">
+                    Báo cáo và liên hệ
+                </a>
+            </p>
+        </aside>
+
+    </div>
+</main>
 
     <footer>
         <p>&copy; 2026 Nhóm 05 - Khoa Toán - Tin</p>
