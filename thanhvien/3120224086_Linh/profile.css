@@ -1,0 +1,937 @@
+/* ========================================
+                01. BIẾN CSS
+   ======================================== */
+
+:root {
+  --mau-chinh: #123b6d;
+  --mau-nhan: #ffc72c;
+  --mau-chu: #3a3a3a;
+  --mau-nen: #ffffff;
+  --mau-nen-phu: #f4f6f8;
+  --bo-goc: 8px;
+  --khoang-cach: 16px;
+}
+
+/* ========================================
+                02. CHUẨN HÓA
+   ======================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+
+  font-family: system-ui, "Segoe UI", sans-serif;
+  line-height: 1.6;
+  color: var(--mau-chu);
+  background-color: var(--mau-nen);
+
+  overflow-x: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: var(--mau-chinh);
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--mau-nhan);
+}
+
+a:active {
+  color: var(--mau-chinh);
+}
+
+a:focus-visible {
+  outline: 3px solid var(--mau-nhan);
+  outline-offset: 3px;
+}
+
+/* ========================================
+                03. BỐ CỤC
+   ======================================== */
+
+/* Bố cục chính bằng CSS Grid */
+
+body {
+  display: grid;
+  grid-template-areas:
+    "header"
+    "nav"
+    "main"
+    "footer";
+
+  grid-template-rows: auto auto 1fr auto;
+}
+
+header {
+  grid-area: header;
+
+  width: 100%;
+  min-width: 0;
+
+  padding: var(--khoang-cach);
+  background-color: var(--mau-chinh);
+  color: var(--mau-nen);
+}
+
+nav {
+  grid-area: nav;
+
+  width: 100%;
+  min-width: 0;
+  padding: 8px;
+
+  background-color: var(--mau-nen-phu);
+}
+
+main {
+  grid-area: main;
+
+  width: 100%;
+  max-width: 1200px;
+  min-width: 0;
+
+  margin: 0 auto;
+  padding: var(--khoang-cach);
+
+  overflow-x: hidden;
+}
+
+aside {
+  padding: var(--khoang-cach);
+}
+
+footer {
+  grid-area: footer;
+
+  width: 100%;
+  min-width: 0;
+
+  padding: 8px 14px;
+
+  background-color: var(--mau-chinh);
+  color: var(--mau-nen);
+
+  text-align: center;
+  font-size: 13px;
+}
+
+footer p {
+  margin: 4px 0;
+}
+
+/* ========================================
+                04. THÀNH PHẦN
+   ======================================== */
+
+/* 04.1. THANH ĐIỀU HƯỚNG */
+
+nav ul {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+nav li {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+nav a {
+  display: block;
+
+  width: 100%;
+  max-width: 100%;
+
+  padding: 10px;
+
+  text-align: center;
+  text-decoration: none;
+  overflow-wrap: break-word;
+
+  border-radius: var(--bo-goc);
+  font-weight: 600;
+}
+
+nav a:hover {
+  background-color: var(--mau-chinh);
+  color: var(--mau-nen);
+}
+
+nav a:active {
+  background-color: var(--mau-nhan);
+  color: var(--mau-chu);
+}
+
+nav a:focus-visible {
+  outline: 3px solid var(--mau-nhan);
+  outline-offset: 3px;
+}
+
+/* 04.2. THÀNH PHẦN TRANG CHỦ */
+
+main h1 {
+  margin-top: 0;
+  margin-bottom: 24px;
+
+  color: var(--mau-chinh);
+  text-align: center;
+  overflow-wrap: break-word;
+}
+
+main section {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  margin-bottom: 20px;
+  padding: 16px;
+
+  background-color: var(--mau-nen-phu);
+  border: 1px solid #dce2e8;
+  border-radius: var(--bo-goc);
+
+  overflow-x: hidden;
+}
+
+main section h2 {
+  margin-top: 0;
+
+  color: var(--mau-chinh);
+  overflow-wrap: break-word;
+}
+
+main section h3,
+main section p {
+  overflow-wrap: break-word;
+}
+
+main section p {
+  margin-bottom: 16px;
+}
+
+main section img {
+  display: block;
+
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+
+  margin: 0 auto;
+  border-radius: var(--bo-goc);
+}
+
+main section ul {
+  padding-left: 24px;
+}
+
+main section li {
+  margin-bottom: 8px;
+}
+
+/* 04.3. VIDEO YOUTUBE */
+
+main iframe {
+  display: block;
+
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+
+  aspect-ratio: 16 / 9;
+  border: 0;
+}
+
+/* 04.4. BIỂU MẪU LIÊN HỆ */
+
+form {
+  width: 100%;
+  max-width: 100%;
+}
+
+form input,
+form select,
+form textarea,
+form button {
+  max-width: 100%;
+}
+
+form input,
+form select,
+form textarea {
+  width: 100%;
+}
+
+/* 04.5. BẢNG DỮ LIỆU */
+
+.bang-vo {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.bang-vo table {
+  width: 100%;
+  min-width: 650px;
+  border-collapse: collapse;
+  background-color: var(--mau-nen);
+}
+
+.bang-vo caption {
+  margin-bottom: 12px;
+  font-weight: 600;
+  color: var(--mau-chinh);
+  text-align: left;
+}
+
+.bang-vo th,
+.bang-vo td {
+  padding: 8px;
+  border: 1px solid #c7d0d9;
+  text-align: left;
+}
+
+.bang-vo th {
+  background-color: var(--mau-chinh);
+  color: var(--mau-nen);
+}
+
+.bang-vo tbody tr:hover {
+  background-color: var(--mau-nen-phu);
+}
+
+/* 04.6. LƯỚI SẢN PHẨM */
+
+.luoi-san-pham {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+/* 04.7. THẺ SẢN PHẨM */
+
+.the-san-pham {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+  overflow: hidden;
+
+  background-color: var(--mau-nen);
+  border: 1px solid #dce2e8;
+  border-radius: var(--bo-goc);
+
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* 04.8. HÌNH ẢNH SẢN PHẨM */
+
+.the-san-pham img {
+  display: block;
+
+  width: 100%;
+  height: 200px;
+
+  object-fit: cover;
+}
+
+/* 04.9. NỘI DUNG SẢN PHẨM */
+
+.noi-dung-san-pham {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  padding: 16px;
+}
+
+.noi-dung-san-pham h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+
+  color: var(--mau-chinh);
+}
+
+.noi-dung-san-pham p {
+  margin: 4px 0;
+}
+
+.ma-san-pham {
+  color: #666666;
+  font-size: 14px;
+}
+
+.gia-san-pham {
+  color: var(--mau-chinh);
+  font-weight: 700;
+}
+
+/* 04.10. LIÊN KẾT CHI TIẾT */
+
+.noi-dung-san-pham a {
+  display: inline-block;
+
+  width: fit-content;
+  margin-top: auto;
+  padding: 8px 12px;
+
+  background-color: var(--mau-chinh);
+  color: var(--mau-nen);
+
+  border-radius: var(--bo-goc);
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.noi-dung-san-pham a:hover {
+  background-color: #0b294d;
+  color: var(--mau-nen);
+}
+
+.noi-dung-san-pham a:active {
+  background-color: var(--mau-nhan);
+  color: var(--mau-chu);
+}
+
+.noi-dung-san-pham a:focus-visible {
+  outline: 3px solid var(--mau-nhan);
+  outline-offset: 3px;
+}
+
+/* 04.11. BỐ CỤC TRANG CHI TIẾT */
+
+.bo-cuc-chi-tiet {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  min-width: 0;
+}
+
+.noi-dung-chi-tiet,
+.thong-tin-phu {
+  min-width: 0;
+}
+
+.noi-dung-chi-tiet figure {
+  margin: 16px 0;
+  text-align: center;
+}
+
+.noi-dung-chi-tiet figure img {
+  width: 100%;
+  max-width: 350px;
+  height: auto;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+.noi-dung-chi-tiet figcaption {
+  margin-top: 8px;
+  color: #555555;
+  font-size: 14px;
+}
+
+.thong-tin-phu {
+  padding: 16px;
+  background-color: var(--mau-nen-phu);
+  border: 1px solid #dce2e8;
+  border-radius: var(--bo-goc);
+}
+
+.thong-tin-phu h2 {
+  margin-top: 0;
+  color: var(--mau-chinh);
+}
+
+.thong-tin-phu ul {
+  padding-left: 20px;
+}
+
+.thong-tin-phu li {
+  margin-bottom: 8px;
+}
+
+/* Hai cột trên màn hình lớn */
+
+@media (min-width: 768px) {
+  .bo-cuc-chi-tiet {
+    grid-template-columns: minmax(0, 2fr) minmax(220px, 1fr);
+    align-items: start;
+  }
+}
+
+/* 04.12. NỘI DUNG TRANG GIỚI THIỆU */
+
+.noi-dung-gioi-thieu {
+  width: 100%;
+  max-width: 65ch;
+  margin: 0 auto;
+}
+
+.noi-dung-gioi-thieu h1,
+.noi-dung-gioi-thieu h2 {
+  color: var(--mau-chinh);
+}
+
+.noi-dung-gioi-thieu h1 {
+  text-align: center;
+}
+
+.noi-dung-gioi-thieu p {
+  overflow-wrap: break-word;
+}
+
+/* 04.13. BIỂU MẪU LIÊN HỆ */
+
+/* Khung biểu mẫu */
+form {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 20px;
+  border: 1px solid #dce2e8;
+  border-radius: var(--bo-goc);
+  background-color: var(--mau-nen-phu);
+}
+
+legend {
+  padding: 0 8px;
+  color: var(--mau-chinh);
+  font-weight: 700;
+}
+
+/* Nhãn và ô nhập */
+form label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+form input:not([type="radio"]),
+form select,
+form textarea {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #9ca3af;
+  border-radius: var(--bo-goc);
+  font: inherit;
+  color: var(--mau-chu);
+  background-color: var(--mau-nen);
+}
+
+form textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* Trạng thái khi chọn ô nhập */
+form input:not([type="radio"]):focus-visible,
+form select:focus-visible,
+form textarea:focus-visible {
+  outline: 3px solid var(--mau-nhan);
+  outline-offset: 2px;
+  border-color: var(--mau-chinh);
+}
+
+/* Nút gửi */
+form button {
+  display: inline-block;
+  padding: 10px 16px;
+  border: 1px solid var(--mau-chinh);
+  border-radius: var(--bo-goc);
+  background-color: var(--mau-chinh);
+  color: var(--mau-nen);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+form button:hover {
+  background-color: #0d2b4f;
+  color: var(--mau-nen);
+}
+
+form button:active {
+  background-color: var(--mau-nhan);
+  color: var(--mau-chu);
+}
+
+form button:focus-visible {
+  outline: 3px solid var(--mau-nhan);
+  outline-offset: 3px;
+}
+
+/* Căn giữa nội dung mô tả trang liên hệ */
+.mo-ta-lien-he {
+  text-align: center;
+  margin-bottom: 16px;
+}
+/* Khoảng cách giữa biểu mẫu và thông tin liên hệ */
+.thong-tin-lien-he {
+  margin-top: 16px;
+}
+/* ========================================
+                05. TIỆN ÍCH
+   ======================================== */
+
+/* 05.1. LỚP BAO NỘI DUNG */
+
+.bao {
+  width: 100%;
+  max-width: 1200px;
+
+  margin: 0 auto;
+  padding: var(--khoang-cach);
+}
+
+/* 05.2. CHỈ HIỂN THỊ TRÊN MÁY TÍNH */
+
+.chi-hien-tren-may-tinh {
+  display: none;
+}
+
+/* 05.3. CĂN GIỮA VĂN BẢN */
+
+.text-center {
+  text-align: center;
+}
+
+/* 05.4. ẨN NỘI DUNG */
+
+.an {
+  display: none;
+}
+
+/* ========================================
+                06. RESPONSIVE
+   ======================================== */
+
+/* 06.1. MÀN HÌNH TỪ 360PX */
+
+@media (min-width: 360px) {
+  main {
+    padding: 16px;
+  }
+
+  main section {
+    padding: 16px;
+  }
+
+  main h1 {
+    font-size: 1.6rem;
+  }
+
+  main section h2 {
+    font-size: 1.25rem;
+  }
+}
+
+/* 06.2. MÀN HÌNH TỪ 768PX */
+
+@media (min-width: 768px) {
+  /* Menu chuyển sang hàng ngang */
+
+  nav ul {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    gap: 12px;
+  }
+
+  nav li {
+    width: auto;
+  }
+
+  nav a {
+    width: auto;
+    padding: 8px 12px;
+  }
+
+  /* Khoảng cách nội dung */
+
+  main {
+    padding: 24px;
+  }
+
+  main section {
+    padding: 20px;
+  }
+
+  main h1 {
+    font-size: 2rem;
+  }
+
+  main section h2 {
+    font-size: 1.5rem;
+  }
+
+  /* Hiển thị nội dung dành cho máy tính */
+
+  .chi-hien-tren-may-tinh {
+    display: block;
+  }
+}
+
+/* 06.3. FLEXBOX DANH SÁCH THÀNH VIÊN */
+
+.danh-sach-thanh-vien {
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+  padding-left: 24px;
+}
+
+@media (min-width: 768px) {
+  .danh-sach-thanh-vien {
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    gap: 16px 32px;
+  }
+
+  .danh-sach-thanh-vien li {
+    flex: 1 1 280px;
+  }
+}
+
+/* 06.4. CĂN CHỈNH LOẠI YÊU CẦU */
+
+.loai-yeu-cau {
+  margin: 16px 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.loai-yeu-cau li {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.loai-yeu-cau input[type="radio"] {
+  flex: 0 0 auto;
+  width: auto;
+}
+
+.loai-yeu-cau label {
+  cursor: pointer;
+}
+
+.loai-yeu-cau input[type="radio"]:focus-visible {
+  outline: 3px solid var(--mau-nhan);
+  outline-offset: 3px;
+}
+
+/* Điều chỉnh ảnh sản phẩm trên trang Bootstrap */
+.danh-sach-bootstrap .card-img-top {
+  width: 100%;
+  height: 280px;
+  object-fit: contain;
+  padding: 10px;
+  background-color: #ffffff;
+}
+
+/* =========================================================
+   CSS TRANG GIỚI THIỆU CÁ NHÂN
+   Kế thừa hệ thống CSS chung
+   ========================================================= */
+
+.bo-cuc-ca-nhan {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--khoang-cach);
+  width: 100%;
+  min-width: 0;
+}
+
+.the-can-bo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--khoang-cach);
+  background-color: var(--mau-nen-phu);
+  border: 1px solid #dce2e8;
+  border-radius: var(--bo-goc);
+  text-align: center;
+}
+
+.the-can-bo img {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--mau-chinh);
+  margin-bottom: var(--khoang-cach);
+}
+
+.the-can-bo h1 {
+  margin: 0 0 8px;
+  font-size: 1.4rem;
+  color: var(--mau-chinh);
+}
+
+.the-can-bo .mssv {
+  display: inline-block;
+  padding: 4px 12px;
+  background-color: var(--mau-chinh);
+  color: var(--mau-nen);
+  font-weight: 700;
+  border-radius: var(--bo-goc);
+  font-size: 0.875rem;
+  margin-bottom: 12px;
+}
+
+.the-can-bo p {
+  margin: 4px 0;
+  font-size: 0.95rem;
+}
+
+.danh-sach-ky-nang {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.the-ky-nang {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px var(--khoang-cach);
+  background-color: var(--mau-nen);
+  border: 1px solid #c7d0d9;
+  border-radius: var(--bo-goc);
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--mau-chu);
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.the-ky-nang:hover {
+  border-color: var(--mau-chinh);
+  background-color: var(--mau-chinh);
+  color: var(--mau-nen);
+}
+
+.the-ky-nang:focus-visible,
+.bang-vo a:focus-visible {
+  outline: 3px solid var(--mau-nhan);
+  outline-offset: 3px;
+}
+
+.bang-vo.tkb-canhan {
+  margin-top: 12px;
+}
+
+.bang-vo.tkb-canhan table {
+  min-width: 850px;
+}
+
+.bang-vo.tkb-canhan th {
+  background-color: var(--mau-chinh);
+  color: var(--mau-nen);
+  white-space: nowrap;
+  text-align: center;
+}
+
+.bang-vo.tkb-canhan td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.bang-vo td.mon-hoc {
+  background-color: rgba(18, 59, 109, 0.08);
+  color: var(--mau-chinh);
+  font-weight: 600;
+  font-size: 0.85rem;
+  line-height: 1.35;
+}
+
+.goi-y-cuon {
+  display: block;
+  font-size: 0.8rem;
+  color: #666666;
+  margin-top: 6px;
+  text-align: right;
+  font-style: italic;
+}
+
+@media (min-width: 768px) {
+  .bo-cuc-ca-nhan {
+    grid-template-columns: minmax(250px, 1fr) 2fr;
+    align-items: start;
+  }
+
+  .goi-y-cuon {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .the-can-bo img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto 12px;
+  }
+
+  .bang-vo.tkb-canhan {
+    margin-left: -4px;
+    margin-right: -4px;
+    width: calc(100% + 8px);
+  }
+}
