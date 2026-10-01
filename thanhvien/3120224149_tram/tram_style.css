@@ -26,15 +26,7 @@
 }
 
 
-html, body {
-  max-width: 100%;
-  overflow-x: hidden;
-}
 
-p, a, span {
-  word-wrap: break-word;
-  word-break: break-word;
-}
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -42,6 +34,7 @@ body {
   color: var(--text-color);
   background-color: var(--secondary-color);
   padding: 20px;
+  overflow-x: hidden; /* THÊM DÒNG NÀY: Cắt bỏ triệt để mọi hành vi tràn ngang của trang */
 }
 
 
@@ -116,15 +109,7 @@ main {
   main {
     grid-template-columns: 1.2fr 0.8fr; /* Chia làm 2 cột trên máy tính */
   }
-  .khoi-thong-tin-chinh {
-    flex-direction: column; /* Chuyển thành hàng dọc để không tràn màn hình */
-    align-items: center;    /* Căn giữa ảnh và chữ */
-    text-align: left;     /* Căn giữa chữ cho đẹp mắt (tùy chọn) */
-  }
-
-  .khung-anh-dai-dien {
-    max-width: 200px;       /* Giới hạn kích thước ảnh đại diện trên điện thoại */
-  }
+ 
   /* Cho phần thời khóa biểu trải dài hết cả 2 cột */
   main > section:last-of-type {
     grid-column: 1 / -1;
@@ -159,14 +144,15 @@ section h2, article h2 {
    ========================================================================== */
 /* Căn chỉnh ảnh chân dung */
 img {
-  height: auto;
-  max-width: 100%;
   display: block;
+  max-width: 100%; /* THÊM DÒNG NÀY: Giúp ảnh tự co giãn theo khung chứa */
+  height: auto;     /* THÊM DÒNG NÀY: Giữ đúng tỷ lệ ảnh */
   border-radius: var(--border-radius);
   margin-bottom: 15px;
   object-fit: cover;
   border: 3px solid var(--accent-color);
 }
+
 
 
 
@@ -216,9 +202,9 @@ ul li {
   width: 100%;
   overflow-x: auto; /* Kích hoạt cuộn ngang khi màn hình nhỏ */
   -webkit-overflow-scrolling: touch;
-  margin-top: 15px;
+  /*margin-top: 15px;
   border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius);*/
 }
 
 
