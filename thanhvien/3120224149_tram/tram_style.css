@@ -361,10 +361,6 @@ footer {
        /* align-items: flex-start;*/
         gap: 20px;
     }
-
-
-
-
     .khung-anh-dai-dien {
         flex: 0 0 200px;
         margin: 0;
@@ -375,4 +371,30 @@ footer {
     .chi-tiet-ca-nhan {
         flex: 1;
     }
+
+
+     .profile-header {
+        display: grid;
+        grid-template-columns: 300px 1fr; /* Grid layout cho màn hình lớn */
+        gap: 30px;
+        align-items: center;
+    }
+
+}
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 15px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Ảnh chân dung co giãn theo khung */
+.profile-img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
 }
