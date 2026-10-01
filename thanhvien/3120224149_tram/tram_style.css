@@ -34,7 +34,6 @@ body {
   color: var(--text-color);
   background-color: var(--secondary-color);
   padding: 20px;
-  overflow-x: hidden; /* THÊM DÒNG NÀY: Cắt bỏ triệt để mọi hành vi tràn ngang của trang */
 }
 
 
@@ -117,7 +116,23 @@ main {
 }
 
 
+@media (max-width: 767px) {
+  body {
+    padding: 10px;
+  }
 
+  section, article {
+    padding: 12px;
+  }
+
+  nav {
+    flex-wrap: wrap; /* menu tự xuống dòng nếu quá dài */
+  }
+
+  ul {
+    grid-template-columns: 1fr; /* danh sách kỹ năng 1 cột */
+  }
+}
 
 section, article {
   background-color: var(--bg-color);
@@ -145,14 +160,11 @@ section h2, article h2 {
 /* Căn chỉnh ảnh chân dung */
 img {
   display: block;
-  max-width: 100%; /* THÊM DÒNG NÀY: Giúp ảnh tự co giãn theo khung chứa */
-  height: auto;     /* THÊM DÒNG NÀY: Giữ đúng tỷ lệ ảnh */
   border-radius: var(--border-radius);
   margin-bottom: 15px;
   object-fit: cover;
   border: 3px solid var(--accent-color);
 }
-
 
 
 
@@ -200,21 +212,18 @@ ul li {
 /* Bao bọc bảng bằng một class hoặc cấu trúc để kích hoạt cuộn ngang */
 .table-responsive {
   width: 100%;
-  overflow-x: auto; /* Kích hoạt cuộn ngang khi màn hình nhỏ */
-  -webkit-overflow-scrolling: touch;
-  /*margin-top: 15px;
+  overflow-x: visible; /* bỏ cuộn ngang */
+  margin-top: 15px;
   border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);*/
+  border-radius: var(--border-radius);
 }
-
-
-
 
 table {
   border-collapse: collapse;
   width: 100%;
-  min-width: 600px; /* Ép bảng giữ kích thước tối thiểu để không bị méo chữ */
+  table-layout: fixed;      /* chia đều cột, không bị giãn theo nội dung */
   background-color: var(--bg-color);
+  /* XÓA dòng: min-width: 600px; */
 }
 
 
@@ -231,9 +240,11 @@ caption {
 
 th, td {
   border: 1px solid var(--border-color);
-  padding: 10px;
+  padding: 6px 4px;
   text-align: center;
-  font-size: 0.85rem;
+  font-size: clamp(0.65rem, 2.5vw, 0.85rem); /* chữ tự co theo màn hình */
+  word-wrap: break-word;
+  overflow-wrap: anywhere;  /* cho phép xuống dòng chữ dài */
 }
 
 
@@ -345,7 +356,8 @@ footer {
    ========================================================================== */
 @media (min-width: 768px) {
     .khoi-thong-tin-chinh {
-        flex-direction: row;
+            display: flex;
+    flex-direction: column;
        /* align-items: flex-start;*/
         gap: 20px;
     }
