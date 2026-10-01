@@ -222,6 +222,7 @@ ul li {
 table {
   border-collapse: collapse;
   width: 100%;
+  min-width: 500px;
   table-layout: fixed;      /* chia đều cột, không bị giãn theo nội dung */
   background-color: var(--bg-color);
   /* XÓA dòng: min-width: 600px; */
