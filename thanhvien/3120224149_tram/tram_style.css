@@ -212,7 +212,8 @@ ul li {
 /* Bao bọc bảng bằng một class hoặc cấu trúc để kích hoạt cuộn ngang */
 .table-responsive {
   width: 100%;
-  overflow-x: visible; /* bỏ cuộn ngang */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   margin-top: 15px;
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
