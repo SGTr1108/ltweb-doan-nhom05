@@ -222,9 +222,9 @@ ul li {
 table {
   border-collapse: collapse;
   width: 100%;
-  min-width: 500px;
+  min-width: 600px; /* Tăng lên 600px hoặc giữ 500px để ép bảng rộng hơn màn hình điện thoại */
+  /* BỎ thuộc tính table-layout: fixed; */
   background-color: var(--bg-color);
-  /* XÓA dòng: min-width: 600px; */
 }
 
 
