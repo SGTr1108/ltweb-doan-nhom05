@@ -14,11 +14,28 @@
 <body>
 
     <header>
-        <strong>MiniPos</strong> - Quản lý bán hàng thông minh
+        <strong>MiniPos</strong> - Quản lý bán hàng thông minh  -  
+    
+        <span>
+            Yêu thích:
+            <span
+                data-so-luong-yeu-thich
+                aria-live="polite">
+                0
+            </span>
+        </span>
     </header>
 
     <nav>
-        <ul>
+        <button
+            class="nut-menu"
+            type="button"
+            aria-expanded="false"
+            aria-controls="menu-chinh">
+            ☰ Menu
+        </button>
+    
+        <ul id="menu-chinh">
             <li><a href="index.html">Trang chủ</a></li>
             <li><a href="danh-sach.html">Danh sách Sản phẩm</a></li>
             <li><a href="chi-tiet.html">Chi tiết Hàng hóa</a></li>
@@ -38,6 +55,32 @@
             Các sản phẩm đang được kinh doanh và quản lý
             trên hệ thống MiniPos.
         </p>
+
+        <div class="bo-loc-san-pham">
+            <label for="tim-kiem">Tìm kiếm sản phẩm</label>
+            <input
+                type="search"
+                id="tim-kiem"
+                name="tim-kiem"
+                placeholder="Nhập tên hoặc mã sản phẩm">
+        
+            <label for="loc-danh-muc">Lọc theo danh mục</label>
+            <select id="loc-danh-muc" name="loc-danh-muc">
+                <option value="tat-ca">Tất cả danh mục</option>
+            </select>
+        
+            <label for="sap-xep">Sắp xếp</label>
+            <select id="sap-xep" name="sap-xep">
+                <option value="mac-dinh">Mặc định</option>
+                <option value="gia-tang">Giá tăng dần</option>
+                <option value="gia-giam">Giá giảm dần</option>
+                <option value="ten-az">Tên A-Z</option>
+                <option value="ten-za">Tên Z-A</option>
+            </select>
+        </div>
+        
+        <p id="trang-thai-san-pham" aria-live="polite"></p>
+        <button id="thu-lai-san-pham" type="button" hidden>Thử lại</button>
 
         <div class="luoi-san-pham">
 
@@ -130,7 +173,9 @@
             &copy; 2026 Nhóm 05 - Khoa Toán - Tin.
         </p>
     </footer>
-
+    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/trang-danh-sach.js"></script>
+    <script type="module" src="js/yeu-thich.js"></script>
 </body>
 
 </html>

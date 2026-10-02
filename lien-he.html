@@ -6,27 +6,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
         content="Biểu mẫu báo cáo sự cố hoặc yêu cầu nhập thêm hàng hóa cho kho.">
-    <title>Liên hệ & Báo cáo | MiniPos</title>
+    <title>Liên hệ &amp; Báo cáo | MiniPos</title>
 
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
+
     <header>
-        <strong>MiniPos</strong> - Quản lý bán hàng thông minh
+        <strong>MiniPos</strong> - Quản lý bán hàng thông minh -
+
+        <span>
+            Yêu thích:
+            <span
+                data-so-luong-yeu-thich
+                aria-live="polite">
+                0
+            </span>
+        </span>
     </header>
 
     <nav>
-        <ul>
+        <button
+            class="nut-menu"
+            type="button"
+            aria-expanded="false"
+            aria-controls="menu-chinh">
+            ☰ Menu
+        </button>
+
+        <ul id="menu-chinh">
             <li><a href="index.html">Trang chủ</a></li>
             <li><a href="danh-sach.html">Danh sách Sản phẩm</a></li>
             <li><a href="chi-tiet.html">Chi tiết Hàng hóa</a></li>
             <li><a href="gioi-thieu.html">Giới thiệu Nhóm</a></li>
-            <li><a href="lien-he.html">Báo cáo & Liên hệ</a></li>
+            <li><a href="lien-he.html">Báo cáo &amp; Liên hệ</a></li>
         </ul>
     </nav>
 
     <main class="bao">
+
         <h1>Báo cáo sự cố hoặc Yêu cầu nhập kho</h1>
 
         <p class="mo-ta-lien-he">
@@ -34,13 +53,15 @@
             hoặc báo cáo hết hàng tới Admin.
         </p>
 
-        <form action="#" method="post">
+        <form action="#" method="post" novalidate>
+
             <fieldset>
                 <legend>Thông tin phiếu báo cáo</legend>
 
                 <p>
                     <label for="manv">Mã Nhân Viên *:</label>
-                    <input type="text"
+                    <input
+                        type="text"
                         id="manv"
                         name="manhanvien"
                         required
@@ -48,33 +69,63 @@
                         title="Định dạng hợp lệ: NV kèm 3 chữ số, ví dụ NV001">
                 </p>
 
+                <p
+                    id="loi-manv"
+                    class="thong-bao-loi"
+                    aria-live="polite">
+                </p>
+
                 <p>
                     <label for="email">Email công việc *:</label>
-                    <input type="email"
+                    <input
+                        type="email"
                         id="email"
                         name="email"
                         required>
                 </p>
 
+                <p
+                    id="loi-email"
+                    class="thong-bao-loi"
+                    aria-live="polite">
+                </p>
+
                 <p>
                     <label for="ngaybc">Ngày báo cáo:</label>
-                    <input type="date"
+                    <input
+                        type="date"
                         id="ngaybc"
-                        name="ngaybaocao">
+                        name="ngaybaocao"
+                        required>
+                </p>
+
+                <p
+                    id="loi-ngaybc"
+                    class="thong-bao-loi"
+                    aria-live="polite">
                 </p>
 
                 <p>
                     <label for="mucdo">Mức độ khẩn cấp (1 - 5):</label>
-                    <input type="number"
+                    <input
+                        type="number"
                         id="mucdo"
                         name="mucdouutien"
                         min="1"
                         max="5"
-                        value="3">
+                        value="3"
+                        required>
+                </p>
+
+                <p
+                    id="loi-mucdo"
+                    class="thong-bao-loi"
+                    aria-live="polite">
                 </p>
 
                 <p>
                     <label for="noidung">Nội dung báo cáo *:</label><br>
+
                     <textarea
                         id="noidung"
                         name="noidung"
@@ -84,53 +135,92 @@
                         placeholder="Nhập nội dung sự cố hoặc yêu cầu nhập hàng..."></textarea>
                 </p>
 
+                <p
+                    id="loi-noidung"
+                    class="thong-bao-loi"
+                    aria-live="polite">
+                </p>
+
                 <p>Loại yêu cầu:</p>
 
                 <ul class="loai-yeu-cau">
+
                     <li>
-                        <input type="radio"
+                        <input
+                            type="radio"
                             id="loi_ht"
                             name="loaiyeucau"
                             value="loi"
                             checked>
-                        <label for="loi_ht">Lỗi phần mềm tính tiền</label>
+
+                        <label for="loi_ht">
+                            Lỗi phần mềm tính tiền
+                        </label>
                     </li>
 
                     <li>
-                        <input type="radio"
+                        <input
+                            type="radio"
                             id="nhap_kho"
                             name="loaiyeucau"
                             value="nhapkho">
-                        <label for="nhap_kho">Yêu cầu nhập thêm hàng</label>
+
+                        <label for="nhap_kho">
+                            Yêu cầu nhập thêm hàng
+                        </label>
                     </li>
+
                 </ul>
 
-                <button type="submit">Gửi phiếu báo cáo</button>
+                <button type="submit">
+                    Gửi phiếu báo cáo
+                </button>
+
+                <p
+                    id="trang-thai-lien-he"
+                    aria-live="polite">
+                </p>
+
+                <button
+                    id="thu-lai-lien-he"
+                    type="button"
+                    hidden>
+                    Thử lại
+                </button>
 
             </fieldset>
+
         </form>
-        
-<section class="thong-tin-lien-he">
-    <h2>Thông tin liên hệ</h2>
 
-    <p>
-        Nếu cần hỗ trợ thêm, vui lòng liên hệ với nhóm phát triển
-        MiniPos thông qua số điện thoại của trưởng nhóm - 033.816.2079
-    </p>
+        <section class="thong-tin-lien-he">
 
-    <p>
-        <strong>Nhóm thực hiện:</strong> Nhóm 05
-    </p>
+            <h2>Thông tin liên hệ</h2>
 
-    <p>
-        <strong>Khoa:</strong> Toán - Tin
-    </p>
-</section>
+            <p>
+                Nếu cần hỗ trợ thêm, vui lòng liên hệ với nhóm phát triển
+                MiniPos thông qua số điện thoại của trưởng nhóm - 033.816.2079
+            </p>
+
+            <p>
+                <strong>Nhóm thực hiện:</strong> Nhóm 05
+            </p>
+
+            <p>
+                <strong>Khoa:</strong> Toán - Tin
+            </p>
+
+        </section>
+
     </main>
 
     <footer>
         <p>&copy; 2026 Nhóm 05 - Khoa Toán - Tin</p>
     </footer>
+
+    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/trang-lien-he.js"></script>
+    <script type="module" src="js/yeu-thich.js"></script>
+
 </body>
 
 </html>

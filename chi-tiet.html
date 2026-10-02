@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
         content="Chi tiết thông tin sản phẩm Nước suối SP002, bao gồm giá bán, số lượng tồn kho và lịch sử nhập hàng.">
-    <title>Chi tiết Nước suối | MiniPos</title>
+    <title>Chi tiết Sản phẩm | MiniPos</title>
 
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -14,11 +14,28 @@
 <body>
 
     <header>
-        <strong>MiniPos</strong> - Quản lý bán hàng thông minh
+        <strong>MiniPos</strong> - Quản lý bán hàng thông minh -
+    
+        <span>
+            Yêu thích:
+            <span
+                data-so-luong-yeu-thich
+                aria-live="polite">
+                0
+            </span>
+        </span>
     </header>
 
     <nav>
-        <ul>
+        <button
+            class="nut-menu"
+            type="button"
+            aria-expanded="false"
+            aria-controls="menu-chinh">
+            ☰ Menu
+        </button>
+    
+        <ul id="menu-chinh">
             <li><a href="index.html">Trang chủ</a></li>
             <li><a href="danh-sach.html">Danh sách Sản phẩm</a></li>
             <li><a href="chi-tiet.html">Chi tiết Hàng hóa</a></li>
@@ -27,13 +44,12 @@
         </ul>
     </nav>
 
-    
 <main class="bao">
     <div class="bo-cuc-chi-tiet">
 
-        <article class="noi-dung-chi-tiet">
+        <article class="noi-dung-chi-tiet" id="chi-tiet-san-pham">
 
-            <h1>Chi tiết sản phẩm: Nước suối</h1>
+            <h1 id="ten-san-pham">Chi tiết sản phẩm: Nước suối</h1>
 
             <p>
                 Nước suối AQUAFINA vị ngon của sự tinh khiết.
@@ -42,6 +58,7 @@
 
             <figure>
                 <img
+                     id="anh-san-pham"
                     src="images/aqua.webp"
                     alt="Chai nước suối đóng chai Aquafina"
                     width="350"
@@ -68,7 +85,7 @@
                     <tbody>
                         <tr>
                             <td>Mã sản phẩm</td>
-                            <td>SP002</td>
+                            <td id="ma-san-pham">SP002</td>
                         </tr>
 
                         <tr>
@@ -78,12 +95,17 @@
 
                         <tr>
                             <td>Giá bán</td>
-                            <td>10.000đ</td>
+                            <td id="gia-san-pham">10.000đ</td>
                         </tr>
 
                         <tr>
                             <td>Số lượng tồn kho</td>
-                            <td>100 chai</td>
+                            <td id="ton-kho-san-pham">100 chai</td>
+                        </tr>
+
+                        <tr>
+                            <td>Danh mục</td>
+                            <td id="danh-muc-san-pham">Đồ uống</td>
                         </tr>
 
                         <tr>
@@ -141,13 +163,20 @@
         <aside class="thong-tin-phu">
             <h2>Thông tin nhanh</h2>
 
-            <ul>
+            <ul id="thong-tin-nhanh">
                 <li>Mã sản phẩm: SP002</li>
                 <li>Tên sản phẩm: Nước suối</li>
                 <li>Giá bán: 10.000đ</li>
                 <li>Tồn kho: 100 chai</li>
                 <li>Đơn vị tính: Chai</li>
             </ul>
+            
+            <button
+            type="button"
+            class="nut-yeu-thich"
+            id="nut-yeu-thich-chi-tiet">
+            ♡ Yêu thích
+            </button>
 
             <h2>Liên kết</h2>
 
@@ -170,7 +199,9 @@
     <footer>
         <p>&copy; 2026 Nhóm 05 - Khoa Toán - Tin</p>
     </footer>
-
+    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/trang-chi-tiet.js"></script>
+    <script type="module" src="js/yeu-thich.js"></script>
 </body>
 
 </html>

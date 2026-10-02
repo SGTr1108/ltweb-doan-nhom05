@@ -4,63 +4,261 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="MiniPos - Hệ thống quản lý bán hàng, tồn kho và đơn hàng chuyên nghiệp.">
+
+    <meta
+        name="description"
+        content="MiniPos - Hệ thống quản lý bán hàng, tồn kho và đơn hàng chuyên nghiệp.">
+
     <title>Trang chủ | MiniPos</title>
 
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
+
     <header>
-        <strong>MiniPos</strong> - Quản lý bán hàng thông minh
+        <strong>MiniPos</strong> - Quản lý bán hàng thông minh -
+    
+        <span>
+            Yêu thích:
+            <span
+                data-so-luong-yeu-thich
+                aria-live="polite">
+                0
+            </span>
+        </span>
     </header>
 
     <nav>
-        <ul>
-            <li><a href="index.html">Trang chủ</a></li>
-            <li><a href="danh-sach.html">Danh sách Sản phẩm</a></li>
-            <li><a href="chi-tiet.html">Chi tiết Hàng hóa</a></li>
-            <li><a href="gioi-thieu.html">Giới thiệu Nhóm</a></li>
-            <li><a href="lien-he.html">Báo cáo & Liên hệ</a></li>
+        <button
+            class="nut-menu"
+            type="button"
+            aria-expanded="false"
+            aria-controls="menu-chinh">
+            ☰ Menu
+        </button>
+
+        <ul id="menu-chinh">
+            <li>
+                <a href="index.html">Trang chủ</a>
+            </li>
+
+            <li>
+                <a href="danh-sach.html">Danh sách Sản phẩm</a>
+            </li>
+
+            <li>
+                <a href="chi-tiet.html">Chi tiết Hàng hóa</a>
+            </li>
+
+            <li>
+                <a href="gioi-thieu.html">Giới thiệu Nhóm</a>
+            </li>
+
+            <li>
+                <a href="lien-he.html">Báo cáo &amp; Liên hệ</a>
+            </li>
         </ul>
     </nav>
 
     <main class="bao">
+
         <h1>Trang chủ hệ thống MiniPos</h1>
 
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-content">
+
+                <p class="hero-label">
+                    GIẢI PHÁP QUẢN LÝ BÁN HÀNG
+                </p>
+
+                <h2>
+                    MiniPos – Quản lý bán hàng thông minh
+                </h2>
+
+                <p>
+                    Hỗ trợ quản lý sản phẩm, bán hàng và tồn kho hiệu quả.
+                </p>
+
+                <a href="danh-sach.html">
+                    Xem sản phẩm
+                </a>
+
+            </div>
+        </section>
+
+
+        <!-- TỔNG QUAN HỆ THỐNG -->
         <section>
+
             <h2>Tổng quan hệ thống</h2>
-            <p>Hệ thống MiniPos được xây dựng nhằm hỗ trợ cửa hàng quản lý sản phẩm, nhập xuất hàng, theo dõi tồn kho và
-                tối ưu hóa quá trình bán hàng. Giao diện được thiết kế tối giản, giúp nhân viên thực hiện thao tác tính
-                tiền nhanh chóng.</p>
-                <img src="images/MiniPOS.webp" alt="Giao diện hệ thống MiniPos"
-                width="800" height="533">
+
+            <p>
+                Hệ thống MiniPos được xây dựng nhằm hỗ trợ cửa hàng quản lý
+                sản phẩm, nhập xuất hàng, theo dõi tồn kho và tối ưu hóa quá
+                trình bán hàng. Giao diện được thiết kế tối giản, giúp nhân
+                viên thực hiện thao tác tính tiền nhanh chóng.
+            </p>
+
+            <img
+                src="images/MiniPOS.webp"
+                alt="Giao diện hệ thống MiniPos"
+                width="800"
+                height="533"
+                loading="lazy">
+
         </section>
 
+
+        <!-- REST API -->
         <section>
+
+            <h2>Thông tin thời tiết</h2>
+
+            <p
+                id="trang-thai-thoi-tiet"
+                aria-live="polite">
+                Đang tải dữ liệu thời tiết...
+            </p>
+
+            <div id="du-lieu-thoi-tiet"></div>
+
+            <button
+                id="thu-lai-thoi-tiet"
+                type="button"
+                hidden>
+                Thử lại
+            </button>
+
+        </section>
+
+
+        <!-- THẺ GIỚI THIỆU -->
+        <section class="the-gioi-thieu">
+
+            <article class="the">
+
+                <h2>Sản phẩm</h2>
+
+                <p>
+                    Quản lý thông tin và danh mục sản phẩm một cách rõ ràng,
+                    thuận tiện.
+                </p>
+
+            </article>
+
+
+            <article class="the">
+
+                <h2>Bán hàng</h2>
+
+                <p>
+                    Hỗ trợ quá trình bán hàng, tính tiền và quản lý đơn hàng
+                    nhanh chóng.
+                </p>
+
+            </article>
+
+
+            <article class="the">
+
+                <h2>Tồn kho</h2>
+
+                <p>
+                    Theo dõi số lượng hàng hóa và tình trạng tồn kho hiệu quả.
+                </p>
+
+            </article>
+
+        </section>
+
+
+        <!-- TÍNH NĂNG NỔI BẬT -->
+        <section>
+
             <h2>Tính năng nổi bật</h2>
+
             <ul>
-                <li>Quản lý sản phẩm và danh mục hàng hóa.</li>
-                <li>Thực hiện bán hàng, tính tiền và in hóa đơn.</li>
-                <li>Theo dõi tồn kho theo thời gian thực.</li>
-                <li>Phân quyền Admin và Nhân viên bán hàng độc lập.</li>
+
+                <li>
+                    Quản lý sản phẩm và danh mục hàng hóa.
+                </li>
+
+                <li>
+                    Thực hiện bán hàng, tính tiền và in hóa đơn.
+                </li>
+
+                <li>
+                    Theo dõi tồn kho theo thời gian thực.
+                </li>
+
+                <li>
+                    Phân quyền Admin và Nhân viên bán hàng độc lập.
+                </li>
+
             </ul>
+
         </section>
 
+
+        <!-- LỢI ÍCH CỦA HỆ THỐNG -->
         <section>
+
             <h2>Lợi ích của hệ thống</h2>
+
             <ul>
-                <li>Tiết kiệm thời gian trong quá trình bán hàng.</li>
-                <li>Hỗ trợ quản lý hàng hóa và tồn kho hiệu quả.</li>
-                <li>Giảm sai sót khi nhập liệu và tính tiền.</li>
-                <li>Cung cấp giao diện dễ sử dụng cho nhân viên.</li>
+
+                <li>
+                    Tiết kiệm thời gian trong quá trình bán hàng.
+                </li>
+
+                <li>
+                    Hỗ trợ quản lý hàng hóa và tồn kho hiệu quả.
+                </li>
+
+                <li>
+                    Giảm sai sót khi nhập liệu và tính tiền.
+                </li>
+
+                <li>
+                    Cung cấp giao diện dễ sử dụng cho nhân viên.
+                </li>
+
             </ul>
+
         </section>
+
     </main>
 
+
     <footer>
-        <p>&copy; 2026 Nhóm 05 - Lũy, Sang, Linh, Trâm. Trực thuộc Khoa Toán - Tin.</p>
+
+        <p>
+            &copy; 2026 Nhóm 05 - Lũy, Sang, Linh, Trâm.
+            Trực thuộc Khoa Toán - Tin.
+        </p>
+
     </footer>
+
+
+    <!-- JavaScript dùng chung -->
+    <script
+        type="module"
+        src="js/main.js">
+    </script>
+
+    <!-- JavaScript cho REST API trang chủ -->
+    <script
+        type="module"
+        src="js/trang-chu.js">
+    </script>
+
+    <script
+    type="module"
+    src="js/yeu-thich.js">
+    </script>
+
 </body>
 
 </html>
