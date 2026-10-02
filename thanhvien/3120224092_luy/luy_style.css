@@ -737,3 +737,60 @@ footer a:hover {
     outline: 3px solid var(--mau-nhan);
     outline-offset: 3px;
 }
+/* ========================================
+   CSS BỔ SUNG CHO PHẦN C (JS TƯƠNG TÁC)
+   ======================================== */
+
+/* 1. Hiệu ứng con trỏ nhấp nháy cho gõ chữ */
+.typing-cursor::after {
+    content: '|';
+    display: inline-block;
+    animation: blink 0.8s step-end infinite;
+    color: var(--mau-chinh);
+    margin-left: 2px;
+}
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+/* 2. Định dạng nút Accordion */
+.accordion-header {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-size: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    color: inherit;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.accordion-header::after {
+    content: '▼';
+    font-size: 0.7em;
+    transition: transform 0.3s ease;
+}
+.accordion-header[aria-expanded="false"]::after {
+    transform: rotate(-90deg); /* Xoay mũi tên khi đóng */
+}
+.accordion-header:focus-visible {
+    outline: 3px solid var(--mau-nhan);
+    border-radius: 4px;
+    outline-offset: 4px;
+}
+.accordion-content {
+    display: none;
+}
+.accordion-content.open {
+    display: block;
+    animation: fadeIn 0.4s ease;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

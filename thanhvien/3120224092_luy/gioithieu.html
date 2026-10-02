@@ -4,10 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta
-    name="description"
-    content="Trang giới thiệu cá nhân sinh viên thực hiện đồ án MiniPos."
-  >
+  <meta name="description" content="Trang giới thiệu cá nhân sinh viên thực hiện đồ án MiniPos.">
   <title>Giới thiệu Cá nhân | MiniPos</title>
 
   <link rel="stylesheet" href="luy_style.css">
@@ -40,65 +37,56 @@
   <main>
 
     <!-- Section: Giới thiệu bản thân và ảnh chân dung -->
-<!-- Section: Giới thiệu bản thân và ảnh chân dung -->
-<section>
-  <h2>Thông tin sinh viên</h2>
+    <!-- Section: Giới thiệu bản thân và ảnh chân dung -->
+    <section>
+      <h2>Thông tin sinh viên</h2>
 
-  <img
-    src="avatar.png"
-    alt="Ảnh chân dung sinh viên"
-    width="120"
-    height="150"
-  >
+      <img src="avatar.png" alt="Ảnh chân dung sinh viên" width="120" height="150">
 
-  <div class="student-info">
-    <p>
-      <strong>Họ và tên:</strong> Thới Đình Thị Thanh Lũy
-    </p>
+      <div class="student-info">
+        <p><strong>Họ và tên:</strong> Thới Đình Thị Thanh Lũy</p>
+        <p><strong>Mã sinh viên:</strong> 3120224092</p>
+        <p><strong>Lớp học phần:</strong> Thiết kế và Lập trình Web - Nhóm 05</p>
 
-    <p>
-      <strong>Mã sinh viên:</strong> 3120224092
-    </p>
+        <!-- Thêm id="typing-text" và thuộc tính data-text để JS đọc dữ liệu -->
+        <p id="typing-text"
+          data-text="Chào mừng bạn đến với trang cá nhân của mình trong dự án phát triển hệ thống quản lý bán hàng MiniPos.">
+          <!-- Mặc định để trống, JS sẽ gõ chữ vào đây -->
+        </p>
 
-    <p>
-      <strong>Lớp học phần:</strong> Thiết kế và Lập trình Web - Nhóm 05
-    </p>
+        <p><strong>Kỹ năng chuyên môn</strong></p>
+        <ul>
+          <li>Ngôn ngữ: HTML, PHP cơ bản</li>
+          <li>Công cụ: Visual Studio Code, Git/GitHub, XAMPP, Word, Draw.io</li>
+          <li>Cơ sở dữ liệu: MySQL</li>
+        </ul>
+      </div>
+    </section>
 
-    <p>
-      Chào mừng bạn đến với trang cá nhân của mình trong dự án phát triển
-      hệ thống quản lý bán hàng MiniPos.
-    </p>
+    <!-- Chức năng Accordion: Dự án và Sở thích -->
+    <article class="accordion-section">
+      <!-- Biến h2 thành một nút có thể click và điều hướng bằng phím Tab/Enter -->
+      <h2>
+        <button class="accordion-header" aria-expanded="true" aria-controls="content-dinhhuong">
+          Định hướng và Sở thích
+        </button>
+      </h2>
 
-    <p>
-      <strong>Kỹ năng chuyên môn</strong>
-    </p>
-
-    <ul>
-      <li>Ngôn ngữ: HTML, PHP cơ bản</li>
-      <li>Công cụ: Visual Studio Code, Git/GitHub, XAMPP, Word, Draw.io</li>
-      <li>Cơ sở dữ liệu: MySQL</li>
-    </ul>
-  </div>
-</section>
-
-    <!-- Article: Dự án và Sở thích -->
-    <article>
-      <h2>Định hướng và Sở thích</h2>
-
-      <p>
-        Trong đồ án nhóm MiniPos, mình đảm nhận việc lên ý tưởng và xây dựng
-        cấu trúc giao diện website, phát triển các trang HTML ngữ nghĩa,
-        đồng thời đảm bảo nội dung và liên kết giữa các trang được tổ chức
-        rõ ràng, thống nhất.
-      </p>
-
-      <p>
-        Sở thích cá nhân của mình là thực hiện các công trình nghiên cứu
-        phục vụ cho học tập, tổ chức các hoạt động cho sinh viên.
-      </p>
+      <!-- Bọc nội dung cần đóng/mở vào trong div -->
+      <div id="content-dinhhuong" class="accordion-content open">
+        <p>
+          Trong đồ án nhóm MiniPos, mình đảm nhận việc lên ý tưởng và xây dựng
+          cấu trúc giao diện website, phát triển các trang HTML ngữ nghĩa,
+          đồng thời đảm bảo nội dung và liên kết giữa các trang được tổ chức
+          rõ ràng, thống nhất.
+        </p>
+        <p>
+          Sở thích cá nhân của mình là thực hiện các công trình nghiên cứu
+          phục vụ cho học tập, tổ chức các hoạt động cho sinh viên.
+        </p>
+      </div>
     </article>
-
-    <!-- Bảng: Thời khóa biểu tuần -->
+<!-- Bảng: Thời khóa biểu tuần -->
     <section>
       <h2>Thời khóa biểu tuần</h2>
 
@@ -234,8 +222,7 @@
               Hệ quản trị cơ sở dữ liệu<br>
               Phòng: B3-304
             </td>
-
-            <td></td>
+<td></td>
 
             <td rowspan="4">
               31231016 - (24-0102)<br>
@@ -319,5 +306,8 @@
     </p>
   </footer>
 
+  <!-- Gọi file JavaScript cá nhân -->
+  <script type="module" src="js/canhan.js"></script>
 </body>
+
 </html>
