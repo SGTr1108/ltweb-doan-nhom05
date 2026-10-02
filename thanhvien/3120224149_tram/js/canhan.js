@@ -6,23 +6,26 @@
  *   2. Nhấp chuột vào ảnh chân dung đại diện -> Khung nền đen hiện ra hiển thị ảnh phóng to kèm chú thích.
  *   3. Bấm vào nút dấu (X) góc trên hoặc bấm vào vùng nền đen bên ngoài để đóng trình phóng to ảnh.
  */
-document.addEventListener("DOMContentLoaded", function() {
 
-  // ==========================================
-  // 1. XỬ LÝ NÚT CUỘN LÊN ĐẦU TRANG
-  // ==========================================
+document.addEventListener("DOMContentLoaded", function () {
+  
+  // =========================================================================
+  // 1. CHỨC NĂNG: NÚT CUỘN LÊN ĐẦU TRANG (BACK TO TOP)
+  // =========================================================================
   const scrollToTopBtn = document.getElementById("scrollToTopBtn");
 
   if (scrollToTopBtn) {
-    window.onscroll = function() {
+    // Ẩn/hiện nút dựa trên khoảng cách cuộn của trình duyệt
+    window.addEventListener("scroll", function () {
       if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-        scrollToTopBtn.style.display = "block";
+        scrollToTopBtn.classList.add("active");
       } else {
-        scrollToTopBtn.style.display = "none";
+        scrollToTopBtn.classList.remove("active");
       }
-    };
+    });
 
-    scrollToTopBtn.addEventListener("click", function() {
+    // Xử lý cuộn mượt khi click vào nút bằng addEventListener
+    scrollToTopBtn.addEventListener("click", function () {
       window.scrollTo({
         top: 0,
         behavior: "smooth"
@@ -30,32 +33,45 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
-  // ==========================================
-  // 2. XỬ LÝ PHÓNG TO ẢNH CHÂN DUNG (LIGHTBOX)
-  // ==========================================
+  // =========================================================================
+  // 2. CHỨC NĂNG: TRÌNH PHÓNG TO ẢNH CHÂN DUNG (LIGHTBOX VIA DOM METHODS)
+  // =========================================================================
   const profileImg = document.querySelector(".profile-img");
-  const lightbox = document.getElementById("imageLightbox");
-  const lightboxImg = document.getElementById("lightboxImg");
-  const lightboxClose = document.querySelector(".lightbox-close");
+  const lightboxContainer = document.getElementById("imageLightbox");
 
-  if (profileImg && lightbox && lightboxImg && lightboxClose) {
-    // Khi click vào ảnh đại diện -> Mở khung phóng to
-    profileImg.addEventListener("click", function() {
-      lightbox.style.display = "block";
-      lightboxImg.src = this.src; // Lấy nguồn ảnh từ avatar gốc gán qua
+  // Kiểm tra điều kiện tồn tại để ngăn chặn triệt để lỗi "Uncaught TypeError" trong Console
+  if (profileImg && lightboxContainer) {
+    
+    // Tạo phần tử nút Đóng (X) bằng createElement
+    const closeBtn = document.createElement("span");
+    closeBtn.classList.add("lightbox-close");
+    closeBtn.textContent = "×"; // Sử dụng textContent thay vì innerHTML để bảo mật dữ liệu
+
+    // Tạo phần tử thẻ hiển thị hình ảnh phóng to bằng createElement
+    const targetImg = document.createElement("img");
+    targetImg.classList.add("lightbox-content");
+    targetImg.alt = "Ảnh chân dung phóng to sinh viên";
+
+    // Đưa các phần tử vừa tạo lồng vào trong khung nền tối của ứng dụng
+    lightboxContainer.appendChild(closeBtn);
+    lightboxContainer.appendChild(targetImg);
+
+    // Sự kiện 2A: Nhấp chuột vào ảnh đại diện gốc để hiển thị Lightbox phóng to
+    profileImg.addEventListener("click", function () {
+      targetImg.src = profileImg.src; // Sao chép đường dẫn ảnh tự động
+      lightboxContainer.classList.add("open"); // Hiển thị khung qua classList
     });
 
-    // Khi click vào dấu X -> Đóng khung phóng to
-    lightboxClose.addEventListener("click", function() {
-      lightbox.style.display = "none";
+    // Sự kiện 2B: Nhấp chuột vào nút (X) để ẩn khung phóng to
+    closeBtn.addEventListener("click", function () {
+      lightboxContainer.classList.remove("open");
     });
 
-    // Khi click vào vùng nền đen bên ngoài ảnh -> Cũng tự động đóng khung
-    lightbox.addEventListener("click", function(event) {
-      if (event.target === lightbox) {
-        lightbox.style.display = "none";
+    // Sự kiện 2C: Nhấp chuột ra ngoài vùng ảnh (vùng nền đen) để ẩn khung phóng to nhanh
+    lightboxContainer.addEventListener("click", function (event) {
+      if (event.target === lightboxContainer) {
+        lightboxContainer.classList.remove("open");
       }
     });
   }
-
 });
