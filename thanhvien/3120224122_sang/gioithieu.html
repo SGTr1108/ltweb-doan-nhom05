@@ -52,13 +52,51 @@
         </section>
 
         <!-- Article: Dự án và Sở thích -->
-        <article>
-            <h2>Định hướng và Sở thích</h2>
-            <p>Trong đồ án nhóm MiniPos, mình đảm nhận việc thiết kế cấu trúc giao diện HTML ngữ nghĩa, đảm bảo các tiêu
-                chuẩn về khả năng truy cập (A11y) và tối ưu hóa SEO on-page.</p>
-            <p>Sở thích cá nhân của mình là tìm hiểu các mô hình kiến trúc phần mềm 3 tầng và phát triển các ứng dụng
-                web thực tế phục vụ đời sống.</p>
-        </article>
+        <!-- Chức năng 1: Chuyển đổi thẻ nội dung (Tabbed Content) -->
+        <section class="tabs-section">
+            <h2>Thông tin thêm</h2>
+            <!-- Các nút Tab -->
+            <div class="tab-buttons" role="tablist">
+                <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="tab-hoctap"
+                    id="btn-hoctap">Học tập</button>
+                <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-duan" id="btn-duan">Dự
+                    án</button>
+                <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-chungchi"
+                    id="btn-chungchi">Chứng chỉ</button>
+            </div>
+
+            <!-- Nội dung các Tab -->
+            <div class="tab-content active" id="tab-hoctap" role="tabpanel" aria-labelledby="btn-hoctap">
+                <h3>Định hướng học tập</h3>
+                <p>Sở thích cá nhân của mình là tìm hiểu các mô hình kiến trúc phần mềm 3 tầng và phát triển các ứng
+                    dụng web thực tế phục vụ đời sống.</p>
+            </div>
+            <div class="tab-content" id="tab-duan" role="tabpanel" aria-labelledby="btn-duan">
+                <h3>Dự án MiniPos</h3>
+                <p>Trong đồ án nhóm MiniPos, mình đảm nhận việc thiết kế cấu trúc giao diện HTML ngữ nghĩa, đảm bảo các
+                    tiêu chuẩn về khả năng truy cập (A11y) và tối ưu hóa SEO on-page.</p>
+            </div>
+            <div class="tab-content" id="tab-chungchi" role="tabpanel" aria-labelledby="btn-chungchi">
+                <h3>Chứng chỉ & Thành tích</h3>
+                <p>Đang hoàn thiện chứng chỉ ngoại ngữ và các kỹ năng lập trình nâng cao.</p>
+            </div>
+        </section>
+
+        <!-- Chức năng 2: Tính chỉ số BMI -->
+        <section class="bmi-section">
+            <h2>Tính chỉ số BMI cá nhân</h2>
+            <div class="bmi-form">
+                <label for="chieu-cao">Chiều cao (cm):</label>
+                <input type="number" id="chieu-cao" placeholder="Ví dụ: 170" min="50" max="300">
+
+                <label for="can-nang">Cân nặng (kg):</label>
+                <input type="number" id="can-nang" placeholder="Ví dụ: 60" min="10" max="300">
+
+                <button id="btn-tinh-bmi" type="button">Tính BMI</button>
+            </div>
+            <!-- aria-live="polite" giúp trình đọc màn hình tự động đọc kết quả khi nó xuất hiện -->
+            <p id="kq-bmi" aria-live="polite" class="bmi-result"></p>
+        </section>
 
         <!-- Bảng: Thời khóa biểu tuần -->
         <section>
@@ -239,6 +277,8 @@
     <footer>
         <p>&copy; 2026 [Trần Xuân Sang] - Khoa Toán - Tin, Đại học Sư phạm Đà Nẵng.</p>
     </footer>
+    <!-- Gọi file JavaScript cá nhân -->
+    <script type="module" src="js/canhan.js"></script>
 </body>
 
 </html>
