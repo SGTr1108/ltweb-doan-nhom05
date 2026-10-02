@@ -23,12 +23,6 @@
       <a href="https://sgtr1108.github.io/ltweb-doan-nhom05/index.html">Quay về Trang chủ Nhóm</a> |
       <a href="https://sgtr1108.github.io/ltweb-doan-nhom05/gioi-thieu.html">Quay lại Giới thiệu Nhóm</a>
 
-<span class="translate-label">Dịch trang:</span>
-  <button class="flag-btn" onclick="changeLanguage('vi')" title="Tiếng Việt">🇻🇳</button>
-  <button class="flag-btn" onclick="changeLanguage('en')" title="English">🇬🇧</button>
-
-  <!-- Khung ẩn của Google Translate (bắt buộc phải có để hoạt động nhưng dùng CSS ẩn đi) -->
-  <div id="google_translate_element" style="display: none;"></div>
     </nav>
 
     <main>
@@ -266,7 +260,12 @@
     </footer>
     <button id="scrollToTopBtn" title="Lên đầu trang">&#10148;</button>
 
+        <!-- KHUNG NỀN TỐI ĐỂ HIỂN THỊ ẢNH PHÓNG TO  -->
+    <div id="imageLightbox" class="lightbox">
+      <span class="lightbox-close">&times;</span>
+      <img class="lightbox-content" id="lightboxImg" alt="Ảnh chân dung phóng to">
+    </div>
+
     <script src="js/canhan.js" defer></script>
-    <script src="https://google.com"></script>
   </body>
 </html>
