@@ -10,6 +10,7 @@
     <title>Giới thiệu Cá nhân | MiniPos</title>
     <!-- Nhúng tệp CSS riêng độc lập -->
     <link rel="stylesheet" href="tram_style.css">
+
   </head>
 
   <body>
@@ -21,6 +22,13 @@
       <!-- Liên kết hai chiều: quay về trang chủ của nhóm (lùi 2 cấp thư mục) -->
       <a href="https://sgtr1108.github.io/ltweb-doan-nhom05/index.html">Quay về Trang chủ Nhóm</a> |
       <a href="https://sgtr1108.github.io/ltweb-doan-nhom05/gioi-thieu.html">Quay lại Giới thiệu Nhóm</a>
+
+<span class="translate-label">Dịch trang:</span>
+  <button class="flag-btn" onclick="changeLanguage('vi')" title="Tiếng Việt">🇻🇳</button>
+  <button class="flag-btn" onclick="changeLanguage('en')" title="English">🇬🇧</button>
+
+  <!-- Khung ẩn của Google Translate (bắt buộc phải có để hoạt động nhưng dùng CSS ẩn đi) -->
+  <div id="google_translate_element" style="display: none;"></div>
     </nav>
 
     <main>
@@ -256,5 +264,9 @@
         Nẵng.
       </p>
     </footer>
+    <button id="scrollToTopBtn" title="Lên đầu trang">&#10148;</button>
+
+    <script src="js/canhan.js" defer></script>
+    <script src="https://google.com"></script>
   </body>
 </html>
