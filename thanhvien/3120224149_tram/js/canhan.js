@@ -1,4 +1,3 @@
-// Đợi cấu trúc HTML của trang tải xong hoàn toàn rồi mới chạy mã bên trong
 document.addEventListener("DOMContentLoaded", function() {
 
   // ==========================================
@@ -6,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // ==========================================
   const scrollToTopBtn = document.getElementById("scrollToTopBtn");
 
-  if (scrollToTopBtn) { // Kiểm tra xem nút có tồn tại không để tránh lỗi null
+  if (scrollToTopBtn) {
     window.onscroll = function() {
       if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
         scrollToTopBtn.style.display = "block";
@@ -23,29 +22,32 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
-});
+  // ==========================================
+  // 2. XỬ LÝ PHÓNG TO ẢNH CHÂN DUNG (LIGHTBOX)
+  // ==========================================
+  const profileImg = document.querySelector(".profile-img");
+  const lightbox = document.getElementById("imageLightbox");
+  const lightboxImg = document.getElementById("lightboxImg");
+  const lightboxClose = document.querySelector(".lightbox-close");
 
-// ==========================================
-// 2. CẤU HÌNH BỘ DỊCH GOOGLE TRANSLATE ẨN
-// ==========================================
-// Lưu ý: Hàm này phải để NẰM NGOÀI sự kiện DOMContentLoaded để Google API có thể gọi trực tiếp toàn cục
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({
-    pageLanguage: 'vi',
-    includedLanguages: 'en,vi',
-    layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-  }, 'google_translate_element');
-}
+  if (profileImg && lightbox && lightboxImg && lightboxClose) {
+    // Khi click vào ảnh đại diện -> Mở khung phóng to
+    profileImg.addEventListener("click", function() {
+      lightbox.style.display = "block";
+      lightboxImg.src = this.src; // Lấy nguồn ảnh từ avatar gốc gán qua
+    });
 
-// ==========================================
-// 3. XỬ LÝ SỰ KIỆN BẤM VÀO LÁ CỜ ĐỂ DỊCH
-// ==========================================
-function changeLanguage(langCode) {
-  const googleSelect = document.querySelector('.goog-te-combo');
-  if (googleSelect) {
-    googleSelect.value = langCode;
-    googleSelect.dispatchEvent(new Event('change'));
-  } else {
-    alert("Tính năng dịch đang tải hoặc bị trình duyệt chặn trên môi trường local (file://). Bạn hãy chạy bằng Live Server hoặc đẩy lên GitHub Pages nhé!");
+    // Khi click vào dấu X -> Đóng khung phóng to
+    lightboxClose.addEventListener("click", function() {
+      lightbox.style.display = "none";
+    });
+
+    // Khi click vào vùng nền đen bên ngoài ảnh -> Cũng tự động đóng khung
+    lightbox.addEventListener("click", function(event) {
+      if (event.target === lightbox) {
+        lightbox.style.display = "none";
+      }
+    });
   }
-}
+
+});
