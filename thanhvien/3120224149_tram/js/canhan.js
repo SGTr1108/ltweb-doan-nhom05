@@ -1,3 +1,11 @@
+/**
+ * TẬP TIN: js/canhan.js
+ * CHỨC NĂNG: Điều khiển hiệu ứng cuộn mượt lên đầu trang và trình xem ảnh phóng to (Lightbox).
+ * CÁCH THỬ: 
+ *   1. Cuộn trang xuống dưới -> Xuất hiện nút mũi tên góc phải -> Bấm để cuộn mượt lên đỉnh.
+ *   2. Nhấp chuột vào ảnh chân dung đại diện -> Khung nền đen hiện ra hiển thị ảnh phóng to kèm chú thích.
+ *   3. Bấm vào nút dấu (X) góc trên hoặc bấm vào vùng nền đen bên ngoài để đóng trình phóng to ảnh.
+ */
 document.addEventListener("DOMContentLoaded", function() {
 
   // ==========================================
