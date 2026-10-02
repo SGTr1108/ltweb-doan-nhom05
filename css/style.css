@@ -1,4 +1,3 @@
-
 /* ========================================
                 01. BIẾN CSS
    ======================================== */
@@ -11,6 +10,7 @@
     --mau-nen-phu: #f4f6f8;
     --bo-goc: 8px;
     --khoang-cach: 16px;
+    --font-size-co-ban: 16px;
 }
 
 
@@ -35,11 +35,14 @@ body {
     min-width: 0;
     max-width: 100%;
     min-height: 100vh;
+
     margin: 0;
     padding: 0;
 
     font-family: system-ui, "Segoe UI", sans-serif;
+    font-size: var(--font-size-co-ban);
     line-height: 1.6;
+
     color: var(--mau-chu);
     background-color: var(--mau-nen);
 
@@ -75,10 +78,9 @@ a:focus-visible {
                 03. BỐ CỤC
    ======================================== */
 
-/* Bố cục chính bằng CSS Grid */
-
 body {
     display: grid;
+
     grid-template-areas:
         "header"
         "nav"
@@ -95,6 +97,7 @@ header {
     min-width: 0;
 
     padding: var(--khoang-cach);
+
     background-color: var(--mau-chinh);
     color: var(--mau-nen);
 }
@@ -104,6 +107,7 @@ nav {
 
     width: 100%;
     min-width: 0;
+
     padding: 8px;
 
     background-color: var(--mau-nen-phu);
@@ -150,7 +154,10 @@ footer p {
                 04. THÀNH PHẦN
    ======================================== */
 
-/* 04.1. THANH ĐIỀU HƯỚNG */
+
+/* ----------------------------------------
+   04.1. THANH ĐIỀU HƯỚNG
+   ---------------------------------------- */
 
 nav ul {
     display: flex;
@@ -162,6 +169,7 @@ nav ul {
     min-width: 0;
 
     gap: 4px;
+
     margin: 0;
     padding: 0;
 
@@ -184,6 +192,7 @@ nav a {
 
     text-align: center;
     text-decoration: none;
+
     overflow-wrap: break-word;
 
     border-radius: var(--bo-goc);
@@ -205,14 +214,19 @@ nav a:focus-visible {
     outline-offset: 3px;
 }
 
-/* 04.2. THÀNH PHẦN TRANG CHỦ */
+
+/* ----------------------------------------
+   04.2. THÀNH PHẦN TRANG CHỦ
+   ---------------------------------------- */
 
 main h1 {
     margin-top: 0;
     margin-bottom: 24px;
 
     color: var(--mau-chinh);
+
     text-align: center;
+
     overflow-wrap: break-word;
 }
 
@@ -225,6 +239,7 @@ main section {
     padding: 16px;
 
     background-color: var(--mau-nen-phu);
+
     border: 1px solid #dce2e8;
     border-radius: var(--bo-goc);
 
@@ -235,6 +250,7 @@ main section h2 {
     margin-top: 0;
 
     color: var(--mau-chinh);
+
     overflow-wrap: break-word;
 }
 
@@ -255,6 +271,7 @@ main section img {
     height: auto;
 
     margin: 0 auto;
+
     border-radius: var(--bo-goc);
 }
 
@@ -266,24 +283,34 @@ main section li {
     margin-bottom: 8px;
 }
 
-/* 04.3. VIDEO YOUTUBE */
+
+/* ----------------------------------------
+   04.3. VIDEO YOUTUBE
+   ---------------------------------------- */
 
 main iframe {
     display: block;
 
     width: 100%;
     max-width: 100%;
+
     height: auto;
 
     aspect-ratio: 16 / 9;
+
     border: 0;
 }
 
-/* 04.4. BIỂU MẪU LIÊN HỆ */
+
+/* ----------------------------------------
+   04.4. BIỂU MẪU LIÊN HỆ
+   ---------------------------------------- */
 
 form {
     width: 100%;
-    max-width: 100%;
+    max-width: 720px;
+
+    margin: 0 auto;
 }
 
 form input,
@@ -299,34 +326,181 @@ form textarea {
     width: 100%;
 }
 
-/* 04.5. BẢNG DỮ LIỆU */
+fieldset {
+    min-width: 0;
+
+    margin: 0;
+    padding: 20px;
+
+    border: 1px solid #dce2e8;
+    border-radius: var(--bo-goc);
+
+    background-color: var(--mau-nen-phu);
+}
+
+legend {
+    padding: 0 8px;
+
+    color: var(--mau-chinh);
+    font-weight: 700;
+}
+
+form label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    font-weight: 600;
+}
+
+form input:not([type="radio"]),
+form select,
+form textarea {
+    display: block;
+
+    width: 100%;
+    max-width: 100%;
+
+    padding: 10px 12px;
+
+    border: 1px solid #9ca3af;
+    border-radius: var(--bo-goc);
+
+    font: inherit;
+
+    color: var(--mau-chu);
+    background-color: var(--mau-nen);
+}
+
+form textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+form input:not([type="radio"]):focus-visible,
+form select:focus-visible,
+form textarea:focus-visible {
+    outline: 3px solid var(--mau-nhan);
+    outline-offset: 2px;
+
+    border-color: var(--mau-chinh);
+}
+
+
+/* Nút gửi biểu mẫu */
+
+form button {
+    display: inline-block;
+
+    padding: 10px 16px;
+
+    border: 1px solid var(--mau-chinh);
+    border-radius: var(--bo-goc);
+
+    background-color: var(--mau-chinh);
+    color: var(--mau-nen);
+
+    font: inherit;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+form button:hover {
+    background-color: #0d2b4f;
+    color: var(--mau-nen);
+}
+
+form button:active {
+    background-color: var(--mau-nhan);
+    color: var(--mau-chu);
+}
+
+form button:focus-visible {
+    outline: 3px solid var(--mau-nhan);
+    outline-offset: 3px;
+}
+
+
+/* Thông báo lỗi */
+
+.thong-bao-loi {
+    margin: 4px 0 10px;
+
+    color: #b00020;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+input[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+    border: 2px solid #b00020;
+    background-color: #fff5f5;
+}
+
+input[aria-invalid="true"]:focus,
+textarea[aria-invalid="true"]:focus {
+    outline: 3px solid #f5b5b5;
+    outline-offset: 2px;
+}
+
+
+/* Nội dung liên hệ */
+
+.mo-ta-lien-he {
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.thong-tin-lien-he {
+    margin-top: 16px;
+}
+
+
+/* ----------------------------------------
+   04.5. BẢNG DỮ LIỆU
+   ---------------------------------------- */
 
 .bang-vo {
     display: block;
+
     width: 100%;
     max-width: 100%;
     min-width: 0;
+
     overflow-x: auto;
 }
 
 .bang-vo table {
     width: 100%;
     min-width: 650px;
+
     border-collapse: collapse;
+
     background-color: var(--mau-nen);
 }
 
 .bang-vo caption {
     margin-bottom: 12px;
-    font-weight: 600;
+
     color: var(--mau-chinh);
+
+    font-weight: 600;
+
     text-align: left;
 }
 
 .bang-vo th,
 .bang-vo td {
     padding: 8px;
+
     border: 1px solid #c7d0d9;
+
     text-align: left;
 }
 
@@ -339,31 +513,45 @@ form textarea {
     background-color: var(--mau-nen-phu);
 }
 
-/* 04.6. LƯỚI SẢN PHẨM */
+
+/* ----------------------------------------
+   04.6. LƯỚI SẢN PHẨM
+   ---------------------------------------- */
 
 .luoi-san-pham {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(240px, 1fr));
+
     gap: 20px;
 }
 
-/* 04.7. THẺ SẢN PHẨM */
+
+/* ----------------------------------------
+   04.7. THẺ SẢN PHẨM
+   ---------------------------------------- */
 
 .the-san-pham {
     display: flex;
     flex-direction: column;
 
     min-width: 0;
+
     overflow: hidden;
 
     background-color: var(--mau-nen);
+
     border: 1px solid #dce2e8;
     border-radius: var(--bo-goc);
 
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
-/* 04.8. HÌNH ẢNH SẢN PHẨM */
+
+/* ----------------------------------------
+   04.8. HÌNH ẢNH SẢN PHẨM
+   ---------------------------------------- */
 
 .the-san-pham img {
     display: block;
@@ -374,12 +562,18 @@ form textarea {
     object-fit: cover;
 }
 
-/* 04.9. NỘI DUNG SẢN PHẨM */
+
+/* ----------------------------------------
+   04.9. NỘI DUNG SẢN PHẨM
+   ---------------------------------------- */
 
 .noi-dung-san-pham {
     display: flex;
     flex-direction: column;
+
     flex: 1;
+
+    min-width: 0;
 
     padding: 16px;
 }
@@ -405,21 +599,28 @@ form textarea {
     font-weight: 700;
 }
 
-/* 04.10. LIÊN KẾT CHI TIẾT */
+
+/* ----------------------------------------
+   04.10. NÚT XEM CHI TIẾT
+   ---------------------------------------- */
 
 .noi-dung-san-pham a {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
-    width: fit-content;
-    margin-top: auto;
+    width: auto;
+
     padding: 8px 12px;
 
     background-color: var(--mau-chinh);
     color: var(--mau-nen);
 
     border-radius: var(--bo-goc);
+
     text-decoration: none;
-    transition: background-color 0.2s ease;
+
+    white-space: nowrap;
 }
 
 .noi-dung-san-pham a:hover {
@@ -437,12 +638,88 @@ form textarea {
     outline-offset: 3px;
 }
 
-/* 04.11. BỐ CỤC TRANG CHI TIẾT */
+
+/* ----------------------------------------
+   04.11. HÀNG NÚT SẢN PHẨM
+   ---------------------------------------- */
+
+.hang-nut-san-pham {
+    display: flex;
+    align-items: stretch;
+
+    width: 100%;
+
+    gap: 8px;
+
+    margin-top: auto;
+}
+
+.hang-nut-san-pham a,
+.hang-nut-san-pham .nut-yeu-thich {
+    flex: 1;
+
+    min-width: 0;
+    width: 0;
+
+    margin-top: 0;
+    padding: 8px 10px;
+
+    box-sizing: border-box;
+
+    text-align: center;
+
+    white-space: nowrap;
+}
+
+
+/* ----------------------------------------
+   04.12. NÚT YÊU THÍCH
+   ---------------------------------------- */
+
+.nut-yeu-thich {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid var(--mau-chinh);
+    border-radius: var(--bo-goc);
+
+    background-color: var(--mau-chinh);
+    color: var(--mau-nen);
+
+    font: inherit;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.nut-yeu-thich:hover {
+    background-color: var(--mau-nen);
+    color: var(--mau-chinh);
+}
+
+.nut-yeu-thich:active {
+    background-color: var(--mau-nhan);
+    color: var(--mau-chu);
+}
+
+.nut-yeu-thich:focus-visible {
+    outline: 3px solid var(--mau-nhan);
+    outline-offset: 3px;
+}
+
+
+/* ----------------------------------------
+   04.13. BỐ CỤC TRANG CHI TIẾT
+   ---------------------------------------- */
 
 .bo-cuc-chi-tiet {
     display: grid;
+
     grid-template-columns: 1fr;
+
     gap: 24px;
+
     min-width: 0;
 }
 
@@ -453,6 +730,7 @@ form textarea {
 
 .noi-dung-chi-tiet figure {
     margin: 16px 0;
+
     text-align: center;
 }
 
@@ -460,25 +738,32 @@ form textarea {
     width: 100%;
     max-width: 350px;
     height: auto;
+
     margin: 0 auto;
+
     object-fit: contain;
 }
 
 .noi-dung-chi-tiet figcaption {
     margin-top: 8px;
+
     color: #555555;
+
     font-size: 14px;
 }
 
 .thong-tin-phu {
     padding: 16px;
+
     background-color: var(--mau-nen-phu);
+
     border: 1px solid #dce2e8;
     border-radius: var(--bo-goc);
 }
 
 .thong-tin-phu h2 {
     margin-top: 0;
+
     color: var(--mau-chinh);
 }
 
@@ -490,20 +775,15 @@ form textarea {
     margin-bottom: 8px;
 }
 
-/* Hai cột trên màn hình lớn */
 
-@media (min-width: 768px) {
-    .bo-cuc-chi-tiet {
-        grid-template-columns: minmax(0, 2fr) minmax(220px, 1fr);
-        align-items: start;
-    }
-}
-
-/* 04.12. NỘI DUNG TRANG GIỚI THIỆU */
+/* ----------------------------------------
+   04.14. NỘI DUNG TRANG GIỚI THIỆU
+   ---------------------------------------- */
 
 .noi-dung-gioi-thieu {
     width: 100%;
     max-width: 65ch;
+
     margin: 0 auto;
 }
 
@@ -520,108 +800,195 @@ form textarea {
     overflow-wrap: break-word;
 }
 
-/* 04.13. BIỂU MẪU LIÊN HỆ */
 
-/* Khung biểu mẫu */
-form {
-    width: 100%;
-    max-width: 720px;
-    margin: 0 auto;
+/* ----------------------------------------
+   04.15. HERO TRANG CHỦ
+   ---------------------------------------- */
+
+.hero {
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 40px 32px;
+
+    background: linear-gradient(
+        135deg,
+        var(--mau-chinh),
+        #1b548f
+    );
+
+    border: none;
+
+    color: var(--mau-nen);
 }
 
-fieldset {
-    min-width: 0;
-    margin: 0;
-    padding: 20px;
-    border: 1px solid #dce2e8;
-    border-radius: var(--bo-goc);
-    background-color: var(--mau-nen-phu);
+.hero::after {
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    right: -60px;
+    bottom: -70px;
+
+    background-color: var(--mau-nhan);
+
+    border-radius: 50%;
+
+    opacity: 0.9;
 }
 
-legend {
-    padding: 0 8px;
-    color: var(--mau-chinh);
+.hero-content {
+    position: relative;
+
+    z-index: 1;
+
+    max-width: 700px;
+}
+
+.hero-label {
+    margin: 0 0 10px;
+
+    color: var(--mau-nhan);
+
+    font-size: 14px;
     font-weight: 700;
+
+    letter-spacing: 1.5px;
 }
 
-/* Nhãn và ô nhập */
-form label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 600;
+.hero h2 {
+    margin: 0 0 12px;
+
+    color: var(--mau-nen);
+
+    font-size: 32px;
 }
 
-form input:not([type="radio"]),
-form select,
-form textarea {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #9ca3af;
-    border-radius: var(--bo-goc);
-    font: inherit;
-    color: var(--mau-chu);
-    background-color: var(--mau-nen);
+.hero p:not(.hero-label) {
+    margin-bottom: 24px;
+
+    color: var(--mau-nen);
+
+    font-size: 17px;
 }
 
-form textarea {
-    resize: vertical;
-    min-height: 120px;
-}
-
-/* Trạng thái khi chọn ô nhập */
-form input:not([type="radio"]):focus-visible,
-form select:focus-visible,
-form textarea:focus-visible {
-    outline: 3px solid var(--mau-nhan);
-    outline-offset: 2px;
-    border-color: var(--mau-chinh);
-}
-
-/* Nút gửi */
-form button {
+.hero a {
     display: inline-block;
-    padding: 10px 16px;
-    border: 1px solid var(--mau-chinh);
-    border-radius: var(--bo-goc);
-    background-color: var(--mau-chinh);
-    color: var(--mau-nen);
-    font: inherit;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s ease, color 0.2s ease;
-}
 
-form button:hover {
-    background-color: #0d2b4f;
-    color: var(--mau-nen);
-}
+    padding: 10px 20px;
 
-form button:active {
     background-color: var(--mau-nhan);
     color: var(--mau-chu);
+
+    border-radius: var(--bo-goc);
+
+    font-weight: 700;
+
+    text-decoration: none;
 }
 
-form button:focus-visible {
+.hero a:hover {
+    opacity: 0.9;
+}
+
+
+/* ----------------------------------------
+   04.16. 3 THẺ GIỚI THIỆU
+   ---------------------------------------- */
+
+.the-gioi-thieu {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 16px;
+
+    padding: 0;
+
+    background-color: transparent;
+
+    border: none;
+}
+
+.the {
+    flex: 1 1 250px;
+
+    min-width: 0;
+
+    padding: 24px;
+
+    background-color: var(--mau-nen-phu);
+
+    border: 1px solid #dce2e8;
+    border-radius: var(--bo-goc);
+}
+
+.the h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+
+    color: var(--mau-chinh);
+}
+
+.the p {
+    margin: 0;
+
+    line-height: 1.6;
+}
+
+
+/* ----------------------------------------
+   04.17. MENU MOBILE
+   ---------------------------------------- */
+
+.nut-menu {
+    display: block;
+
+    width: 100%;
+
+    padding: 10px 14px;
+
+    border: 1px solid var(--mau-chinh);
+    border-radius: var(--bo-goc);
+
+    background-color: var(--mau-chinh);
+    color: var(--mau-nen);
+
+    font: inherit;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.nut-menu:focus-visible {
     outline: 3px solid var(--mau-nhan);
     outline-offset: 3px;
 }
 
-/* Căn giữa nội dung mô tả trang liên hệ */
-.mo-ta-lien-he {
-    text-align: center;
-    margin-bottom: 16px;
+/* Khi JavaScript bị tắt:
+   menu vẫn hiển thị */
+#menu-chinh {
+    display: flex;
 }
-/* Khoảng cách giữa biểu mẫu và thông tin liên hệ */
-.thong-tin-lien-he {
-    margin-top: 16px;
+
+/* Khi JavaScript hoạt động:
+   menu mobile mặc định đóng */
+html.js-enabled #menu-chinh {
+    display: none;
 }
+
+/* Khi JavaScript hoạt động và menu được mở */
+html.js-enabled #menu-chinh.menu-mo {
+    display: flex;
+}
+
+
 /* ========================================
                 05. TIỆN ÍCH
    ======================================== */
-
-/* 05.1. LỚP BAO NỘI DUNG */
 
 .bao {
     width: 100%;
@@ -631,19 +998,13 @@ form button:focus-visible {
     padding: var(--khoang-cach);
 }
 
-/* 05.2. CHỈ HIỂN THỊ TRÊN MÁY TÍNH */
-
 .chi-hien-tren-may-tinh {
     display: none;
 }
 
-/* 05.3. CĂN GIỮA VĂN BẢN */
-
 .text-center {
     text-align: center;
 }
-
-/* 05.4. ẨN NỘI DUNG */
 
 .an {
     display: none;
@@ -654,9 +1015,13 @@ form button:focus-visible {
                 06. RESPONSIVE
    ======================================== */
 
-/* 06.1. MÀN HÌNH TỪ 360PX */
+
+/* ----------------------------------------
+   06.1. MÀN HÌNH TỪ 360PX
+   ---------------------------------------- */
 
 @media (min-width: 360px) {
+
     main {
         padding: 16px;
     }
@@ -674,16 +1039,31 @@ form button:focus-visible {
     }
 }
 
-/* 06.2. MÀN HÌNH TỪ 768PX */
+
+/* ----------------------------------------
+   06.2. MÀN HÌNH TỪ 768PX
+   ---------------------------------------- */
 
 @media (min-width: 768px) {
 
-    /* Menu chuyển sang hàng ngang */
+    /* Menu */
+
+    .nut-menu {
+        display: none;
+    }
+
+    #menu-chinh,
+    html.js-enabled #menu-chinh,
+    html.js-enabled #menu-chinh.menu-mo {
+        display: flex;
+    }
 
     nav ul {
         flex-direction: row;
+
         align-items: center;
         justify-content: center;
+
         flex-wrap: wrap;
 
         gap: 12px;
@@ -695,10 +1075,12 @@ form button:focus-visible {
 
     nav a {
         width: auto;
+
         padding: 8px 12px;
     }
 
-    /* Khoảng cách nội dung */
+
+    /* Nội dung */
 
     main {
         padding: 24px;
@@ -716,27 +1098,30 @@ form button:focus-visible {
         font-size: 1.5rem;
     }
 
-    /* Hiển thị nội dung dành cho máy tính */
+
+    /* Trang chi tiết */
+
+    .bo-cuc-chi-tiet {
+        grid-template-columns:
+            minmax(0, 2fr)
+            minmax(220px, 1fr);
+
+        align-items: start;
+    }
+
+
+    /* Nội dung máy tính */
 
     .chi-hien-tren-may-tinh {
         display: block;
     }
-}
 
 
-/* 06.3. FLEXBOX DANH SÁCH THÀNH VIÊN */
+    /* Danh sách thành viên */
 
-.danh-sach-thanh-vien {
-    display: flex;
-    flex-direction: column;
-
-    gap: 12px;
-    padding-left: 24px;
-}
-
-@media (min-width: 768px) {
     .danh-sach-thanh-vien {
         flex-direction: row;
+
         flex-wrap: wrap;
 
         gap: 16px 32px;
@@ -747,7 +1132,24 @@ form button:focus-visible {
     }
 }
 
-/* 06.4. CĂN CHỈNH LOẠI YÊU CẦU */
+
+/* ----------------------------------------
+   06.3. DANH SÁCH THÀNH VIÊN
+   ---------------------------------------- */
+
+.danh-sach-thanh-vien {
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+
+    padding-left: 24px;
+}
+
+
+/* ----------------------------------------
+   06.4. CĂN CHỈNH LOẠI YÊU CẦU
+   ---------------------------------------- */
 
 .loai-yeu-cau {
     margin: 16px 0;
@@ -761,11 +1163,13 @@ form button:focus-visible {
     align-items: center;
 
     gap: 8px;
+
     margin-bottom: 12px;
 }
 
 .loai-yeu-cau input[type="radio"] {
     flex: 0 0 auto;
+
     width: auto;
 }
 
@@ -778,11 +1182,64 @@ form button:focus-visible {
     outline-offset: 3px;
 }
 
-/* Điều chỉnh ảnh sản phẩm trên trang Bootstrap */
+
+/* ----------------------------------------
+   06.5. ẢNH SẢN PHẨM BOOTSTRAP
+   ---------------------------------------- */
+
 .danh-sach-bootstrap .card-img-top {
     width: 100%;
     height: 280px;
+
     object-fit: contain;
+
     padding: 10px;
+
     background-color: #ffffff;
+}
+
+
+/* ----------------------------------------
+   06.6. RESPONSIVE HERO
+   ---------------------------------------- */
+
+@media (max-width: 767px) {
+
+    .hero {
+        padding: 30px 20px;
+    }
+
+    .hero h2 {
+        font-size: 26px;
+    }
+
+    .hero p:not(.hero-label) {
+        font-size: 16px;
+    }
+}
+
+
+/* ----------------------------------------
+   06.7. SỬA KHOẢNG CÁCH DANH SÁCH THÀNH VIÊN
+   ---------------------------------------- */
+
+.danh-sach-thanh-vien {
+    display: block;
+
+    margin: 0;
+    padding-left: 24px;
+}
+
+.danh-sach-thanh-vien li {
+    display: list-item;
+
+    min-height: 0;
+    height: auto;
+
+    margin: 0 0 12px 0;
+    padding: 0;
+}
+
+.danh-sach-thanh-vien li:last-child {
+    margin-bottom: 0;
 }

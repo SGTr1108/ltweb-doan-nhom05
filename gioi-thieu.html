@@ -11,18 +11,37 @@
 </head>
 
 <body>
-  <header><strong>MiniPos</strong> - Quản lý bán hàng thông minh</header>
+
+  <header>
+    <strong>MiniPos</strong> - Quản lý bán hàng thông minh -
+
+    <span>
+      Yêu thích:
+      <span
+        data-so-luong-yeu-thich
+        aria-live="polite">
+        0
+      </span>
+    </span>
+  </header>
 
   <nav>
-    <ul>
+    <button
+      class="nut-menu"
+      type="button"
+      aria-expanded="false"
+      aria-controls="menu-chinh">
+      ☰ Menu
+    </button>
+
+    <ul id="menu-chinh">
       <li><a href="index.html">Trang chủ</a></li>
       <li><a href="danh-sach.html">Danh sách Sản phẩm</a></li>
       <li><a href="chi-tiet.html">Chi tiết Hàng hóa</a></li>
       <li><a href="gioi-thieu.html">Giới thiệu Nhóm</a></li>
-      <li><a href="lien-he.html">Báo cáo & Liên hệ</a></li>
+      <li><a href="lien-he.html">Báo cáo &amp; Liên hệ</a></li>
     </ul>
   </nav>
-
 
   <main class="bao">
     <div class="noi-dung-gioi-thieu">
@@ -79,6 +98,10 @@
   <footer>
     <p>&copy; 2026 Nhóm 05 - Khoa Toán - Tin</p>
   </footer>
+
+  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/yeu-thich.js"></script>
+
 </body>
 
 </html>

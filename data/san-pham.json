@@ -1,0 +1,98 @@
+[
+    {
+        "id": "SP001",
+        "ten": "Bánh snack",
+        "gia": 15000,
+        "danhMuc": "Đồ ăn",
+        "tonKho": 50,
+        "anh": "images/lays.png"
+    },
+    {
+        "id": "SP002",
+        "ten": "Nước suối",
+        "gia": 10000,
+        "danhMuc": "Đồ uống",
+        "tonKho": 100,
+        "anh": "images/AQUAFINA.webp"
+    },
+    {
+        "id": "SP003",
+        "ten": "Mì ly",
+        "gia": 20000,
+        "danhMuc": "Đồ ăn",
+        "tonKho": 30,
+        "anh": "images/myly.jpg"
+    },
+    {
+        "id": "SP004",
+        "ten": "Trà sữa",
+        "gia": 25000,
+        "danhMuc": "Đồ uống",
+        "tonKho": 20,
+        "anh": "images/trasua.jpg"
+    },
+    {
+        "id": "SP005",
+        "ten": "Bánh kẹo",
+        "gia": 12000,
+        "danhMuc": "Đồ ăn",
+        "tonKho": 60,
+        "anh": "images/chug.jpg"
+    },
+    {
+        "id": "SP006",
+        "ten": "Cà phê",
+        "gia": 25000,
+        "danhMuc": "Đồ uống",
+        "tonKho": 40,
+        "anh": "images/cafe.jpg"
+    },
+    {
+        "id": "SP007",
+        "ten": "Trà xanh",
+        "gia": 12000,
+        "danhMuc": "Đồ uống",
+        "tonKho": 45,
+        "anh": "images/traxanh.jpeg"
+    },
+    {
+        "id": "SP008",
+        "ten": "Bánh quy",
+        "gia": 18000,
+        "danhMuc": "Đồ ăn",
+        "tonKho": 35,
+        "anh": "images/banhquy.jpg"
+    },
+    {
+        "id": "SP009",
+        "ten": "Nước cam",
+        "gia": 15000,
+        "danhMuc": "Đồ uống",
+        "tonKho": 55,
+        "anh": "images/nuoccam.jpg"
+    },
+    {
+        "id": "SP010",
+        "ten": "Cá viên chiên",
+        "gia": 35000,
+        "danhMuc": "Đồ ăn",
+        "tonKho": 25,
+        "anh": "images/cvc.webp"
+    },
+    {
+        "id": "SP011",
+        "ten": "Bánh tráng",
+        "gia": 10000,
+        "danhMuc": "Đồ ăn",
+        "tonKho": 70,
+        "anh": "images/banhtrang.jpeg"
+    },
+    {
+        "id": "SP012",
+        "ten": "Khoai tây chiên",
+        "gia": 22000,
+        "danhMuc": "Đồ ăn",
+        "tonKho": 45,
+        "anh": "images/khoaitaychien.webp"
+    }
+]

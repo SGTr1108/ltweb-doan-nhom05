@@ -400,3 +400,89 @@ footer {
     border-radius: 8px;
     object-fit: cover;
 }
+
+
+/* --- CSS CHO NÚT LÊN ĐẦU TRANG --- */
+#scrollToTopBtn {
+  display: none; /* Mặc định ẩn dạng khối */
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 99;
+  border: none;
+  outline: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  padding: 12px 16px;
+  border-radius: 50%;
+  font-size: 18px;
+  transform: rotate(-90deg); /* Quay mũi tên hướng lên trên */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.2s, transform 0.2s;
+}
+/* Hiển thị nút khi JavaScript thêm Class active */
+#scrollToTopBtn.active {
+  display: block !important;
+}
+#scrollToTopBtn:hover {
+  background-color: #0056b3;
+  transform: rotate(-90deg) scale(1.1);
+}
+
+/* --- CSS CHO TRÌNH XEM ẢNH (LIGHTBOX) --- */
+.lightbox {
+  display: none; /* Ẩn mặc định */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85); /* Nền đen mờ */
+  padding-top: 60px;
+}
+/* Kích hoạt hiển thị khi có class .open */
+.lightbox.open {
+  display: block !important;
+}
+
+.lightbox-content {
+  margin: auto;
+  display: block;
+  max-width: 80%;
+  max-height: 75vh;
+  border-radius: 6px;
+  box-shadow: 0 4px 25px rgba(255, 255, 255, 0.15);
+  animation: zoomEffect 0.25s ease-out;
+}
+@keyframes zoomEffect {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  color: #ffffff;
+  font-size: 45px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.lightbox-close:hover {
+  color: #cccccc;
+}
+
+/* Hiệu ứng trỏ chuột cho ảnh chân dung gốc */
+.profile-img {
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.profile-img:hover {
+  opacity: 0.9;
+}
+
+
+
