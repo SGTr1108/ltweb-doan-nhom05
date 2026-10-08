@@ -484,5 +484,19 @@ footer {
   opacity: 0.9;
 }
 
+.profile-img-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Hiển thị viền rõ ràng khi người dùng dùng phím Tab di chuyển tới ảnh */
+.profile-img-btn:focus-visible, 
+.lightbox-close:focus-visible {
+  outline: 3px solid #007bff;
+  outline-offset: 2px;
+}
 
 

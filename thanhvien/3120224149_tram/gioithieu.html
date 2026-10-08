@@ -34,9 +34,10 @@
 <div class="khoi-thong-tin-chinh">
     
     <!-- Khối bên trái: Ảnh chân dung -->
-    <div class="khung-anh-dai-dien">
+     <!-- Cập nhật phần ảnh đại diện trong HTML của bạn thành cấu trúc này -->
+    <button type="button" class="profile-img-btn" aria-label="Phóng to ảnh chân dung đại diện">
         <img src="avatar.png" alt="Ảnh chân dung của Đoàn Thùy Thảo Trâm" class="profile-img">
-    </div>
+   </button>
 
     <!-- Khối bên phải: Toàn bộ thông tin chữ -->
     <div class="chi-tiet-ca-nhan">
@@ -260,9 +261,14 @@
     </footer>
     <button id="scrollToTopBtn" title="Lên đầu trang">&#10148;</button>
 
-        <!-- KHUNG NỀN TỐI ĐỂ HIỂN THỊ ẢNH PHÓNG TO  -->
-    <div id="imageLightbox" class="lightbox">
-      <span class="lightbox-close">&times;</span>
+
+<!-- KHUNG NỀN TỐI ĐỂ HIỂN THỊ ẢNH PHÓNG TO -->
+<div id="imageLightbox" class="lightbox" aria-hidden="true" role="dialog" aria-label="Trình xem ảnh phóng to">
+  <!-- Nút đóng bằng thẻ button thay vì span -->
+  <button type="button" class="lightbox-close" aria-label="Đóng trình xem ảnh">&times;</button>
+  
+  <!-- Thẻ img hiển thị ảnh phóng to sẽ được JS tự động chèn vào đây -->
+</div>
     
     </div>
     <script src="js/canhan.js" defer></script>
