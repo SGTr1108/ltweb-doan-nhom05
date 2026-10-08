@@ -1,3 +1,6 @@
+// trang-danh-sach.js
+// Tải, tìm kiếm, lọc, sắp xếp và hiển thị danh sách sản phẩm.
+
 import { taiJSON } from "./api.js";
 
 import {

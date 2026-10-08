@@ -940,15 +940,15 @@ textarea[aria-invalid="true"]:focus {
 }
 
 
-/* ----------------------------------------
+/* ========================================
    04.17. MENU MOBILE
-   ---------------------------------------- */
+   ======================================== */
 
+/* Mặc định ẩn nút menu khi JavaScript tắt */
 .nut-menu {
-    display: block;
+    display: none;
 
     width: 100%;
-
     padding: 10px 14px;
 
     border: 1px solid var(--mau-chinh);
@@ -963,24 +963,27 @@ textarea[aria-invalid="true"]:focus {
     cursor: pointer;
 }
 
+/* Chỉ hiện nút ☰ khi JavaScript được bật */
+html.js-enabled .nut-menu {
+    display: block;
+}
+
 .nut-menu:focus-visible {
     outline: 3px solid var(--mau-nhan);
     outline-offset: 3px;
 }
 
-/* Khi JavaScript bị tắt:
-   menu vẫn hiển thị */
+/* Khi JavaScript tắt, menu luôn hiển thị */
 #menu-chinh {
     display: flex;
 }
 
-/* Khi JavaScript hoạt động:
-   menu mobile mặc định đóng */
+/* Khi JavaScript bật, menu mobile mặc định đóng */
 html.js-enabled #menu-chinh {
     display: none;
 }
 
-/* Khi JavaScript hoạt động và menu được mở */
+/* Khi JavaScript bật và menu được mở */
 html.js-enabled #menu-chinh.menu-mo {
     display: flex;
 }
@@ -1010,11 +1013,9 @@ html.js-enabled #menu-chinh.menu-mo {
     display: none;
 }
 
-
 /* ========================================
                 06. RESPONSIVE
    ======================================== */
-
 
 /* ----------------------------------------
    06.1. MÀN HÌNH TỪ 360PX
@@ -1039,16 +1040,15 @@ html.js-enabled #menu-chinh.menu-mo {
     }
 }
 
-
 /* ----------------------------------------
    06.2. MÀN HÌNH TỪ 768PX
    ---------------------------------------- */
 
 @media (min-width: 768px) {
 
-    /* Menu */
+    /* Menu trên máy tính */
 
-    .nut-menu {
+    html.js-enabled .nut-menu {
         display: none;
     }
 
@@ -1132,7 +1132,6 @@ html.js-enabled #menu-chinh.menu-mo {
     }
 }
 
-
 /* ----------------------------------------
    06.3. DANH SÁCH THÀNH VIÊN
    ---------------------------------------- */
@@ -1145,7 +1144,6 @@ html.js-enabled #menu-chinh.menu-mo {
 
     padding-left: 24px;
 }
-
 
 /* ----------------------------------------
    06.4. CĂN CHỈNH LOẠI YÊU CẦU

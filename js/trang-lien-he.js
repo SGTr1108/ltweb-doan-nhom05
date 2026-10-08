@@ -1,3 +1,6 @@
+// trang-lien-he.js
+// Kiểm tra và gửi biểu mẫu liên hệ bằng fetch.
+
 "use strict";
 
 const form = document.querySelector("form");
