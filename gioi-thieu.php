@@ -35,7 +35,7 @@ require __DIR__ . '/inc/header.php';
 
         <ul class="danh-sach-thanh-vien">
             <li>
-                <a href="thanhvien/3120224092_luy/gioithieu.html">
+                <a href="thanhvien/3120224092_luy/gioithieu.php">
                     Thới Đình Thị Thanh Lũy (3120224092) - Trưởng nhóm
                 </a>
             </li>

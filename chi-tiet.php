@@ -3,15 +3,45 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/inc/config.php';
 
+
 $maSanPham = isset($_GET['id']) && is_string($_GET['id'])
     ? trim($_GET['id'])
-    : 'SP002';
+    : '';
 
 $khoSanPham = new \App\Data\KhoSanPham();
-$sanPham = $khoSanPham->timTheoId($maSanPham);
+$sanPham = $maSanPham !== ''
+    ? $khoSanPham->timTheoId($maSanPham)
+    : null;
 
 if ($sanPham === null) {
     http_response_code(404);
+}
+
+if ($sanPham !== null) {
+    $lichSuXem = [];
+
+    if (isset($_COOKIE['da_xem']) && is_string($_COOKIE['da_xem'])) {
+        $lichSuXem = array_filter(
+            explode(',', $_COOKIE['da_xem']),
+            static fn(string $id): bool => preg_match('/^SP\d{3}$/', $id) === 1
+        );
+    }
+
+    // Đưa sản phẩm vừa xem lên đầu danh sách, không lặp mã.
+    $lichSuXem = array_values(array_unique([
+        $sanPham->getId(),
+        ...$lichSuXem
+    ]));
+
+    // Chỉ lưu tối đa 4 sản phẩm gần nhất.
+    $lichSuXem = array_slice($lichSuXem, 0, 4);
+
+    setcookie('da_xem', implode(',', $lichSuXem), [
+        'expires' => time() + 30 * 24 * 60 * 60,
+        'path' => '/',
+        'httponly' => true,
+        'samesite' => 'Lax',
+    ]);
 }
 
 $tieuDeTrang = $sanPham !== null
