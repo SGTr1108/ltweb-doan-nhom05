@@ -62,6 +62,9 @@ async function taiChiTietSanPham() {
 }
 
 function hienThiChiTiet(sp) {
+    // Đổi tiêu đề tab theo tên sản phẩm
+    document.title = `${sp.ten} - MiniPos`;
+
     khuVucChiTiet.replaceChildren();
 
     const tieuDe =

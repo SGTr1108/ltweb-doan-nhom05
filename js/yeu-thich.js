@@ -1,3 +1,6 @@
+// yeu-thich.js
+// Quản lý danh sách sản phẩm yêu thích bằng localStorage.
+
 "use strict";
 
 const TEN_KHOA = "sanPhamYeuThich";

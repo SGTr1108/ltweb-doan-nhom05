@@ -1,3 +1,6 @@
+// trang-chu.js
+// Tải và hiển thị dữ liệu thời tiết từ REST API công khai.
+
 "use strict";
 
 import { taiJSON } from "./api.js";

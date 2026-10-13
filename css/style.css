@@ -940,15 +940,15 @@ textarea[aria-invalid="true"]:focus {
 }
 
 
-/* ----------------------------------------
+/* ========================================
    04.17. MENU MOBILE
-   ---------------------------------------- */
+   ======================================== */
 
+/* Mặc định ẩn nút menu khi JavaScript tắt */
 .nut-menu {
-    display: block;
+    display: none;
 
     width: 100%;
-
     padding: 10px 14px;
 
     border: 1px solid var(--mau-chinh);
@@ -963,24 +963,27 @@ textarea[aria-invalid="true"]:focus {
     cursor: pointer;
 }
 
+/* Chỉ hiện nút ☰ khi JavaScript được bật */
+html.js-enabled .nut-menu {
+    display: block;
+}
+
 .nut-menu:focus-visible {
     outline: 3px solid var(--mau-nhan);
     outline-offset: 3px;
 }
 
-/* Khi JavaScript bị tắt:
-   menu vẫn hiển thị */
+/* Khi JavaScript tắt, menu luôn hiển thị */
 #menu-chinh {
     display: flex;
 }
 
-/* Khi JavaScript hoạt động:
-   menu mobile mặc định đóng */
+/* Khi JavaScript bật, menu mobile mặc định đóng */
 html.js-enabled #menu-chinh {
     display: none;
 }
 
-/* Khi JavaScript hoạt động và menu được mở */
+/* Khi JavaScript bật và menu được mở */
 html.js-enabled #menu-chinh.menu-mo {
     display: flex;
 }
@@ -1010,11 +1013,9 @@ html.js-enabled #menu-chinh.menu-mo {
     display: none;
 }
 
-
 /* ========================================
                 06. RESPONSIVE
    ======================================== */
-
 
 /* ----------------------------------------
    06.1. MÀN HÌNH TỪ 360PX
@@ -1039,16 +1040,15 @@ html.js-enabled #menu-chinh.menu-mo {
     }
 }
 
-
 /* ----------------------------------------
    06.2. MÀN HÌNH TỪ 768PX
    ---------------------------------------- */
 
 @media (min-width: 768px) {
 
-    /* Menu */
+    /* Menu trên máy tính */
 
-    .nut-menu {
+    html.js-enabled .nut-menu {
         display: none;
     }
 
@@ -1132,7 +1132,6 @@ html.js-enabled #menu-chinh.menu-mo {
     }
 }
 
-
 /* ----------------------------------------
    06.3. DANH SÁCH THÀNH VIÊN
    ---------------------------------------- */
@@ -1145,7 +1144,6 @@ html.js-enabled #menu-chinh.menu-mo {
 
     padding-left: 24px;
 }
-
 
 /* ----------------------------------------
    06.4. CĂN CHỈNH LOẠI YÊU CẦU
@@ -1242,4 +1240,2122 @@ html.js-enabled #menu-chinh.menu-mo {
 
 .danh-sach-thanh-vien li:last-child {
     margin-bottom: 0;
+}
+/* Tạo khoảng cách giữa nút Áp dụng và liên kết Xóa bộ lọc */
+.bo-loc-san-pham a {
+    margin-left: 10px;
+}
+/* Tao khoang cach ben tren cac thao tac loc san pham */
+.bo-loc-san-pham button[type="submit"] {
+    margin-top: 10px;
+}
+
+.bo-loc-san-pham a {
+    display: inline-block;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+/* Bang chi tiet: chi hang tieu de cot co nen xanh */
+.bang-vo tbody th[scope="row"] {
+    background-color: #ffffff;
+    color: #173f70;
+}
+/* ===== Giao dien rieng trang quan tri ===== */
+.trang-quan-tri .thanh-cong-cu-quan-tri {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 20px 0 28px;
+}
+
+.trang-quan-tri .loi-chao-quan-tri {
+    margin: 0;
+}
+
+.trang-quan-tri .form-dang-xuat-quan-tri {
+    width: auto;
+    max-width: none;
+    margin: 0;
+}
+
+.trang-quan-tri .form-dang-xuat-quan-tri button {
+    margin: 0;
+}
+
+.trang-quan-tri section {
+    margin: 20px 0;
+    min-width: 0;
+}
+
+.trang-quan-tri .bang-vo {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.trang-quan-tri table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.trang-quan-tri th,
+.trang-quan-tri td {
+    padding: 12px;
+    text-align: left;
+    vertical-align: top;
+    overflow-wrap: anywhere;
+}
+
+.trang-quan-tri td {
+    line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+    .trang-quan-tri .thanh-cong-cu-quan-tri {
+        align-items: flex-start;
+    }
+
+    .trang-quan-tri .bang-vo table {
+        min-width: 760px;
+    }
+
+    .trang-quan-tri h1 {
+        font-size: 1.7rem;
+    }
+}
+/* Bieu mau them san pham vao gio hang */
+.form-them-gio-hang {
+    width: auto;
+    max-width: none;
+    margin: 8px 0;
+}
+
+.form-them-gio-hang input[type="number"] {
+    max-width: 100px;
+}
+
+.form-them-gio-hang-chi-tiet {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.form-them-gio-hang-chi-tiet button {
+    margin: 0;
+}
+/* MINIPOS-GIO-HANG-UI-V2 */
+
+/* Thẻ sản phẩm: hai nút trên, nút thêm giỏ ở hàng dưới */
+.the-san-pham .hang-nut-san-pham {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 10px;
+    align-items: stretch;
+}
+
+.the-san-pham .hang-nut-san-pham > a {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 10px 8px;
+    text-align: center;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.the-san-pham .hang-nut-san-pham > .nut-yeu-thich {
+    grid-column: 2;
+    grid-row: 1;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 10px 8px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.the-san-pham .hang-nut-san-pham > .form-them-gio-hang {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    margin: 0;
+}
+
+.the-san-pham .form-them-gio-hang button,
+.trang-gio-hang .nut-tiep-tuc-mua {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding: 11px 14px;
+    color: #173f73;
+    background: #ffffff;
+    border: 2px solid #173f73;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.the-san-pham .form-them-gio-hang button:hover,
+.trang-gio-hang .nut-tiep-tuc-mua:hover {
+    color: #ffffff;
+    background: #173f73;
+}
+
+.the-san-pham .form-them-gio-hang button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* Nút thêm giỏ ở trang chi tiết */
+.form-them-gio-hang-chi-tiet {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    width: 100%;
+    max-width: none;
+    margin: 16px 0;
+}
+
+.form-them-gio-hang-chi-tiet input[type="number"] {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 130px;
+}
+
+.form-them-gio-hang-chi-tiet button {
+    width: 100%;
+    color: #173f73;
+    background: #ffffff;
+    border: 2px solid #173f73;
+    border-radius: 8px;
+}
+
+/* Giao diện mới cho trang giỏ hàng */
+.trang-gio-hang {
+    max-width: 1100px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.trang-gio-hang > h1 {
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.trang-gio-hang .mo-ta-gio-hang {
+    margin: 0 0 24px;
+    text-align: center;
+    color: #596579;
+}
+
+.trang-gio-hang .thong-bao-gio-hang {
+    padding: 12px 16px;
+    border: 1px solid #b7d2ee;
+    border-radius: 8px;
+    background: #f1f7fd;
+    color: #173f73;
+}
+
+.trang-gio-hang .gio-hang-trong {
+    padding: 36px 20px;
+    text-align: center;
+    border: 1px dashed #b8c8d9;
+    border-radius: 12px;
+    background: #f8fafc;
+}
+
+.trang-gio-hang .gio-hang-trong h2 {
+    margin-top: 0;
+}
+
+.trang-gio-hang .nut-tiep-tuc-mua {
+    display: inline-block;
+    width: auto;
+    margin-top: 12px;
+    text-decoration: none;
+}
+
+.trang-gio-hang .danh-sach-mat-hang {
+    display: grid;
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.trang-gio-hang .mat-hang-gio {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 270px);
+    gap: 24px;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #d9e1ea;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgb(20 45 75 / 5%);
+}
+
+.trang-gio-hang .thong-tin-mat-hang {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    min-width: 0;
+}
+
+.trang-gio-hang .anh-mat-hang {
+    flex: 0 0 90px;
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    border: 1px solid #edf0f4;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
+.trang-gio-hang .chi-tiet-mat-hang {
+    min-width: 0;
+}
+
+.trang-gio-hang .chi-tiet-mat-hang h2 {
+    margin: 0 0 8px;
+    font-size: 1.15rem;
+    overflow-wrap: anywhere;
+}
+
+.trang-gio-hang .chi-tiet-mat-hang p {
+    margin: 5px 0;
+}
+
+.trang-gio-hang .ma-mat-hang {
+    color: #596579;
+    font-size: 0.95rem;
+}
+
+.trang-gio-hang .gia-don-vi {
+    color: #173f73;
+    font-weight: 700;
+}
+
+.trang-gio-hang .thao-tac-mat-hang {
+    display: grid;
+    gap: 12px;
+    min-width: 0;
+}
+
+.trang-gio-hang .thanh-tien-mat-hang {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: baseline;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e6ebf1;
+}
+
+.trang-gio-hang .thanh-tien-mat-hang strong {
+    color: #173f73;
+    font-size: 1.2rem;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.trang-gio-hang .form-cap-nhat-gio-hang,
+.trang-gio-hang .form-xoa-mat-hang,
+.trang-gio-hang .form-xoa-tat-ca {
+    display: flex;
+    align-items: end;
+    gap: 8px;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+}
+
+.trang-gio-hang .form-cap-nhat-gio-hang label {
+    width: 100%;
+    margin: 0;
+}
+
+.trang-gio-hang .form-cap-nhat-gio-hang input[type="number"] {
+    box-sizing: border-box;
+    width: 82px;
+    min-width: 0;
+    margin: 0;
+}
+
+.trang-gio-hang .form-cap-nhat-gio-hang button,
+.trang-gio-hang .form-xoa-mat-hang button,
+.trang-gio-hang .form-xoa-tat-ca button {
+    width: auto;
+    margin: 0;
+    padding: 9px 13px;
+}
+
+.trang-gio-hang .form-xoa-mat-hang button,
+.trang-gio-hang .form-xoa-tat-ca button {
+    color: #173f73;
+    background: #ffffff;
+    border: 1px solid #173f73;
+}
+
+.trang-gio-hang .tong-thanh-toan-gio-hang {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+    padding: 24px;
+    border: 1px solid #d9e1ea;
+    border-radius: 12px;
+    background: #f3f6f9;
+}
+
+.trang-gio-hang .thong-ke-gio-hang {
+    display: grid;
+    gap: 8px;
+}
+
+.trang-gio-hang .thong-ke-gio-hang p {
+    margin: 0;
+}
+
+.trang-gio-hang .dong-tong-tien {
+    color: #173f73;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.trang-gio-hang .loi-gio-hang {
+    padding: 18px;
+    border: 1px solid #e1a6a6;
+    border-radius: 8px;
+    background: #fff5f5;
+}
+
+@media (max-width: 700px) {
+    .trang-gio-hang .mat-hang-gio {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 18px;
+        padding: 16px;
+    }
+
+    .trang-gio-hang .thong-tin-mat-hang {
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .trang-gio-hang .anh-mat-hang {
+        flex-basis: 70px;
+        width: 70px;
+        height: 70px;
+    }
+
+    .trang-gio-hang .tong-thanh-toan-gio-hang {
+        padding: 18px;
+    }
+
+    .trang-gio-hang .form-xoa-tat-ca {
+        width: 100%;
+    }
+
+    .trang-gio-hang .form-xoa-tat-ca button {
+        width: 100%;
+    }
+}
+/* MINIPOS-GIO-HANG-LAYOUT-V3 */
+/* Dùng xanh navy chủ đạo của MiniPos thay cho xanh lá ảnh tham khảo. */
+
+.gio-hang-page-v2 {
+    width: min(100% - 32px, 1280px);
+    max-width: 1280px;
+    box-sizing: border-box;
+    margin: 28px auto 40px;
+    padding: 0;
+}
+
+.gio-hang-page-v2 .gio-hang-heading-v2 {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 0 0 24px;
+}
+
+.gio-hang-page-v2 .gio-hang-icon-v2 {
+    flex: 0 0 44px;
+    font-size: 38px;
+    line-height: 1;
+}
+
+.gio-hang-page-v2 .gio-hang-heading-v2 h1 {
+    margin: 0 0 5px;
+    text-align: left;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+.gio-hang-page-v2 .gio-hang-heading-v2 p {
+    margin: 0;
+    color: #5b6879;
+    font-size: 0.95rem;
+}
+
+.gio-hang-page-v2 .gio-hang-notice-v2 {
+    margin: 0 0 18px;
+    padding: 12px 15px;
+    border: 1px solid #b7cce4;
+    border-radius: 9px;
+    background: #f0f5fb;
+    color: #173f73;
+}
+
+.gio-hang-page-v2 .gio-hang-layout-v2 {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 310px;
+    align-items: start;
+    gap: 22px;
+}
+
+.gio-hang-page-v2 .gio-hang-products-v2,
+.gio-hang-page-v2 .gio-hang-summary-v2 {
+    min-width: 0;
+    border: 1px solid #dbe3ed;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 3px 12px rgb(23 63 115 / 6%);
+}
+
+.gio-hang-page-v2 .gio-hang-products-v2 {
+    padding: 18px;
+}
+
+.gio-hang-page-v2 .gio-hang-section-heading-v2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.gio-hang-page-v2 .gio-hang-section-heading-v2 h2,
+.gio-hang-page-v2 .gio-hang-summary-heading-v2 h2 {
+    margin: 0;
+    font-size: 1.12rem;
+    color: #173f73;
+}
+
+.gio-hang-page-v2 .gio-hang-section-heading-v2 > span {
+    flex: 0 0 auto;
+    padding: 5px 9px;
+    border-radius: 20px;
+    color: #173f73;
+    background: #eaf1fa;
+    font-size: 0.85rem;
+}
+
+.gio-hang-page-v2 .gio-hang-columns-v2,
+.gio-hang-page-v2 .gio-hang-product-v2 {
+    display: grid;
+    grid-template-columns: minmax(175px, 1fr) 92px 118px 103px 30px;
+    gap: 12px;
+    align-items: center;
+}
+
+.gio-hang-page-v2 .gio-hang-columns-v2 {
+    padding: 10px 12px;
+    border: 1px solid #e1e7ef;
+    border-radius: 8px;
+    background: #f3f6fa;
+    color: #4a5870;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.gio-hang-page-v2 .gio-hang-product-v2 {
+    padding: 16px 12px;
+    border-bottom: 1px solid #e8edf3;
+}
+
+.gio-hang-page-v2 .gio-hang-product-v2:last-child {
+    border-bottom: 0;
+}
+
+.gio-hang-page-v2 .gio-hang-product-info-v2 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.gio-hang-page-v2 .gio-hang-product-image-v2 {
+    display: flex;
+    flex: 0 0 68px;
+    width: 68px;
+    height: 72px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid #edf0f5;
+    border-radius: 8px;
+    background: #f8fafc;
+}
+
+.gio-hang-page-v2 .gio-hang-product-image-v2 img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.gio-hang-page-v2 .gio-hang-product-name-v2 {
+    min-width: 0;
+}
+
+.gio-hang-page-v2 .gio-hang-product-name-v2 h3 {
+    margin: 0 0 6px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.gio-hang-page-v2 .gio-hang-product-name-v2 h3 a {
+    color: #173f73;
+    text-decoration: none;
+}
+
+.gio-hang-page-v2 .gio-hang-product-name-v2 h3 a:hover {
+    text-decoration: underline;
+}
+
+.gio-hang-page-v2 .gio-hang-product-name-v2 p {
+    margin: 4px 0;
+    font-size: 0.78rem;
+}
+
+.gio-hang-page-v2 .gio-hang-product-code-v2,
+.gio-hang-page-v2 .gio-hang-category-v2 {
+    color: #6a7587;
+}
+
+.gio-hang-page-v2 .gio-hang-stock-v2,
+.gio-hang-page-v2 .gio-hang-out-stock-v2 {
+    display: inline-block;
+    margin-top: 4px;
+    padding: 3px 7px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+}
+
+.gio-hang-page-v2 .gio-hang-stock-v2 {
+    color: #173f73;
+    border: 1px solid #c4d6ed;
+    background: #eef4fc;
+}
+
+.gio-hang-page-v2 .gio-hang-out-stock-v2 {
+    color: #9a3333;
+    border: 1px solid #eccaca;
+    background: #fff1f1;
+}
+
+.gio-hang-page-v2 .gio-hang-unit-price-v2,
+.gio-hang-page-v2 .gio-hang-subtotal-v2 {
+    min-width: 0;
+    font-size: 0.9rem;
+    overflow-wrap: anywhere;
+}
+
+.gio-hang-page-v2 .gio-hang-unit-price-v2 strong,
+.gio-hang-page-v2 .gio-hang-subtotal-v2 strong {
+    color: #173f73;
+}
+
+.gio-hang-page-v2 .gio-hang-mobile-label-v2 {
+    display: none;
+}
+
+.gio-hang-page-v2 .gio-hang-quantity-form-v2 {
+    min-width: 0;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+}
+
+.gio-hang-page-v2 .gio-hang-quantity-control-v2 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+}
+
+.gio-hang-page-v2 .gio-hang-quantity-control-v2 input {
+    box-sizing: border-box;
+    width: 52px;
+    min-width: 0;
+    margin: 0;
+    padding: 7px 4px;
+    text-align: center;
+}
+
+.gio-hang-page-v2 .gio-hang-quantity-control-v2 button {
+    margin: 0;
+    padding: 7px 8px;
+    border: 1px solid #173f73;
+    border-radius: 6px;
+    color: #173f73;
+    background: white;
+    font-size: 0.76rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.gio-hang-page-v2 .gio-hang-quantity-control-v2 button:hover {
+    color: white;
+    background: #173f73;
+}
+
+.gio-hang-page-v2 .gio-hang-remove-form-v2 {
+    width: auto;
+    max-width: none;
+    margin: 0;
+}
+
+.gio-hang-page-v2 .gio-hang-remove-form-v2 button {
+    display: flex;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #d7e1ee;
+    border-radius: 7px;
+    color: #173f73;
+    background: #f3f6fa;
+    font-size: 1.35rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.gio-hang-page-v2 .gio-hang-remove-form-v2 button:hover {
+    border-color: #173f73;
+    background: #e4edf8;
+}
+
+.gio-hang-page-v2 .gio-hang-continue-v2 {
+    margin-top: 18px;
+}
+
+.gio-hang-page-v2 .gio-hang-outline-button-v2,
+.gio-hang-page-v2 .gio-hang-primary-button-v2 {
+    display: inline-flex;
+    min-height: 40px;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 15px;
+    border: 1px solid #173f73;
+    border-radius: 8px;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.gio-hang-page-v2 .gio-hang-outline-button-v2 {
+    color: #173f73;
+    background: white;
+}
+
+.gio-hang-page-v2 .gio-hang-outline-button-v2:hover {
+    background: #f0f5fb;
+}
+
+.gio-hang-page-v2 .gio-hang-primary-button-v2 {
+    color: white;
+    background: #173f73;
+}
+
+.gio-hang-page-v2 .gio-hang-primary-button-v2:hover {
+    background: #102f58;
+}
+
+.gio-hang-page-v2 .gio-hang-summary-v2 {
+    overflow: hidden;
+}
+
+.gio-hang-page-v2 .gio-hang-summary-heading-v2 {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 16px;
+    border-bottom: 1px solid #dbe3ed;
+    background: #f0f5fb;
+}
+
+.gio-hang-page-v2 .gio-hang-summary-heading-v2 > span {
+    color: #173f73;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.gio-hang-page-v2 .gio-hang-summary-body-v2 {
+    padding: 16px;
+}
+
+.gio-hang-page-v2 .gio-hang-summary-row-v2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 14px;
+    color: #4e5b6d;
+    font-size: 0.9rem;
+}
+
+.gio-hang-page-v2 .gio-hang-summary-row-v2 strong {
+    color: #173f73;
+    text-align: right;
+}
+
+.gio-hang-page-v2 .gio-hang-summary-muted-v2 {
+    color: #6a7587;
+    text-align: right;
+}
+
+.gio-hang-page-v2 .gio-hang-summary-total-v2 {
+    display: grid;
+    gap: 8px;
+    margin: 18px 0;
+    padding: 15px;
+    border-radius: 9px;
+    background: #eaf1fa;
+    color: #173f73;
+}
+
+.gio-hang-page-v2 .gio-hang-summary-total-v2 strong {
+    font-size: 1.45rem;
+    overflow-wrap: anywhere;
+}
+
+.gio-hang-page-v2 .gio-hang-checkout-disabled-v2 {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding: 12px;
+    border: 1px solid #aebed2;
+    border-radius: 8px;
+    color: #5d6d81;
+    background: #e8edf4;
+    font-weight: 700;
+    cursor: not-allowed;
+}
+
+.gio-hang-page-v2 .gio-hang-checkout-note-v2 {
+    margin: 8px 0 18px;
+    color: #687588;
+    font-size: 0.78rem;
+    line-height: 1.5;
+}
+
+.gio-hang-page-v2 .gio-hang-clear-form-v2 {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+}
+
+.gio-hang-page-v2 .gio-hang-clear-form-v2 button {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding: 10px;
+    border: 1px solid #173f73;
+    border-radius: 8px;
+    color: #173f73;
+    background: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.gio-hang-page-v2 .gio-hang-clear-form-v2 button:hover {
+    background: #f0f5fb;
+}
+
+.gio-hang-page-v2 .gio-hang-support-v2 {
+    display: flex;
+    gap: 11px;
+    margin: 0;
+    padding: 15px 16px;
+    border-top: 1px solid #dbe3ed;
+    background: #f6f8fb;
+    color: #173f73;
+}
+
+.gio-hang-page-v2 .gio-hang-support-v2 > div:first-child {
+    font-size: 1.35rem;
+    font-weight: 700;
+}
+
+.gio-hang-page-v2 .gio-hang-support-v2 strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.gio-hang-page-v2 .gio-hang-support-v2 p {
+    margin: 0 0 6px;
+    color: #58667a;
+    font-size: 0.83rem;
+    line-height: 1.5;
+}
+
+.gio-hang-page-v2 .gio-hang-support-v2 a {
+    color: #173f73;
+    font-weight: 600;
+}
+
+.gio-hang-page-v2 .gio-hang-empty-v2 {
+    padding: 40px 20px;
+    border: 1px solid #dbe3ed;
+    border-radius: 12px;
+    background: #f8fafc;
+    text-align: center;
+}
+
+.gio-hang-page-v2 .gio-hang-empty-v2 h2 {
+    color: #173f73;
+}
+
+.gio-hang-page-v2 .gio-hang-empty-icon-v2 {
+    font-size: 42px;
+}
+
+.gio-hang-page-v2 .gio-hang-empty-v2 .gio-hang-outline-button-v2,
+.gio-hang-page-v2 .gio-hang-empty-v2 .gio-hang-primary-button-v2 {
+    margin-top: 12px;
+}
+
+@media (max-width: 1000px) {
+    .gio-hang-page-v2 .gio-hang-layout-v2 {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .gio-hang-page-v2 .gio-hang-summary-v2 {
+        width: 100%;
+    }
+}
+
+@media (max-width: 700px) {
+    .gio-hang-page-v2 {
+        width: calc(100% - 24px);
+        margin-top: 18px;
+    }
+
+    .gio-hang-page-v2 .gio-hang-products-v2 {
+        padding: 12px;
+    }
+
+    .gio-hang-page-v2 .gio-hang-columns-v2 {
+        display: none;
+    }
+
+    .gio-hang-page-v2 .gio-hang-product-v2 {
+        grid-template-columns: minmax(0, 1fr) 30px;
+        gap: 12px;
+        padding: 15px 2px;
+    }
+
+    .gio-hang-page-v2 .gio-hang-product-info-v2 {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .gio-hang-page-v2 .gio-hang-remove-form-v2 {
+        grid-column: 2;
+        grid-row: 1;
+        align-self: start;
+    }
+
+    .gio-hang-page-v2 .gio-hang-unit-price-v2 {
+        display: flex;
+        grid-column: 1 / -1;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        padding-left: 4px;
+    }
+
+    .gio-hang-page-v2 .gio-hang-quantity-form-v2 {
+        grid-column: 1 / -1;
+        padding-left: 4px;
+    }
+
+    .gio-hang-page-v2 .gio-hang-subtotal-v2 {
+        display: flex;
+        grid-column: 1 / -1;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 0 4px 5px;
+    }
+
+    .gio-hang-page-v2 .gio-hang-mobile-label-v2 {
+        display: inline;
+        color: #647187;
+        font-size: 0.85rem;
+        font-weight: 400;
+    }
+
+    .gio-hang-page-v2 .gio-hang-quantity-control-v2 {
+        justify-content: flex-start;
+    }
+
+    .gio-hang-page-v2 .gio-hang-quantity-control-v2 input {
+        width: 70px;
+    }
+
+    .gio-hang-page-v2 .gio-hang-section-heading-v2 h2 {
+        font-size: 1rem;
+    }
+
+    .gio-hang-page-v2 .gio-hang-summary-body-v2 {
+        padding: 14px;
+    }
+}
+/* MINIPOS-GIO-HANG-REFINEMENT-V4 */
+
+.gio-hang-page-v2 {
+    max-width: 1400px;
+    margin-top: 22px;
+}
+
+.gio-hang-page-v2 .gio-hang-icon-v2 {
+    color: #173f73;
+    flex-basis: 42px;
+}
+
+.gio-hang-page-v2 .gio-hang-icon-v2 svg {
+    display: block;
+}
+
+.gio-hang-page-v2 .gio-hang-layout-v2 {
+    grid-template-columns: minmax(0, 2.15fr) minmax(300px, 1fr);
+    gap: 18px;
+}
+
+.gio-hang-page-v2 .gio-hang-products-v2 {
+    padding: 14px;
+}
+
+.gio-hang-page-v2 .gio-hang-section-heading-v2 {
+    margin-bottom: 12px;
+}
+
+.gio-hang-page-v2 .gio-hang-columns-v2,
+.gio-hang-page-v2 .gio-hang-product-v2 {
+    grid-template-columns:
+        minmax(175px, 1.9fr)
+        minmax(72px, .65fr)
+        minmax(105px, .9fr)
+        minmax(88px, .8fr)
+        28px;
+    gap: 9px;
+}
+
+.gio-hang-page-v2 .gio-hang-columns-v2 {
+    padding: 9px 10px;
+    font-size: .77rem;
+}
+
+.gio-hang-page-v2 .gio-hang-product-v2 {
+    padding: 11px 8px;
+}
+
+.gio-hang-page-v2 .gio-hang-product-info-v2 {
+    gap: 9px;
+}
+
+.gio-hang-page-v2 .gio-hang-product-image-v2 {
+    flex-basis: 58px;
+    width: 58px;
+    height: 62px;
+}
+
+.gio-hang-page-v2 .gio-hang-product-name-v2 h3 {
+    margin-bottom: 4px;
+    font-size: .88rem;
+}
+
+.gio-hang-page-v2 .gio-hang-product-name-v2 p {
+    margin: 2px 0;
+    font-size: .73rem;
+}
+
+.gio-hang-page-v2 .gio-hang-stock-v2,
+.gio-hang-page-v2 .gio-hang-out-stock-v2 {
+    margin-top: 3px;
+    padding: 2px 6px;
+    font-size: .68rem;
+}
+
+.gio-hang-page-v2 .gio-hang-unit-price-v2,
+.gio-hang-page-v2 .gio-hang-subtotal-v2 {
+    font-size: .82rem;
+}
+
+.gio-hang-page-v2 .gio-hang-quantity-form-v2 {
+    align-self: center;
+}
+
+.gio-hang-page-v2 .gio-hang-quantity-control-v2 {
+    display: inline-flex;
+    width: max-content;
+    max-width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 3px;
+    border: 1px solid #d9e3f0;
+    border-radius: 8px;
+    background: #f4f7fb;
+}
+
+.gio-hang-page-v2 .gio-hang-quantity-control-v2 input {
+    width: 34px;
+    height: 28px;
+    padding: 2px;
+    border: 0;
+    border-radius: 4px;
+    outline-offset: 1px;
+    background: transparent;
+    color: #173f73;
+    font-size: .82rem;
+    text-align: center;
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+.gio-hang-page-v2 .gio-hang-quantity-control-v2 input::-webkit-inner-spin-button,
+.gio-hang-page-v2 .gio-hang-quantity-control-v2 input::-webkit-outer-spin-button {
+    margin: 0;
+    appearance: none;
+}
+
+.gio-hang-page-v2 .gio-hang-quantity-control-v2 .gio-hang-step-v2 {
+    display: inline-flex;
+    width: 27px;
+    height: 27px;
+    flex: 0 0 27px;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #d7e2ef;
+    border-radius: 6px;
+    background: #eaf1fa;
+    color: #173f73;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.gio-hang-page-v2 .gio-hang-quantity-control-v2 .gio-hang-step-v2:hover:not(:disabled) {
+    color: #fff;
+    border-color: #173f73;
+    background: #173f73;
+}
+
+.gio-hang-page-v2 .gio-hang-quantity-control-v2 .gio-hang-step-v2:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+}
+
+.gio-hang-page-v2 .gio-hang-quantity-save-v2 {
+    display: block;
+    margin: 3px 0 0;
+    padding: 2px 0;
+    border: 0;
+    background: transparent;
+    color: #173f73;
+    font-size: .7rem;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.gio-hang-page-v2 .gio-hang-quantity-save-v2:hover {
+    color: #102f58;
+}
+
+.gio-hang-page-v2 .gio-hang-subtotal-v2 strong {
+    font-size: .86rem;
+}
+
+.gio-hang-page-v2 .gio-hang-remove-form-v2 button {
+    width: 27px;
+    height: 27px;
+    border-radius: 7px;
+    background: #f1f5fa;
+    color: #173f73;
+    font-size: 1.2rem;
+}
+
+.gio-hang-page-v2 .gio-hang-summary-heading-v2 {
+    padding: 14px 15px;
+}
+
+.gio-hang-page-v2 .gio-hang-summary-body-v2 {
+    padding: 14px;
+}
+
+.gio-hang-page-v2 .gio-hang-summary-row-v2 {
+    margin-bottom: 11px;
+    font-size: .85rem;
+}
+
+.gio-hang-page-v2 .gio-hang-summary-total-v2 {
+    margin: 15px 0;
+    padding: 13px;
+    background: #eaf1fa;
+}
+
+.gio-hang-page-v2 .gio-hang-summary-total-v2 strong {
+    font-size: 1.35rem;
+    color: #173f73;
+}
+
+.gio-hang-page-v2 .gio-hang-checkout-disabled-v2 {
+    min-height: 42px;
+    background: #173f73;
+    border-color: #173f73;
+    color: #fff;
+    opacity: .62;
+}
+
+.gio-hang-page-v2 .gio-hang-checkout-note-v2 {
+    margin: 7px 0 14px;
+    font-size: .75rem;
+}
+
+.gio-hang-page-v2 .gio-hang-support-v2 {
+    padding: 12px 15px;
+}
+
+@media (max-width: 1000px) {
+    .gio-hang-page-v2 .gio-hang-layout-v2 {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 700px) {
+    .gio-hang-page-v2 .gio-hang-product-v2 {
+        grid-template-columns: minmax(0, 1fr) 28px;
+    }
+
+    .gio-hang-page-v2 .gio-hang-quantity-control-v2 {
+        width: max-content;
+    }
+
+    .gio-hang-page-v2 .gio-hang-quantity-save-v2 {
+        margin-top: 5px;
+    }
+}
+/* MINIPOS-GIO-HANG-TYPOGRAPHY-V5 */
+
+/* Tieu de va mo ta */
+.gio-hang-page-v2 .gio-hang-heading-v2 h1 {
+    font-size: 2.15rem;
+    line-height: 1.3;
+}
+
+.gio-hang-page-v2 .gio-hang-heading-v2 p {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Tieu de khu vuc */
+.gio-hang-page-v2 .gio-hang-section-heading-v2 h2,
+.gio-hang-page-v2 .gio-hang-summary-heading-v2 h2 {
+    font-size: 1.2rem;
+    line-height: 1.4;
+}
+
+.gio-hang-page-v2 .gio-hang-section-heading-v2 > span {
+    font-size: .9rem;
+}
+
+/* Ten san pham giu mau den */
+.gio-hang-page-v2 .gio-hang-product-name-v2 h3,
+.gio-hang-page-v2 .gio-hang-product-name-v2 h3 a {
+    color: #202124;
+    font-size: 1rem;
+    line-height: 1.45;
+}
+
+.gio-hang-page-v2 .gio-hang-product-name-v2 p {
+    font-size: .82rem;
+    line-height: 1.5;
+}
+
+/* Cac chi tiet xanh la chuyen sang xanh navy */
+.gio-hang-page-v2 .gio-hang-stock-v2 {
+    color: #173f73;
+    background: #eaf1fa;
+    border-color: #c6d8ee;
+    font-size: .76rem;
+}
+
+.gio-hang-page-v2 .gio-hang-unit-price-v2,
+.gio-hang-page-v2 .gio-hang-subtotal-v2 {
+    font-size: .93rem;
+    line-height: 1.5;
+}
+
+.gio-hang-page-v2 .gio-hang-unit-price-v2 strong,
+.gio-hang-page-v2 .gio-hang-subtotal-v2 strong {
+    color: #173f73;
+    font-weight: 700;
+}
+
+.gio-hang-page-v2 .gio-hang-columns-v2 {
+    font-size: .86rem;
+    line-height: 1.45;
+}
+
+.gio-hang-page-v2 .gio-hang-product-code-v2,
+.gio-hang-page-v2 .gio-hang-category-v2 {
+    font-size: .82rem;
+}
+
+/* Nut tang/giam so luong */
+.gio-hang-page-v2 .gio-hang-quantity-control-v2 input {
+    font-size: .95rem;
+    color: #173f73;
+}
+
+.gio-hang-page-v2 .gio-hang-quantity-control-v2 .gio-hang-step-v2 {
+    color: #173f73;
+    background: #eaf1fa;
+    border-color: #c6d8ee;
+    font-size: 1.1rem;
+}
+
+.gio-hang-page-v2 .gio-hang-quantity-save-v2 {
+    font-size: .8rem;
+}
+
+/* Bieu tuong thung rac: do canh bao, nen do nhat */
+.gio-hang-page-v2 .gio-hang-remove-form-v2 button {
+    color: #b42318;
+    background: #fff1f0;
+    border: 1px solid #f0c9c6;
+}
+
+.gio-hang-page-v2 .gio-hang-remove-form-v2 button:hover {
+    color: #8f1d14;
+    background: #fde2df;
+    border-color: #dfaaa5;
+}
+
+/* Tom tat don hang */
+.gio-hang-page-v2 .gio-hang-summary-row-v2 {
+    font-size: .95rem;
+    line-height: 1.5;
+}
+
+.gio-hang-page-v2 .gio-hang-summary-total-v2 {
+    background: #eaf1fa;
+}
+
+.gio-hang-page-v2 .gio-hang-summary-total-v2 > span {
+    font-size: .95rem;
+}
+
+.gio-hang-page-v2 .gio-hang-summary-total-v2 strong {
+    color: #173f73;
+    font-size: 1.5rem;
+    line-height: 1.4;
+}
+
+.gio-hang-page-v2 .gio-hang-checkout-disabled-v2 {
+    font-size: .92rem;
+}
+
+.gio-hang-page-v2 .gio-hang-checkout-note-v2 {
+    font-size: .82rem;
+    line-height: 1.5;
+}
+
+.gio-hang-page-v2 .gio-hang-clear-form-v2 button,
+.gio-hang-page-v2 .gio-hang-outline-button-v2 {
+    font-size: .92rem;
+}
+
+.gio-hang-page-v2 .gio-hang-support-v2 p {
+    font-size: .86rem;
+    line-height: 1.55;
+}
+
+@media (max-width: 700px) {
+    .gio-hang-page-v2 .gio-hang-heading-v2 h1 {
+        font-size: 1.75rem;
+    }
+
+    .gio-hang-page-v2 .gio-hang-heading-v2 p {
+        font-size: .95rem;
+    }
+
+    .gio-hang-page-v2 .gio-hang-summary-row-v2 {
+        font-size: .92rem;
+    }
+}
+/* MINIPOS-GIO-HANG-FINAL-TYPOGRAPHY-V6 */
+
+/* Tang co chu tong the, tan dung khong gian san co */
+.gio-hang-page-v2 {
+    font-size: 16px;
+}
+
+.gio-hang-page-v2 .gio-hang-heading-v2 h1 {
+    font-size: 2.25rem;
+}
+
+.gio-hang-page-v2 .gio-hang-heading-v2 p {
+    font-size: 1.05rem;
+}
+
+/* Tieu de cac khu vuc */
+.gio-hang-page-v2 .gio-hang-section-heading-v2 h2,
+.gio-hang-page-v2 .gio-hang-summary-heading-v2 h2 {
+    font-size: 1.3rem;
+}
+
+.gio-hang-page-v2 .gio-hang-columns-v2 {
+    grid-template-columns:
+        minmax(190px, 1.8fr)
+        minmax(100px, .75fr)
+        minmax(140px, 1fr)
+        minmax(110px, .9fr)
+        78px;
+    gap: 10px;
+    font-size: .96rem;
+}
+
+.gio-hang-page-v2 .gio-hang-product-v2 {
+    grid-template-columns:
+        minmax(190px, 1.8fr)
+        minmax(100px, .75fr)
+        minmax(140px, 1fr)
+        minmax(110px, .9fr)
+        78px;
+    gap: 10px;
+    padding: 17px 10px;
+}
+
+/* Ten san pham mau den, chu lon hon */
+.gio-hang-page-v2 .gio-hang-product-name-v2 h3,
+.gio-hang-page-v2 .gio-hang-product-name-v2 h3 a {
+    color: #202124;
+    font-size: 1.12rem;
+    line-height: 1.5;
+}
+
+.gio-hang-page-v2 .gio-hang-product-name-v2 p {
+    font-size: .92rem;
+    line-height: 1.5;
+}
+
+.gio-hang-page-v2 .gio-hang-stock-v2,
+.gio-hang-page-v2 .gio-hang-out-stock-v2 {
+    font-size: .82rem;
+}
+
+/* Don gia mau xanh navy */
+.gio-hang-page-v2 .gio-hang-unit-price-v2,
+.gio-hang-page-v2 .gio-hang-unit-price-v2 strong {
+    color: #173f73;
+    font-size: 1.02rem;
+    font-weight: 700;
+}
+
+/* Thanh tien mau den */
+.gio-hang-page-v2 .gio-hang-subtotal-v2,
+.gio-hang-page-v2 .gio-hang-subtotal-v2 strong {
+    color: #202124;
+    font-size: 1.02rem;
+    font-weight: 700;
+}
+
+/* Nut tang giam, khong can nut Luu so luong */
+.gio-hang-page-v2 .gio-hang-quantity-control-v2 {
+    gap: 5px;
+    padding: 4px;
+}
+
+.gio-hang-page-v2 .gio-hang-quantity-control-v2 input {
+    width: 42px;
+    height: 32px;
+    font-size: 1rem;
+}
+
+.gio-hang-page-v2 .gio-hang-quantity-control-v2 .gio-hang-step-v2 {
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
+    font-size: 1.15rem;
+}
+
+.gio-hang-page-v2 .gio-hang-quantity-save-v2 {
+    display: none;
+}
+
+/* Cot thao tac va nut thung rac */
+.gio-hang-page-v2 .gio-hang-columns-v2 > span:last-child {
+    text-align: center;
+}
+
+.gio-hang-page-v2 .gio-hang-remove-form-v2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gio-hang-page-v2 .gio-hang-remove-form-v2 button {
+    width: 34px;
+    height: 34px;
+}
+
+.gio-hang-page-v2 .gio-hang-summary-row-v2 {
+    font-size: 1rem;
+}
+
+.gio-hang-page-v2 .gio-hang-summary-total-v2 > span {
+    font-size: 1.02rem;
+}
+
+.gio-hang-page-v2 .gio-hang-summary-total-v2 strong {
+    font-size: 1.6rem;
+}
+
+.gio-hang-page-v2 .gio-hang-checkout-disabled-v2,
+.gio-hang-page-v2 .gio-hang-clear-form-v2 button,
+.gio-hang-page-v2 .gio-hang-outline-button-v2 {
+    font-size: .98rem;
+}
+
+.gio-hang-page-v2 .gio-hang-checkout-note-v2,
+.gio-hang-page-v2 .gio-hang-support-v2 p {
+    font-size: .88rem;
+    line-height: 1.55;
+}
+
+@media (max-width: 700px) {
+    .gio-hang-page-v2 .gio-hang-heading-v2 h1 {
+        font-size: 1.85rem;
+    }
+
+    .gio-hang-page-v2 .gio-hang-product-v2 {
+        grid-template-columns: minmax(0, 1fr) 34px;
+    }
+
+    .gio-hang-page-v2 .gio-hang-unit-price-v2,
+    .gio-hang-page-v2 .gio-hang-subtotal-v2 {
+        font-size: .98rem;
+    }
+}
+/* MINIPOS-GIO-HANG-LARGER-IMAGES-V7 */
+.gio-hang-page-v2 .gio-hang-product-image-v2 {
+    flex: 0 0 100px;
+    width: 100px;
+    height: 110px;
+    border-radius: 10px;
+}
+
+.gio-hang-page-v2 .gio-hang-product-image-v2 img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.gio-hang-page-v2 .gio-hang-product-info-v2 {
+    gap: 14px;
+}
+
+@media (max-width: 700px) {
+    .gio-hang-page-v2 .gio-hang-product-image-v2 {
+        flex: 0 0 84px;
+        width: 84px;
+        height: 90px;
+    }
+}
+/* MINIPOS-DA-XEM-GAN-DAY-V1 */
+.san-pham-da-xem {
+    margin: 28px 0;
+}
+
+.san-pham-da-xem .tieu-de-da-xem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.san-pham-da-xem .tieu-de-da-xem h2 {
+    margin: 0 0 6px;
+    color: #173f73;
+}
+
+.san-pham-da-xem .tieu-de-da-xem p {
+    margin: 0;
+    color: #596579;
+}
+
+.san-pham-da-xem .tieu-de-da-xem > a {
+    color: #173f73;
+    font-weight: 600;
+}
+
+.san-pham-da-xem .luoi-san-pham-da-xem {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.san-pham-da-xem .the-san-pham-da-xem {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid #dbe3ed;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 3px 12px rgb(23 63 115 / 6%);
+}
+
+.san-pham-da-xem .anh-san-pham-da-xem {
+    display: block;
+    height: 165px;
+    overflow: hidden;
+    background: #f6f8fb;
+}
+
+.san-pham-da-xem .anh-san-pham-da-xem img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.san-pham-da-xem .noi-dung-da-xem {
+    padding: 14px;
+}
+
+.san-pham-da-xem .noi-dung-da-xem h3 {
+    margin: 0 0 9px;
+    font-size: 1rem;
+    line-height: 1.45;
+}
+
+.san-pham-da-xem .noi-dung-da-xem h3 a {
+    color: #202124;
+    text-decoration: none;
+}
+
+.san-pham-da-xem .noi-dung-da-xem h3 a:hover {
+    color: #173f73;
+}
+
+.san-pham-da-xem .gia-da-xem {
+    margin: 0 0 6px;
+    color: #173f73;
+    font-weight: 700;
+}
+
+.san-pham-da-xem .ton-kho-da-xem {
+    margin: 0 0 13px;
+    color: #596579;
+    font-size: .9rem;
+}
+
+.san-pham-da-xem .nut-xem-lai-san-pham {
+    display: block;
+    padding: 9px 12px;
+    border: 1px solid #173f73;
+    border-radius: 7px;
+    color: #173f73;
+    background: #ffffff;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+}
+
+.san-pham-da-xem .nut-xem-lai-san-pham:hover {
+    color: #ffffff;
+    background: #173f73;
+}
+
+.san-pham-da-xem .thong-bao-chua-xem {
+    padding: 18px;
+    border: 1px dashed #b7cce4;
+    border-radius: 10px;
+    color: #596579;
+    background: #f6f8fb;
+}
+
+@media (max-width: 900px) {
+    .san-pham-da-xem .luoi-san-pham-da-xem {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .san-pham-da-xem .luoi-san-pham-da-xem {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .san-pham-da-xem .anh-san-pham-da-xem {
+        height: 190px;
+    }
+}
+/* MINIPOS-HEADER-ACCOUNT-V1 */
+.dau-trang .lien-ket-logo-minipos {
+    color: inherit;
+    text-decoration: none;
+}
+
+.dau-trang .lien-ket-logo-minipos:hover {
+    text-decoration: underline;
+}
+
+#menu-chinh a[aria-current="page"] {
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+#menu-chinh .form-dang-xuat-header {
+    display: inline-flex;
+    width: auto;
+    max-width: none;
+    margin: 0;
+}
+
+#menu-chinh .form-dang-xuat-header button {
+    width: auto;
+    margin: 0;
+}
+
+.thong-tin-nguoi-dung-header {
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+    .thong-tin-nguoi-dung-header {
+        display: block;
+        width: 100%;
+        margin-top: 6px;
+    }
+}
+/* MINIPOS-HEADER-LAYOUT-V2 */
+
+/* Sap xep lai thanh header chinh */
+header.dau-trang {
+    display: grid !important;
+    grid-template-columns:
+        max-content
+        minmax(220px, 1fr)
+        max-content
+        max-content;
+    align-items: center;
+    gap: 12px 24px;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 76px;
+    padding: 16px clamp(16px, 3vw, 40px);
+    line-height: 1.5;
+}
+
+/* Ten thuong hieu */
+header.dau-trang > strong {
+    display: block;
+    margin: 0;
+    font-size: 1.25rem;
+    line-height: 1.3;
+    white-space: nowrap;
+}
+
+header.dau-trang .lien-ket-logo-minipos {
+    color: #ffffff;
+    font-size: inherit;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+/* Mo ta thuong hieu */
+header.dau-trang > span:not(.thong-tin-yeu-thich-header):not(.thong-tin-nguoi-dung-header) {
+    min-width: 0;
+    margin: 0;
+    color: #ffffff;
+    font-size: 1rem;
+    overflow-wrap: anywhere;
+}
+
+/* So luong yeu thich */
+header.dau-trang .thong-tin-yeu-thich-header {
+    justify-self: end;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin: 0;
+    padding: 8px 13px;
+    border: 1px solid rgb(255 255 255 / 30%);
+    border-radius: 999px;
+    background: rgb(255 255 255 / 10%);
+    color: #ffffff;
+    font-size: .95rem;
+    white-space: nowrap;
+}
+
+header.dau-trang [data-so-luong-yeu-thich] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    min-height: 24px;
+    padding: 0 5px;
+    box-sizing: border-box;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #173f73;
+    font-weight: 700;
+}
+
+/* Loi chao tai khoan */
+header.dau-trang .thong-tin-nguoi-dung-header {
+    justify-self: end;
+    margin: 0;
+    color: #ffffff;
+    font-size: .95rem;
+    line-height: 1.5;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+header.dau-trang .thong-tin-nguoi-dung-header strong {
+    font-weight: 700;
+}
+
+/* May tinh bang va laptop nho */
+@media (max-width: 1050px) {
+    header.dau-trang {
+        grid-template-columns: max-content minmax(0, 1fr);
+        gap: 10px 16px;
+    }
+
+    header.dau-trang > strong {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    header.dau-trang > span:not(.thong-tin-yeu-thich-header):not(.thong-tin-nguoi-dung-header) {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    header.dau-trang .thong-tin-yeu-thich-header {
+        grid-column: 1;
+        grid-row: 2;
+        justify-self: start;
+    }
+
+    header.dau-trang .thong-tin-nguoi-dung-header {
+        grid-column: 2;
+        grid-row: 2;
+        justify-self: end;
+        text-align: right;
+    }
+}
+
+/* Dien thoai */
+@media (max-width: 520px) {
+    header.dau-trang {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 9px;
+        padding: 14px 16px;
+    }
+
+    header.dau-trang > strong,
+    header.dau-trang > span:not(.thong-tin-yeu-thich-header):not(.thong-tin-nguoi-dung-header),
+    header.dau-trang .thong-tin-yeu-thich-header,
+    header.dau-trang .thong-tin-nguoi-dung-header {
+        grid-column: 1;
+        grid-row: auto;
+        justify-self: start;
+        text-align: left;
+    }
+
+    header.dau-trang > strong {
+        font-size: 1.2rem;
+    }
+
+    header.dau-trang .thong-tin-yeu-thich-header {
+        padding: 6px 11px;
+    }
+}
+/* MINIPOS-FOOTER-DESIGN-V2 */
+
+footer.footer-minipos-v2 {
+    grid-area: footer;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+    width: calc(100% - 36px);
+    max-width: 1800px;
+    min-width: 0;
+    margin: 28px auto 18px;
+    padding: 24px 30px;
+    border: 1px solid #315887;
+    border-radius: 14px;
+    background: #173f73;
+    color: #ffffff;
+    box-shadow: 0 5px 18px rgb(23 63 115 / 12%);
+}
+
+footer.footer-minipos-v2 .footer-loi-cam-on {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    gap: 22px;
+    min-width: 0;
+}
+
+footer.footer-minipos-v2 .footer-trai-tim {
+    flex: 0 0 auto;
+    color: #ffffff;
+    font-size: 42px;
+    line-height: 1;
+}
+
+footer.footer-minipos-v2 .footer-thong-diep {
+    min-width: 0;
+}
+
+footer.footer-minipos-v2 .footer-tieu-de {
+    margin: 0 0 6px;
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+footer.footer-minipos-v2 .footer-mo-ta {
+    margin: 0;
+    color: #ffffff;
+    font-size: .98rem;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+footer.footer-minipos-v2 .footer-thuong-hieu {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 18px;
+    min-width: 0;
+    padding-left: 26px;
+}
+
+footer.footer-minipos-v2 .footer-vach-ngan {
+    align-self: stretch;
+    width: 1px;
+    min-height: 58px;
+    background: rgb(255 255 255 / 40%);
+}
+
+footer.footer-minipos-v2 .footer-bieu-tuong-cua-hang {
+    flex: 0 0 auto;
+    color: #ffffff;
+}
+
+footer.footer-minipos-v2 .footer-thong-tin-nhom {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+footer.footer-minipos-v2 .footer-thong-tin-nhom strong {
+    color: #ffffff;
+    font-size: 1.25rem;
+    line-height: 1.4;
+}
+
+footer.footer-minipos-v2 .footer-thong-tin-nhom span {
+    color: #ffffff;
+    font-size: .95rem;
+    line-height: 1.5;
+    white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+    footer.footer-minipos-v2 {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 20px;
+        width: calc(100% - 24px);
+        padding: 22px 20px;
+    }
+
+    footer.footer-minipos-v2 .footer-loi-cam-on {
+        gap: 14px;
+    }
+
+    footer.footer-minipos-v2 .footer-trai-tim {
+        font-size: 34px;
+    }
+
+    footer.footer-minipos-v2 .footer-tieu-de {
+        font-size: 1rem;
+    }
+
+    footer.footer-minipos-v2 .footer-mo-ta {
+        font-size: .92rem;
+    }
+
+    footer.footer-minipos-v2 .footer-thuong-hieu {
+        padding: 16px 0 0;
+        border-top: 1px solid rgb(255 255 255 / 35%);
+        gap: 14px;
+    }
+
+    footer.footer-minipos-v2 .footer-vach-ngan {
+        display: none;
+    }
+
+    footer.footer-minipos-v2 .footer-bieu-tuong-cua-hang {
+        width: 40px;
+        height: 40px;
+    }
+
+    footer.footer-minipos-v2 .footer-thong-tin-nhom strong {
+        font-size: 1.1rem;
+    }
+
+    footer.footer-minipos-v2 .footer-thong-tin-nhom span {
+        font-size: .9rem;
+        white-space: normal;
+    }
+}
+/* MINIPOS-FOOTER-SPACING-FIX-V3 */
+
+/* Thu gon chieu cao va khoang cach footer */
+footer.footer-minipos-v2 {
+    padding: 17px 24px;
+    margin: 22px auto 14px;
+    gap: 22px;
+    border-radius: 12px;
+}
+
+/* Can dong hai dong chu cung mot le trai */
+footer.footer-minipos-v2 .footer-loi-cam-on {
+    align-items: center;
+    gap: 16px;
+}
+
+footer.footer-minipos-v2 .footer-thong-diep {
+    min-width: 0;
+    flex: 1 1 auto;
+    text-align: left;
+}
+
+footer.footer-minipos-v2 .footer-thong-diep p,
+footer.footer-minipos-v2 .footer-tieu-de,
+footer.footer-minipos-v2 .footer-mo-ta {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    text-align: left !important;
+}
+
+/* Nho hon mot chut nhung van de doc */
+footer.footer-minipos-v2 .footer-trai-tim {
+    font-size: 34px;
+}
+
+footer.footer-minipos-v2 .footer-tieu-de {
+    margin-top: 0;
+    margin-bottom: 3px;
+    font-size: 1rem;
+    line-height: 1.45;
+}
+
+footer.footer-minipos-v2 .footer-mo-ta {
+    font-size: .9rem;
+    line-height: 1.5;
+}
+
+/* Thu gon cum thuong hieu ben phai */
+footer.footer-minipos-v2 .footer-thuong-hieu {
+    gap: 14px;
+    padding-left: 20px;
+}
+
+footer.footer-minipos-v2 .footer-vach-ngan {
+    min-height: 46px;
+}
+
+footer.footer-minipos-v2 .footer-bieu-tuong-cua-hang {
+    width: 40px;
+    height: 40px;
+}
+
+footer.footer-minipos-v2 .footer-thong-tin-nhom {
+    gap: 3px;
+}
+
+footer.footer-minipos-v2 .footer-thong-tin-nhom strong {
+    font-size: 1.1rem;
+    line-height: 1.35;
+}
+
+footer.footer-minipos-v2 .footer-thong-tin-nhom span {
+    font-size: .85rem;
+    line-height: 1.4;
+}
+
+@media (max-width: 760px) {
+    footer.footer-minipos-v2 {
+        padding: 17px 18px;
+        gap: 16px;
+    }
+
+    footer.footer-minipos-v2 .footer-loi-cam-on {
+        gap: 12px;
+    }
+
+    footer.footer-minipos-v2 .footer-trai-tim {
+        font-size: 30px;
+    }
+
+    footer.footer-minipos-v2 .footer-tieu-de {
+        font-size: .95rem;
+    }
+
+    footer.footer-minipos-v2 .footer-mo-ta {
+        font-size: .88rem;
+    }
+
+    footer.footer-minipos-v2 .footer-thuong-hieu {
+        gap: 12px;
+        padding-top: 13px;
+    }
 }
