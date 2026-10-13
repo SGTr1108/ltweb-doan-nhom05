@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 require_once __DIR__ . '/inc/config.php';
@@ -41,7 +42,7 @@ require __DIR__ . '/inc/header.php';
             </li>
 
             <li>
-                <a href="thanhvien/3120224122_sang/gioithieu.html">
+                <a href="thanhvien/3120224122_sang/gioithieu.php">
                     Trần Xuân Sang (3120224122)
                 </a>
             </li>

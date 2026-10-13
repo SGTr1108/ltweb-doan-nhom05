@@ -195,3 +195,19 @@ table th, table td {
     font-weight: bold;
     font-size: 16px;
 }
+/* Khối tiêu đề dải băng xanh */
+.page-title-banner {
+    background-color: #123e6d !important; /* Màu nền xanh nhất quán với header nhóm */
+    padding: 25px 0;
+    text-align: center;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.page-title-banner h1 {
+    color: #ffffff !important; /* Chữ màu trắng tinh, không bị trùng màu nền */
+    margin: 0;
+    font-size: 2rem;
+    font-weight: bold;
+    background: transparent !important;
+}

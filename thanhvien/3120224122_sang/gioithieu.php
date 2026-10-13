@@ -2,9 +2,6 @@
 /*
  * Tệp: gioithieu.php
  * Sinh viên: Trần Xuân Sang (MSSV: 3120224122)
- * Chức năng 1: Khởi tạo và in danh sách các dự án thực tế từ mảng PHP.
- * Chức năng 2: Sổ lưu bút (đọc/ghi dữ liệu từ tệp JSONL, kiểm tra POST, chặn XSS và chuyển hướng PRG).
- * Cách thử: Mở http://localhost:8000/thanhvien/3120224122_sang/gioithieu.php, xem danh sách dự án, nhập tên và lời nhắn vào form lưu bút rồi nhấn gửi.
  */
 
 session_start();
@@ -15,7 +12,7 @@ require $goc . 'inc/config.php';
 require_once $goc . 'inc/ham.php';
 require $goc . 'inc/header.php';
 
-// Dự phòng trường hợp file inc/ham.php của nhóm chưa định nghĩa hàm e()
+// Dự phòng trường hợp file inc/ham.php chưa định nghĩa hàm e()
 if (!function_exists('e')) {
     function e($string)
     {
@@ -42,12 +39,11 @@ $du_an = [
     ]
 ];
 
-// --- CHỨC NĂNG 2: Sổ lưu bút (Xử lý Form PRG) ---
+// --- CHỨC NĂNG 2: Sổ lưu bút (JSONL) ---
 $thu_muc_storage = $goc . 'storage/';
 $file_luu_but = $thu_muc_storage . '3120224122_luubut.jsonl';
 $loi = '';
 
-// Tạo thư mục storage nếu chưa có (tránh lỗi Warning)
 if (!is_dir($thu_muc_storage)) {
     mkdir($thu_muc_storage, 0777, true);
 }
@@ -57,17 +53,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $loi_nhan = trim($_POST['loi_nhan'] ?? '');
 
     if ($ten !== '' && $loi_nhan !== '') {
-        // Chuẩn bị mảng dữ liệu và mã hóa JSON
         $data = json_encode([
             'ten' => $ten,
             'loi_nhan' => $loi_nhan,
             'thoi_gian' => date('d/m/Y H:i:s')
         ]) . PHP_EOL;
 
-        // Lưu vào tệp an toàn với cơ chế khóa
         file_put_contents($file_luu_but, $data, FILE_APPEND | LOCK_EX);
-
-        // PRG: Chuyển hướng sau khi POST thành công để tránh submit lại khi F5
         header("Location: gioithieu.php?status=success");
         exit;
     } else {
@@ -75,111 +67,273 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Đọc tối đa 5 lời nhắn mới nhất
 $danh_sach_luu_but = [];
 if (file_exists($file_luu_but)) {
     $lines = file($file_luu_but, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    $lines = array_reverse($lines); // Đảo ngược để đưa tin mới nhất lên đầu
-    $lines = array_slice($lines, 0, 5); // Cắt lấy 5 dòng
+    $lines = array_reverse($lines);
+    $lines = array_slice($lines, 0, 5);
     foreach ($lines as $line) {
         $danh_sach_luu_but[] = json_decode($line, true);
     }
 }
 ?>
 
-<!-- HTML Bắt đầu -->
-<!-- Thay thế bằng đường dẫn tới file CSS cá nhân của bạn nếu cần -->
-<!-- <link rel="stylesheet" href="css/style.css"> -->
+<!-- ================= PHẦN HTML CỦA BẠN ================= -->
+<link rel="stylesheet" href="style_canhan.css">
 
-<main class="container my-5">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h1 class="display-5">Trang cá nhân - Trần Xuân Sang</h1>
-            <p class="lead">Sinh viên Công nghệ Thông tin - Đại học Đà Nẵng</p>
-        </div>
+<main class="profile-container">
+    <div class="page-title-banner">
+        <h1>Trang giới thiệu cá nhân</h1>
     </div>
 
-    <hr>
+    <nav>
+        <a href="../../index.php">Quay về Trang chủ Nhóm</a> |
+        <a href="../../gioi-thieu.php">Quay lại Giới thiệu Nhóm</a>
+    </nav>
 
-    <!-- Hiển thị Chức năng 1 -->
-    <section class="mb-5">
-        <h2 class="mb-3">Dự án chuyên môn</h2>
-        <div class="row">
+    <!-- Section: Giới thiệu bản thân và ảnh chân dung -->
+    <section class="profile-header">
+        <div class="profile-avatar">
+            <img src="Sang-avatar.png" alt="Ảnh chân dung sinh viên Trần Xuân Sang" class="profile-img">
+        </div>
+
+        <div class="profile-info">
+            <h2>Thông tin sinh viên</h2>
+            <p><strong>Họ và tên:</strong> Trần Xuân Sang</p>
+            <p><strong>Mã sinh viên:</strong> 3120224122</p>
+            <p><strong>Lớp học phần:</strong> Thiết kế và Lập trình Web - Nhóm 05</p>
+            <p>Chào mừng bạn đến với trang cá nhân của mình trong dự án phát triển hệ thống quản lý bán hàng MiniPos.</p>
+
+            <h3>Kỹ năng chuyên môn</h3>
+            <ul class="skills-list">
+                <li>Ngôn ngữ: C++, Python, PHP</li>
+                <li>Công cụ: Visual Studio Code, Git/GitHub</li>
+                <li>Cơ sở dữ liệu: MySQL, PostgreSQL</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Section: Dự án thực tế (Render từ mảng PHP) -->
+    <section class="tabs-section">
+        <h2>Dự án chuyên môn</h2>
+        <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 15px;">
             <?php foreach ($du_an as $da): ?>
-                <div class="col-md-4 mb-3">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title text-primary"><?= e($da['ten']) ?></h5>
-                            <h6 class="card-subtitle mb-2 text-muted"><?= e($da['cong_nghe']) ?></h6>
-                            <p class="card-text mt-3"><?= e($da['mo_ta']) ?></p>
-                        </div>
-                    </div>
+                <div style="flex: 1; min-width: 250px; border: 1px solid #ccc; padding: 15px; border-radius: 8px; background: #fff;">
+                    <h3 style="color: #2b5c92; margin-top: 0;"><?= e($da['ten']) ?></h3>
+                    <p><strong>Công nghệ:</strong> <?= e($da['cong_nghe']) ?></p>
+                    <p><?= e($da['mo_ta']) ?></p>
                 </div>
             <?php endforeach; ?>
         </div>
     </section>
 
-    <hr>
-
-    <!-- Hiển thị Chức năng 2 -->
-    <section class="mb-5">
-        <h2 class="mb-4">Sổ lưu bút</h2>
+    <!-- Section: Sổ lưu bút PHP -->
+    <section class="bmi-section">
+        <h2>Sổ lưu bút</h2>
 
         <?php if (isset($_GET['status']) && $_GET['status'] === 'success'): ?>
-            <div class="alert alert-success" role="alert">
-                Cảm ơn bạn đã để lại lời nhắn!
-            </div>
+            <p style="color: green; font-weight: bold;">Cảm ơn bạn đã để lại lời nhắn!</p>
         <?php endif; ?>
 
         <?php if ($loi !== ''): ?>
-            <div class="alert alert-danger" role="alert">
-                <?= e($loi) ?>
-            </div>
+            <p style="color: red; font-weight: bold;"><?= e($loi) ?></p>
         <?php endif; ?>
 
-        <div class="row">
-            <div class="col-md-6 mb-4">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title mb-3">Viết lời nhắn</h5>
-                        <form method="POST" action="gioithieu.php">
-                            <div class="mb-3">
-                                <label for="ten" class="form-label">Tên của bạn</label>
-                                <input type="text" class="form-control" id="ten" name="ten" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="loi_nhan" class="form-label">Lời nhắn</label>
-                                <textarea class="form-control" id="loi_nhan" name="loi_nhan" rows="4" required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Gửi lời nhắn</button>
-                        </form>
-                    </div>
-                </div>
+        <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 15px;">
+            <!-- Form Gửi -->
+            <div style="flex: 1; min-width: 300px; background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #e1e8ed;">
+                <form method="POST" action="gioithieu.php" class="bmi-form">
+                    <label for="ten">Tên của bạn:</label>
+                    <input type="text" id="ten" name="ten" required>
+
+                    <label for="loi_nhan">Lời nhắn:</label>
+                    <textarea id="loi_nhan" name="loi_nhan" rows="4" style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;" required></textarea>
+
+                    <button type="submit">Gửi lời nhắn</button>
+                </form>
             </div>
 
-            <div class="col-md-6">
-                <h5 class="mb-3">5 Lời nhắn mới nhất</h5>
-                <ul class="list-group shadow-sm">
-                    <?php if (empty($danh_sach_luu_but)): ?>
-                        <li class="list-group-item text-muted">Chưa có lời nhắn nào. Hãy là người đầu tiên!</li>
-                    <?php else: ?>
-                        <?php foreach ($danh_sach_luu_but as $lb): ?>
-                            <li class="list-group-item">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <strong class="text-primary"><?= e($lb['ten']) ?></strong>
-                                    <small class="text-muted"><?= e($lb['thoi_gian']) ?></small>
-                                </div>
-                                <p class="mb-0 mt-1"><?= e($lb['loi_nhan']) ?></p>
-                            </li>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </ul>
+            <!-- Danh sách -->
+            <div style="flex: 1; min-width: 300px;">
+                <h3 style="margin-top:0;">5 Lời nhắn mới nhất</h3>
+                <?php if (empty($danh_sach_luu_but)): ?>
+                    <p style="color: #777;">Chưa có lời nhắn nào.</p>
+                <?php else: ?>
+                    <?php foreach ($danh_sach_luu_but as $lb): ?>
+                        <div style="background: #fff; border: 1px solid #eee; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
+                            <strong style="color: #2b5c92;"><?= e($lb['ten']) ?></strong>
+                            <small style="color: #888; float: right;"><?= e($lb['thoi_gian']) ?></small>
+                            <p style="margin: 5px 0 0 0;"><?= e($lb['loi_nhan']) ?></p>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
+        </div>
+    </section>
+
+    <!-- Bảng: Thời khóa biểu tuần (Giữ nguyên) -->
+    <section>
+        <h2>Thời khóa biểu cá nhân</h2>
+        <div class="table-responsive">
+            <table class="schedule-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Tiết</th>
+                        <th scope="col">Thứ 2</th>
+                        <th scope="col">Thứ 3</th>
+                        <th scope="col">Thứ 4</th>
+                        <th scope="col">Thứ 5</th>
+                        <th scope="col">Thứ 6</th>
+                        <th scope="col">Thứ 7</th>
+                        <th scope="col">Chủ nhật</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="period">1</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td rowspan="3">
+                            31231330 - 24-0101<br>
+                            Khai phá dữ liệu<br>
+                            Phòng: A5-404B
+                        </td>
+                        <td rowspan="3">
+                            31231398 - 24-0101<br>
+                            Lập trình mạng<br>
+                            Phòng: A5-403
+                        </td>
+                        <td rowspan="3">
+                            31231755 - 24-0102<br>
+                            Thiết kế và lập trình web<br>
+                            Phòng: B3-303
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="period">2</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="period">3</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="period">4</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="period">5</td>
+                        <td></td>
+                        <td rowspan="2">
+                            21221904 - 24-0113<br>
+                            Lịch sử Đảng Cộng sản Việt Nam<br>
+                            Phòng: A6-403
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="period">6</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="break-row">
+                        <td colspan="8"></td>
+                    </tr>
+                    <tr>
+                        <td class="period">7</td>
+                        <td></td>
+                        <td rowspan="3">
+                            31241283 - 24-0103<br>
+                            Hệ quản trị cơ sở dữ liệu<br>
+                            Phòng: B3-304
+                        </td>
+                        <td></td>
+                        <td rowspan="3">
+                            31231016 - 24-0102<br>
+                            Công nghệ phần mềm<br>
+                            Phòng: B3-503
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="period">8</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="period">9</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="period">10</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="period">11</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td rowspan="2">
+                            31221010 - 24-0103<br>
+                            An toàn thông tin<br>
+                            Phòng: B3-506
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="period">12</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </section>
 </main>
 
-<!-- Gọi script cá nhân -->
-<script src="js/canhan.js"></script>
+<script type="module" src="js/canhan.js"></script>
 
 <?php require $goc . 'inc/footer.php'; ?>
