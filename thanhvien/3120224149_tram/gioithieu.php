@@ -1,0 +1,302 @@
+<?php
+// gioithieu.php - Trang giới thiệu cá nhân gồm bộ đếm lượt xem và máy tính điểm học phần.
+// Cách thử 1: mở trang bằng XAMPP (http://localhost/.../gioithieu.php); mở lại tab ẩn danh thì số lượt xem tăng 1.
+// Cách thử 2: nhập A1, A2, A3 (0-10) rồi bấm "Tính điểm ngay"; trang chuyển hướng (PRG), F5 không gửi lại form.
+// Cách thử 3: để trống / nhập chữ / nhập 11 để xem thông báo lỗi do máy chủ kiểm tra.
+
+declare(strict_types=1);
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+/** Thoát ký tự đặc biệt: mọi dữ liệu in ra HTML đều đi qua hàm này. */
+function e($value): string
+{
+    return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
+/** Lấy giá trị POST dạng chuỗi, không phải chuỗi thì coi như rỗng. */
+function post_str(string $key): string
+{
+    return (isset($_POST[$key]) && is_string($_POST[$key])) ? trim($_POST[$key]) : '';
+}
+
+// ==========================================
+// CHỨC NĂNG 1: BỘ ĐẾM LƯỢT XEM (FILE + SESSION)
+// ==========================================
+$counter_dir  = __DIR__ . '/storage';
+$counter_file = $counter_dir . '/3120224149_counter.txt';
+
+if (!is_dir($counter_dir)) {
+    mkdir($counter_dir, 0755, true);
+}
+
+$fp = fopen($counter_file, 'c+');
+$current_views = 0;
+if ($fp !== false) {
+    flock($fp, LOCK_EX);
+    $current_views = (int)trim((string)stream_get_contents($fp));
+    if (!isset($_SESSION['has_viewed'])) {
+        $current_views++;
+        ftruncate($fp, 0);
+        rewind($fp);
+        fwrite($fp, (string)$current_views);
+        $_SESSION['has_viewed'] = true;
+    }
+    flock($fp, LOCK_UN);
+    fclose($fp);
+}
+
+// ==========================================
+// CHỨC NĂNG 2: MÁY TÍNH ĐIỂM HỌC PHẦN (VALIDATE SERVER + PRG)
+// ==========================================
+$error_msg   = '';
+$success_msg = '';
+$diem_tb     = '';
+$ket_qua     = '';
+$a1 = '';
+$a2 = '';
+$a3 = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tinh_diem'])) {
+    $a1 = post_str('diem_a1');
+    $a2 = post_str('diem_a2');
+    $a3 = post_str('diem_a3');
+
+    // Cho phép nhập dấu phẩy thập phân: 8,5 -> 8.5
+    $n1 = str_replace(',', '.', $a1);
+    $n2 = str_replace(',', '.', $a2);
+    $n3 = str_replace(',', '.', $a3);
+
+    if ($a1 === '' || $a2 === '' || $a3 === '') {
+        $error_msg = 'Vui lòng nhập đầy đủ cả 3 cột điểm!';
+    } elseif (!is_numeric($n1) || !is_numeric($n2) || !is_numeric($n3)) {
+        $error_msg = 'Điểm nhập vào phải là một số hợp lệ!';
+    } else {
+        $f1 = (float)$n1;
+        $f2 = (float)$n2;
+        $f3 = (float)$n3;
+
+        if ($f1 < 0 || $f1 > 10 || $f2 < 0 || $f2 > 10 || $f3 < 0 || $f3 > 10) {
+            $error_msg = 'Điểm số không hợp lệ! Vui lòng nhập trong khoảng từ 0 đến 10.';
+        } else {
+            $tb = round((0.2 * $f1) + (0.3 * $f2) + (0.5 * $f3), 1);
+
+            // PRG: lưu kết quả tạm vào session, chuyển hướng về GET rồi dừng.
+            $_SESSION['flash'] = [
+                'diem_tb' => $tb,
+                'ket_qua' => ($tb >= 4.0) ? 'ĐẠT (Chúc mừng bạn)' : 'HỌC LẠI (Cố gắng lần sau)',
+            ];
+            header('Location: gioithieu.php#may-tinh-diem', true, 303);
+            exit;
+        }
+    }
+}
+
+// Sau khi chuyển hướng: đọc kết quả một lần rồi xóa khỏi session.
+if (isset($_SESSION['flash']) && is_array($_SESSION['flash'])) {
+    $diem_tb     = (string)($_SESSION['flash']['diem_tb'] ?? '');
+    $ket_qua     = (string)($_SESSION['flash']['ket_qua'] ?? '');
+    $success_msg = 'Tính điểm thành công!';
+    unset($_SESSION['flash']);
+}
+?>
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Trang giới thiệu cá nhân sinh viên Đoàn Thùy Thảo Trâm thực hiện đồ án MiniPos.">
+    <title>Giới thiệu Cá nhân | MiniPos</title>
+    <link rel="stylesheet" href="tram_style.css">
+  </head>
+
+  <body>
+    <header>
+      <h1>Trang giới thiệu cá nhân</h1>
+    </header>
+
+    <nav>
+      <a href="https://sgtr1108.github.io/ltweb-doan-nhom05/index.html">Quay về Trang chủ Nhóm</a> |
+      <a href="https://sgtr1108.github.io/ltweb-doan-nhom05/gioi-thieu.html">Quay lại Giới thiệu Nhóm</a>
+    </nav>
+
+    <main>
+      <section class="profile-header">
+        <div class="khoi-thong-tin-chinh">
+          <button type="button" class="profile-img-btn" aria-label="Phóng to ảnh chân dung đại diện">
+            <img src="avatar.png" alt="Ảnh chân dung của Đoàn Thùy Thảo Trâm" class="profile-img">
+          </button>
+
+          <div class="chi-tiet-ca-nhan">
+            <h2>Thông tin sinh viên</h2>
+            <p><strong>Họ và tên:</strong> Đoàn Thùy Thảo Trâm</p>
+            <p><strong>Mã sinh viên:</strong> 3120224149</p>
+            <p><strong>Lớp học phần:</strong> Thiết kế và Lập trình Web - Nhóm 05</p>
+            <p>
+              Chào mừng bạn đến với trang cá nhân của mình trong dự án phát triển hệ
+              thống quản lý bán hàng MiniPos.
+            </p>
+
+            <p class="tieu-de-ky-nang"><strong>Kỹ năng chuyên môn</strong></p>
+            <ul>
+              <li>Ngôn ngữ: HTML, PHP cơ bản</li>
+              <li>Công cụ: Visual Studio Code, Git/GitHub, XAMPP, Word, Draw.io</li>
+              <li>Cơ sở dữ liệu: MySQL</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <article>
+        <h2>Định hướng và Sở thích</h2>
+        <p>
+          Trong đồ án nhóm MiniPos, mình đảm nhận việc thiết kế và
+          xây dựng cấu trúc giao diện website bằng HTML5 ngữ nghĩa,
+          tổ chức nội dung và liên kết giữa các trang,
+          đồng thời kiểm tra khả năng truy cập (A11y) và tối ưu hóa SEO on-page cho website.
+        </p>
+        <p>Sở thích cá nhân của mình là tham gia các hoạt động tập thể, tìm hiểu những kiến thức mới phục vụ cho học tập và giao lưu với bạn bè, sinh viên.</p>
+
+        <div class="container">
+          <div style="text-align: right; margin-bottom: 20px;">
+            <span class="view-badge">👀 Tổng số lượt xem: <?php echo e($current_views); ?></span>
+          </div>
+
+          <div class="box" id="may-tinh-diem">
+            <h3>Máy Tính Điểm Học Phần</h3>
+            <p style="font-size: 0.9em; color: gray;">Công thức: ĐTB = 0.2×A1 + 0.3×A2 + 0.5×A3</p>
+
+            <?php if ($error_msg !== ''): ?>
+              <p class="alert-error">❌ <?php echo e($error_msg); ?></p>
+            <?php endif; ?>
+
+            <?php if ($success_msg !== ''): ?>
+              <p class="alert-success"><?php echo e($success_msg); ?></p>
+            <?php endif; ?>
+
+            <form action="gioithieu.php" method="post">
+              <div class="form-group">
+                <label for="diem_a1">Điểm chuyên cần / Thái độ (A1):</label>
+                <input type="text" id="diem_a1" name="diem_a1" value="<?php echo e($a1); ?>" placeholder="Ví dụ: 8.5">
+              </div>
+              <div class="form-group">
+                <label for="diem_a2">Điểm kiểm tra giữa kỳ (A2):</label>
+                <input type="text" id="diem_a2" name="diem_a2" value="<?php echo e($a2); ?>" placeholder="Ví dụ: 8.5">
+              </div>
+              <div class="form-group">
+                <label for="diem_a3">Điểm thi kết thúc học phần (A3):</label>
+                <input type="text" id="diem_a3" name="diem_a3" value="<?php echo e($a3); ?>" placeholder="Ví dụ: 8.5">
+              </div>
+              <button type="submit" name="tinh_diem" class="btn btn-submit">Tính điểm ngay</button>
+            </form>
+
+            <?php if ($diem_tb !== ''): ?>
+              <div class="result-box">
+                <p><strong>Điểm trung bình học phần:</strong> <span style="font-size: 1.2em; color: #007bff;"><?php echo e($diem_tb); ?></span></p>
+                <p><strong>Kết quả xếp loại môn học:</strong> <strong><?php echo e($ket_qua); ?></strong></p>
+              </div>
+            <?php endif; ?>
+          </div>
+        </div>
+      </article>
+
+      <section>
+        <h2>Thời khóa biểu tuần</h2>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Tiết</th>
+                <th scope="col">Thứ 2</th>
+                <th scope="col">Thứ 3</th>
+                <th scope="col">Thứ 4</th>
+                <th scope="col">Thứ 5</th>
+                <th scope="col">Thứ 6</th>
+                <th scope="col">Thứ 7</th>
+                <th scope="col">Chủ nhật</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td></td><td></td><td></td>
+                <td rowspan="3">31231330 - 24-0101<br>Khai phá dữ liệu<br>Phòng: A5-404B</td>
+                <td rowspan="3">31231398 - 24-0101<br>Lập trình mạng<br>Phòng: A5-403</td>
+                <td rowspan="3">31231755 - 24-0102<br>Thiết kế và lập trình web<br>Phòng: B3-303</td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td></td><td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td></td><td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <th scope="row">4</th>
+                <td></td><td></td><td></td>
+                <td rowspan="3">31231282 - 24-0101<br>Hệ phân tán<br>Phòng: B3-303</td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <th scope="row">5</th>
+                <td></td>
+                <td rowspan="2">21221904 - 24-0113<br>Lịch sử Đảng Cộng sản Việt Nam<br>Phòng: A6-403</td>
+                <td></td><td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <th scope="row">6</th>
+                <td></td><td></td><td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <th scope="row">7</th>
+                <td rowspan="2">31221010 - 24-0102<br>An toàn thông tin<br>Phòng: A6-401</td>
+                <td rowspan="4">31241283 - 24-0103<br>Hệ quản trị cơ sở dữ liệu<br>Phòng: B3-304</td>
+                <td></td>
+                <td rowspan="3">31231016 - 24-0102<br>Công nghệ phần mềm<br>Phòng: B3-503</td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <th scope="row">8</th>
+                <td></td><td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <th scope="row">9</th>
+                <td></td><td></td><td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <th scope="row">10</th>
+                <td></td><td></td><td></td><td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <th scope="row">11</th>
+                <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <th scope="row">12</th>
+                <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        &copy; 2026 [Đoàn Thùy Thảo Trâm 24CNTT1] - Khoa Toán - Tin, Đại học Sư phạm Đà Nẵng.
+      </p>
+    </footer>
+
+    <button id="scrollToTopBtn" title="Lên đầu trang">&#10148;</button>
+
+    <div id="imageLightbox" class="lightbox" aria-hidden="true" role="dialog" aria-label="Trình xem ảnh phóng to">
+      <button type="button" class="lightbox-close" aria-label="Đóng trình xem ảnh">&times;</button>
+    </div>
+
+    <script src="js/canhan.js" defer></script>
+  </body>
+</html>
