@@ -48,13 +48,13 @@ require __DIR__ . '/inc/header.php';
             </li>
 
             <li>
-                <a href="thanhvien/3120224086_Linh/gioithieu.html">
+                <a href="thanhvien/3120224086_Linh/gioithieu.php">
                     Nguyễn Võ Khánh Linh (3120224086)
                 </a>
             </li>
 
             <li>
-                <a href="thanhvien/3120224149_tram/gioithieu.html">
+                <a href="thanhvien/3120224149_tram/gioithieu.php">
                     Đoàn Thùy Thảo Trâm (3120224149)
                 </a>
             </li>
