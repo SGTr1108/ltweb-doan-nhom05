@@ -4,21 +4,15 @@
  * Sinh viên: Trần Xuân Sang (MSSV: 3120224122)
  */
 
-session_start();
+// Xác định đường dẫn gốc dự án so với thư mục hiện tại
 $goc = '../../';
+$tieuDeTrang = 'Giới thiệu cá nhân - Sang';
+$cssTrang = 'style_canhan.css';
+$scriptsTrang = ['thanhvien/3120224122_sang/js/canhan.js']; // Đường dẫn từ gốc dự án
 
-// Nạp cấu hình, hàm chung và header của nhóm
-require $goc . 'inc/config.php';
+// Nạp các tệp cấu hình và hàm dùng chung của nhóm
+require_once $goc . 'inc/config.php';
 require_once $goc . 'inc/ham.php';
-require $goc . 'inc/header.php';
-
-// Dự phòng trường hợp file inc/ham.php chưa định nghĩa hàm e()
-if (!function_exists('e')) {
-    function e($string)
-    {
-        return htmlspecialchars($string ?? '', ENT_QUOTES, 'UTF-8');
-    }
-}
 
 // --- CHỨC NĂNG 1: Mảng danh sách dự án ---
 $du_an = [
@@ -40,7 +34,7 @@ $du_an = [
 ];
 
 // --- CHỨC NĂNG 2: Sổ lưu bút (JSONL) ---
-$thu_muc_storage = $goc . 'storage/';
+$thu_muc_storage = __DIR__ . '/../../storage/';
 $file_luu_but = $thu_muc_storage . '3120224122_luubut.jsonl';
 $loi = '';
 
@@ -76,19 +70,20 @@ if (file_exists($file_luu_but)) {
         $danh_sach_luu_but[] = json_decode($line, true);
     }
 }
+
+// Gọi header dùng chung của nhóm (sẽ tự động gọi session_start qua config.php nếu có)
+require_once $goc . 'inc/header.php';
 ?>
 
 <!-- ================= PHẦN HTML CỦA BẠN ================= -->
-<link rel="stylesheet" href="style_canhan.css">
-
 <main class="profile-container">
     <div class="page-title-banner">
         <h1>Trang giới thiệu cá nhân</h1>
     </div>
 
     <nav>
-        <a href="../../index.php">Quay về Trang chủ Nhóm</a>
-        <a href="../../gioi-thieu.php">Quay lại Giới thiệu Nhóm</a>
+        <a href="<?= e($goc) ?>index.php">Quay về Trang chủ Nhóm</a>
+        <a href="<?= e($goc) ?>gioi-thieu.php">Quay lại Giới thiệu Nhóm</a>
     </nav>
 
     <!-- Section: Giới thiệu bản thân và ảnh chân dung -->
@@ -334,6 +329,4 @@ if (file_exists($file_luu_but)) {
     </section>
 </main>
 
-<script type="module" src="js/canhan.js"></script>
-
-<?php require $goc . 'inc/footer.php'; ?>
+<?php require_once $goc . 'inc/footer.php'; ?>
