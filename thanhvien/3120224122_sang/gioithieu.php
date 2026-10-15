@@ -87,7 +87,7 @@ if (file_exists($file_luu_but)) {
     </div>
 
     <nav>
-        <a href="../../index.php">Quay về Trang chủ Nhóm</a> |
+        <a href="../../index.php">Quay về Trang chủ Nhóm</a>
         <a href="../../gioi-thieu.php">Quay lại Giới thiệu Nhóm</a>
     </nav>
 
