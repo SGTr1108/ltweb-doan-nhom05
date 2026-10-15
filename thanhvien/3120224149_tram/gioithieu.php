@@ -145,7 +145,7 @@ if (isset($_SESSION['flash']) && is_array($_SESSION['flash'])) {
 
 
 </div>
-    <nav>
+    <nav style="max-width: 1170px;margin: 0 auto">
       <a href="https://sgtr1108.github.io/ltweb-doan-nhom05/index.html">Quay về Trang chủ Nhóm</a> |
       <a href="https://sgtr1108.github.io/ltweb-doan-nhom05/gioi-thieu.html">Quay lại Giới thiệu Nhóm</a>
     </nav>
