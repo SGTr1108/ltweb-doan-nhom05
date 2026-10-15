@@ -1,25 +1,41 @@
 <?php
-// gioithieu.php - Trang giới thiệu cá nhân gồm bộ đếm lượt xem và máy tính điểm học phần.
+// Chức năng gồm bộ đếm lượt xem và máy tính điểm học phần.
 // Cách thử 1: mở trang bằng XAMPP (http://localhost/.../gioithieu.php); mở lại tab ẩn danh thì số lượt xem tăng 1.
 // Cách thử 2: nhập A1, A2, A3 (0-10) rồi bấm "Tính điểm ngay"; trang chuyển hướng (PRG), F5 không gửi lại form.
 // Cách thử 3: để trống / nhập chữ / nhập 11 để xem thông báo lỗi do máy chủ kiểm tra.
 
+
+// gioithieu.php - Trang giới thiệu cá nhân gồm bộ đếm lượt xem và máy tính điểm học phần.
 declare(strict_types=1);
+
+// --- CẤU HÌNH ĐƯỜNG DẪN VÀ GIAO DIỆN DÙNG CHUNG ---
+$goc = '../../'; // Đường dẫn quay về gốc dự án từ thư mục thanhvien/3120224149_tram/
+$tieuDeTrang = 'Giới thiệu Cá nhân | MiniPos';
+$cssTrang = 'thanhvien/3120224149_tram/tram_style.css'; // Đường dẫn file CSS tính từ gốc dự án
+$scriptsTrang = ['thanhvien/3120224149_tram/js/canhan.js']; // Đường dẫn file JS tính từ gốc dự án
+
+// Nạp các tệp cấu hình và hàm dùng chung của nhóm
+require_once $goc . 'inc/config.php';
+require_once $goc . 'inc/ham.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-/** Thoát ký tự đặc biệt: mọi dữ liệu in ra HTML đều đi qua hàm này. */
-function e($value): string
-{
-    return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+/** Thoát ký tự đặc biệt: Kiểm tra nếu chưa khai báo để tránh lỗi trùng lặp */
+if (!function_exists('e')) {
+    function e($value): string
+    {
+        return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    }
 }
 
-/** Lấy giá trị POST dạng chuỗi, không phải chuỗi thì coi như rỗng. */
-function post_str(string $key): string
-{
-    return (isset($_POST[$key]) && is_string($_POST[$key])) ? trim($_POST[$key]) : '';
+/** Lấy giá trị POST dạng chuỗi */
+if (!function_exists('post_str')) {
+    function post_str(string $key): string
+    {
+        return (isset($_POST[$key]) && is_string($_POST[$key])) ? trim($_POST[$key]) : '';
+    }
 }
 
 // ==========================================
@@ -64,7 +80,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tinh_diem'])) {
     $a2 = post_str('diem_a2');
     $a3 = post_str('diem_a3');
 
-    // Cho phép nhập dấu phẩy thập phân: 8,5 -> 8.5
     $n1 = str_replace(',', '.', $a1);
     $n2 = str_replace(',', '.', $a2);
     $n3 = str_replace(',', '.', $a3);
@@ -83,7 +98,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tinh_diem'])) {
         } else {
             $tb = round((0.2 * $f1) + (0.3 * $f2) + (0.5 * $f3), 1);
 
-            // PRG: lưu kết quả tạm vào session, chuyển hướng về GET rồi dừng.
             $_SESSION['flash'] = [
                 'diem_tb' => $tb,
                 'ket_qua' => ($tb >= 4.0) ? 'ĐẠT (Chúc mừng bạn)' : 'HỌC LẠI (Cố gắng lần sau)',
@@ -94,13 +108,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tinh_diem'])) {
     }
 }
 
-// Sau khi chuyển hướng: đọc kết quả một lần rồi xóa khỏi session.
 if (isset($_SESSION['flash']) && is_array($_SESSION['flash'])) {
     $diem_tb     = (string)($_SESSION['flash']['diem_tb'] ?? '');
     $ket_qua     = (string)($_SESSION['flash']['ket_qua'] ?? '');
     $success_msg = 'Tính điểm thành công!';
     unset($_SESSION['flash']);
 }
+
+// Nạp header chung của nhóm (Quản lý từ thẻ mở HTML đến thanh điều hướng)
 ?>
 <!doctype html>
 <html lang="vi">
@@ -111,12 +126,25 @@ if (isset($_SESSION['flash']) && is_array($_SESSION['flash'])) {
     <title>Giới thiệu Cá nhân | MiniPos</title>
     <link rel="stylesheet" href="tram_style.css">
   </head>
-
   <body>
-    <header>
-      <h1>Trang giới thiệu cá nhân</h1>
-    </header>
+   <div class="page-title-banner"> 
+    <?php require_once __DIR__ . '/../../inc/header.php';?> 
+    
+    <!-- Đoạn code CSS dùng để xóa nhanh viền dọc xanh -->
+    <style>
+        .page-title-banner ul li, 
+        .page-title-banner nav a,
+        .page-title-banner [class*="menu"] li { 
+            border: none !important; 
+            border-left: none !important;
+            border-right: none !important;
+        }
+    </style>
 
+   <h1 style="text-align: center; width: 100%; max-width: 1170px; margin: 0 auto; background-color: #ffffff; color: #0056b3; border: 2px solid #0056b3; padding: 15px 0; border-radius: 8px;">Trang giới thiệu cá nhân</h1>
+
+
+</div>
     <nav>
       <a href="https://sgtr1108.github.io/ltweb-doan-nhom05/index.html">Quay về Trang chủ Nhóm</a> |
       <a href="https://sgtr1108.github.io/ltweb-doan-nhom05/gioi-thieu.html">Quay lại Giới thiệu Nhóm</a>
@@ -285,11 +313,7 @@ if (isset($_SESSION['flash']) && is_array($_SESSION['flash'])) {
       </section>
     </main>
 
-    <footer>
-      <p>
-        &copy; 2026 [Đoàn Thùy Thảo Trâm 24CNTT1] - Khoa Toán - Tin, Đại học Sư phạm Đà Nẵng.
-      </p>
-    </footer>
+   <?php require_once $goc . 'inc/footer.php'; ?>
 
     <button id="scrollToTopBtn" title="Lên đầu trang">&#10148;</button>
 
@@ -300,3 +324,11 @@ if (isset($_SESSION['flash']) && is_array($_SESSION['flash'])) {
     <script src="js/canhan.js" defer></script>
   </body>
 </html>
+
+
+
+
+
+
+
+
