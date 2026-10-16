@@ -1,160 +1,265 @@
 <!doctype html>
 <html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Trang giới thiệu cá nhân sinh viên Đoàn Thùy Thảo Trâm thực hiện đồ án MiniPos.">
-  <title>Giới thiệu Cá nhân | MiniPos</title>
-  <!-- Nhúng tệp CSS riêng độc lập -->
-  <link rel="stylesheet" href="tram_style.css">
-</head>
-<body>
-  <header>
-    <h1>Trang giới thiệu cá nhân</h1>
-  </header>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Trang giới thiệu cá nhân sinh viên Đoàn Thùy Thảo Trâm thực hiện đồ án MiniPos.">
+    <title>Giới thiệu Cá nhân | MiniPos</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="tram_style.css">
+    <!-- Đoạn code CSS dùng để xóa nhanh viền dọc xanh (đã chuyển lên <head>) -->
+    <style>
+      .page-title-banner ul li,
+      .page-title-banner nav a,
+      .page-title-banner [class*="menu"] li {
+        border: none !important;
+        border-left: none !important;
+        border-right: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-title-banner">
 
-  <nav>
-    <!-- Liên kết hai chiều: quay về trang chủ của nhóm (lùi 2 cấp thư mục) -->
-    <a href="https://sgtr1108.github.io/ltweb-doan-nhom05/index.html">Quay về Trang chủ Nhóm</a> | 
-    <a href="https://sgtr1108.github.io/ltweb-doan-nhom05/gioi-thieu.html">Quay lại Giới thiệu Nhóm</a>
-  </nav>
+      <header class="dau-trang">
+        <strong>
+          <a class="lien-ket-logo-minipos" href="../../index.php">MiniPos</a>
+        </strong>
+        <span>| Quản lý bán hàng thông minh</span>
 
-  <main>
-    <!-- Section: Giới thiệu bản thân và ảnh chân dung -->
-    <section class="profile-header">
-      <!-- Bọc toàn bộ vào khối flexbox này -->
-      <div class="khoi-thong-tin-chinh">
-        <!-- Khối bên trái: Ảnh chân dung -->
-        <button type="button" class="profile-img-btn" aria-label="Phóng to ảnh chân dung đại diện">
-          <img src="avatar.png" alt="Ảnh chân dung của Đoàn Thùy Thảo Trâm" class="profile-img">
+        <span class="thong-tin-yeu-thich-header">
+          Yêu thích:
+          <span data-so-luong-yeu-thich aria-live="polite">0</span>
+        </span>
+
+        <span class="thong-tin-nguoi-dung-header">
+          Bạn đang xem với tư cách khách.
+        </span>
+      </header>
+
+      <nav aria-label="Menu chính">
+        <button
+          class="nut-menu"
+          type="button"
+          aria-expanded="false"
+          aria-controls="menu-chinh">
+          ☰ Menu
         </button>
 
-        <!-- Khối bên phải: Toàn bộ thông tin chữ -->
-        <div class="chi-tiet-ca-nhan">
-          <h2>Thông tin sinh viên</h2>
-          <p><strong>Họ và tên:</strong> Đoàn Thùy Thảo Trâm</p>
-          <p><strong>Mã sinh viên:</strong> 3120224149</p>
-          <p><strong>Lớp học phần:</strong> Thiết kế và Lập trình Web - Nhóm 05</p>
-          <p>
-            Chào mừng bạn đến với trang cá nhân của mình trong dự án phát triển hệ thống quản lý bán hàng MiniPos.
-          </p>
-          <p class="tieu-de-ky-nang"><strong>Kỹ năng chuyên môn</strong></p>
-          <ul>
-            <li>Ngôn ngữ: HTML, PHP cơ bản</li>
-            <li>Công cụ: Visual Studio Code, Git/GitHub, XAMPP, Word, Draw.io</li>
-            <li>Cơ sở dữ liệu: MySQL</li>
-          </ul>
+        <ul id="menu-chinh">
+          <li><a href="../../index.php">Trang chủ</a></li>
+          <li><a href="../../danh-sach.php">Sản phẩm</a></li>
+          <li>
+            <a href="../../gio-hang.php">
+              Giỏ hàng (<span data-so-luong-gio-hang aria-live="polite">0</span>)
+            </a>
+          </li>
+          <li><a href="../../lien-he.php">Báo cáo &amp; Liên hệ</a></li>
+          <li><a href="../../gioi-thieu.php">Giới thiệu Nhóm</a></li>
+          <li class="muc-tai-khoan-header">
+            <a href="../../dang-nhap.php">Đăng nhập</a>
+          </li>
+        </ul>
+      </nav>
+
+      <h1 style="text-align: center; width: 100%; max-width: 1170px; margin: 0 auto; background-color: #ffffff; color: #0056b3; border: 2px solid #0056b3; padding: 15px 0; border-radius: 8px;">Trang giới thiệu cá nhân</h1>
+    </div>
+
+    <nav aria-label="Liên kết nhóm" style="max-width: 1170px; margin: 0 auto">
+      <a href="https://sgtr1108.github.io/ltweb-doan-nhom05/index.html">Quay về Trang chủ Nhóm</a> |
+      <a href="https://sgtr1108.github.io/ltweb-doan-nhom05/gioi-thieu.html">Quay lại Giới thiệu Nhóm</a>
+    </nav>
+
+    <main>
+      <section class="profile-header">
+        <div class="khoi-thong-tin-chinh">
+          <button type="button" class="profile-img-btn" aria-label="Phóng to ảnh chân dung đại diện">
+            <img src="avatar.png" alt="Ảnh chân dung của Đoàn Thùy Thảo Trâm" class="profile-img">
+          </button>
+
+          <div class="chi-tiet-ca-nhan">
+            <h2>Thông tin sinh viên</h2>
+            <p><strong>Họ và tên:</strong> Đoàn Thùy Thảo Trâm</p>
+            <p><strong>Mã sinh viên:</strong> 3120224149</p>
+            <p><strong>Lớp học phần:</strong> Thiết kế và Lập trình Web - Nhóm 05</p>
+            <p>
+              Chào mừng bạn đến với trang cá nhân của mình trong dự án phát triển hệ
+              thống quản lý bán hàng MiniPos.
+            </p>
+
+            <p class="tieu-de-ky-nang"><strong>Kỹ năng chuyên môn</strong></p>
+            <ul>
+              <li>Ngôn ngữ: HTML, PHP cơ bản</li>
+              <li>Công cụ: Visual Studio Code, Git/GitHub, XAMPP, Word, Draw.io</li>
+              <li>Cơ sở dữ liệu: MySQL</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <article>
+        <h2>Định hướng và Sở thích</h2>
+        <p>
+          Trong đồ án nhóm MiniPos, mình đảm nhận việc thiết kế và
+          xây dựng cấu trúc giao diện website bằng HTML5 ngữ nghĩa,
+          tổ chức nội dung và liên kết giữa các trang,
+          đồng thời kiểm tra khả năng truy cập (A11y) và tối ưu hóa SEO on-page cho website.
+        </p>
+        <p>Sở thích cá nhân của mình là tham gia các hoạt động tập thể, tìm hiểu những kiến thức mới phục vụ cho học tập và giao lưu với bạn bè, sinh viên.</p>
+
+        <div class="container">
+          <div style="text-align: right; margin-bottom: 20px;">
+            <span class="view-badge">👀 Tổng số lượt xem: 1</span>
+          </div>
+
+          <div class="box" id="may-tinh-diem">
+            <h3>Máy Tính Điểm Học Phần</h3>
+            <p style="font-size: 0.9em; color: gray;">Công thức: ĐTB = 0.2×A1 + 0.3×A2 + 0.5×A3</p>
+
+            <form action="gioithieu.php" method="post">
+              <div class="form-group">
+                <label for="diem_a1">Điểm chuyên cần / Thái độ (A1):</label>
+                <input type="text" id="diem_a1" name="diem_a1" value="" placeholder="Ví dụ: 8.5">
+              </div>
+              <div class="form-group">
+                <label for="diem_a2">Điểm kiểm tra giữa kỳ (A2):</label>
+                <input type="text" id="diem_a2" name="diem_a2" value="" placeholder="Ví dụ: 8.5">
+              </div>
+              <div class="form-group">
+                <label for="diem_a3">Điểm thi kết thúc học phần (A3):</label>
+                <input type="text" id="diem_a3" name="diem_a3" value="" placeholder="Ví dụ: 8.5">
+              </div>
+              <button type="submit" name="tinh_diem" class="btn btn-submit">Tính điểm ngay</button>
+            </form>
+          </div>
+        </div>
+      </article>
+
+      <section>
+        <h2>Thời khóa biểu tuần</h2>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Tiết</th>
+                <th scope="col">Thứ 2</th>
+                <th scope="col">Thứ 3</th>
+                <th scope="col">Thứ 4</th>
+                <th scope="col">Thứ 5</th>
+                <th scope="col">Thứ 6</th>
+                <th scope="col">Thứ 7</th>
+                <th scope="col">Chủ nhật</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td></td><td></td><td></td>
+                <td rowspan="3">31231330 - 24-0101<br>Khai phá dữ liệu<br>Phòng: A5-404B</td>
+                <td rowspan="3">31231398 - 24-0101<br>Lập trình mạng<br>Phòng: A5-403</td>
+                <td rowspan="3">31231755 - 24-0102<br>Thiết kế và lập trình web<br>Phòng: B3-303</td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td></td><td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td></td><td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <th scope="row">4</th>
+                <td></td><td></td><td></td>
+                <td rowspan="3">31231282 - 24-0101<br>Hệ phân tán<br>Phòng: B3-303</td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <th scope="row">5</th>
+                <td></td>
+                <td rowspan="2">21221904 - 24-0113<br>Lịch sử Đảng Cộng sản Việt Nam<br>Phòng: A6-403</td>
+                <td></td><td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <th scope="row">6</th>
+                <td></td><td></td><td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <th scope="row">7</th>
+                <td rowspan="2">31221010 - 24-0102<br>An toàn thông tin<br>Phòng: A6-401</td>
+                <td rowspan="4">31241283 - 24-0103<br>Hệ quản trị cơ sở dữ liệu<br>Phòng: B3-304</td>
+                <td></td>
+                <td rowspan="3">31231016 - 24-0102<br>Công nghệ phần mềm<br>Phòng: B3-503</td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <th scope="row">8</th>
+                <td></td><td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <th scope="row">9</th>
+                <td></td><td></td><td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <th scope="row">10</th>
+                <td></td><td></td><td></td><td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <th scope="row">11</th>
+                <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <th scope="row">12</th>
+                <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer-minipos-v2">
+      <div class="footer-loi-cam-on">
+        <span class="footer-trai-tim" aria-hidden="true">♥</span>
+        <div class="footer-thong-diep">
+          <p class="footer-tieu-de">Cảm ơn bạn đã tin tưởng MiniPos!</p>
+          <p class="footer-mo-ta">Chúng tôi luôn nỗ lực mang đến trải nghiệm mua sắm tốt nhất cho bạn.</p>
         </div>
       </div>
-    </section>
 
-    <!-- Article: Dự án và Sở thích -->
-    <article>
-      <h2>Định hướng và Sở thích</h2>
-      <p>
-        Trong đồ án nhóm MiniPos, mình đảm nhận việc thiết kế và xây dựng cấu trúc giao diện website bằng HTML5 ngữ nghĩa, tổ chức nội dung và liên kết giữa các trang, đồng thời kiểm tra khả năng truy cập (A11y) và tối ưu hóa SEO on-page cho website.
-      </p>
-      <p>Sở thích cá nhân của mình là tham gia các hoạt động tập thể, tìm hiểu những kiến thức mới phục vụ cho học tập và giao lưu với bạn bè, sinh viên.</p>
-    </article>
-
-    <!-- Bảng: Thời khóa biểu tuần -->
-    <section>
-      <h2>Thời khóa biểu tuần</h2>
-      <!-- Khung bọc hỗ trợ cuộn ngang biệt lập trên điện thoại di động -->
-      <div class="table-responsive">
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">Tiết</th>
-              <th scope="col">Thứ 2</th>
-              <th scope="col">Thứ 3</th>
-              <th scope="col">Thứ 4</th>
-              <th scope="col">Thứ 5</th>
-              <th scope="col">Thứ 6</th>
-              <th scope="col">Thứ 7</th>
-              <th scope="col">Chủ nhật</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td></td><td></td><td></td>
-              <td rowspan="3">31231330 - 24-0101<br>Khai phá dữ liệu<br>Phòng: A5-404B</td>
-              <td rowspan="3">31231398 - 24-0101<br>Lập trình mạng<br>Phòng: A5-403</td>
-              <td rowspan="3">31231755 - 24-0102<br>Thiết kế và lập trình web<br>Phòng: B3-303</td>
-              <td></td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td></td><td></td><td></td><td></td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td></td><td></td><td></td><td></td>
-            </tr>
-            <tr>
-              <th scope="row">4</th>
-              <td></td><td></td><td></td>
-              <td rowspan="3">31231282 - 24-0101<br>Hệ phân tán<br>Phòng: B3-303</td>
-              <td></td><td></td><td></td>
-            </tr>
-            <tr>
-              <th scope="row">5</th>
-              <td></td>
-              <td rowspan="2">21221904 - 24-0113<br>Lịch sử Đảng Cộng sản Việt Nam<br>Phòng: A6-403</td>
-              <td></td><td></td><td></td><td></td>
-            </tr>
-            <tr>
-              <th scope="row">6</th>
-              <td></td><td></td><td></td><td></td><td></td>
-            </tr>
-            <tr>
-              <th scope="row">7</th>
-              <td rowspan="2">31221010 - 24-0102<br>An toàn thông tin<br>Phòng: A6-401</td>
-              <td rowspan="4">31241283 - 24-0103<br>Hệ quản trị cơ sở dữ liệu<br>Phòng: B3-304</td>
-              <td></td>
-              <td rowspan="3">31231016 - 24-0102<br>Công nghệ phần mềm<br>Phòng: B3-503</td>
-              <td></td><td></td><td></td>
-            </tr>
-            <tr>
-              <th scope="row">8</th>
-              <td></td><td></td><td></td><td></td>
-            </tr>
-            <tr>
-              <th scope="row">9</th>
-              <td></td><td></td><td></td><td></td><td></td>
-            </tr>
-            <tr>
-              <th scope="row">10</th>
-              <td></td><td></td><td></td><td></td><td></td><td></td>
-            </tr>
-            <tr>
-              <th scope="row">11</th>
-              <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-            </tr>
-            <tr>
-              <th scope="row">12</th>
-              <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="footer-thuong-hieu">
+        <span class="footer-vach-ngan" aria-hidden="true"></span>
+        <svg
+          class="footer-bieu-tuong-cua-hang"
+          viewBox="0 0 48 48"
+          width="48"
+          height="48"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true">
+          <path d="M7 20h34l-3-12H10L7 20Z"/>
+          <path d="M9 20v21h30V20"/>
+          <path d="M18 41V27h12v14"/>
+          <path d="M7 20c0 4 6 5 9 1 3 4 8 4 11 0 3 4 8 3 11-1"/>
+        </svg>
+        <div class="footer-thong-tin-nhom">
+          <strong>MiniPos</strong>
+          <span>Nhóm 05 – LTWeb</span>
+        </div>
       </div>
-    </section>
-  </main>
+    </footer>
 
-  <footer>
-    <p>&copy; 2026 [Đoàn Thùy Thảo Trâm 24CNTT1] - Khoa Toán - Tin, Đại học Sư phạm Đà Nẵng.</p>
-  </footer>
+    <button id="scrollToTopBtn" type="button" title="Lên đầu trang">&#10148;</button>
 
-  <button id="scrollToTopBtn" title="Lên đầu trang">➤</button>
+    <div id="imageLightbox" class="lightbox" aria-hidden="true" role="dialog" aria-label="Trình xem ảnh phóng to">
+      <button type="button" class="lightbox-close" aria-label="Đóng trình xem ảnh">&times;</button>
+    </div>
 
-  <!-- KHUNG NỀN TỐI ĐỂ HIỂN THỊ ẢNH PHÓNG TO -->
-  <div id="imageLightbox" class="lightbox" aria-hidden="true" role="dialog" aria-label="Trình xem ảnh phóng to">
-    <!-- Nút đóng bằng thẻ button thay vì span -->
-    <button type="button" class="lightbox-close" aria-label="Đóng trình xem ảnh">&times;</button>
-    <!-- Thẻ img hiển thị ảnh phóng to sẽ được JS tự động chèn vào đây -->
-  </div>
-
-  <script src="js/canhan.js" defer></script>
-</body>
+    <script type="module" src="../../js/main.js"></script>
+    <script type="module" src="../../js/yeu-thich.js"></script>
+    <script src="js/canhan.js" defer></script>
+  </body>
 </html>
