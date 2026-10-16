@@ -115,7 +115,38 @@ if (isset($_SESSION['flash']) && is_array($_SESSION['flash'])) {
     unset($_SESSION['flash']);
 }
 
-// Nạp header chung của nhóm (Quản lý từ thẻ mở HTML đến thanh điều hướng)
+// ==========================================
+// NẠP HEADER / FOOTER CHUNG (BẮT ĐẦU RA ĐỂ KHÔNG LẶP DOCTYPE/HTML/HEAD/BODY)
+// ==========================================
+// header.php tự in cả <!DOCTYPE>, <html>, <head>, <body> rồi mới đến <header>/<nav>.
+// Trang này đã có khung riêng nên chỉ lấy phần nằm sau thẻ <body> của header.
+ob_start();
+include __DIR__ . '/../../inc/header.php';
+$headerHtml = (string)ob_get_clean();
+
+if (preg_match('/<header\b.*$/is', $headerHtml, $khop)) {
+    $headerHtml = $khop[0];
+} elseif (preg_match('/<body[^>]*>(.*)$/is', $headerHtml, $khop)) {
+    $headerHtml = $khop[1];
+} else {
+    $headerHtml = (string)preg_replace(
+        '#<!DOCTYPE[^>]*>|</?html[^>]*>|<head\b.*?</head>|</?body[^>]*>#is',
+        '',
+        $headerHtml
+    );
+}
+
+// footer.php: bỏ </body> và </html> (nếu có) vì trang tự đóng một lần ở cuối.
+ob_start();
+require_once $goc . 'inc/footer.php';
+$footerHtml = (string)preg_replace('#</body\s*>|</html\s*>#i', '', (string)ob_get_clean());
+
+$headerHtml = (string)preg_replace(
+    '/<header\b/i',
+    '<header style="background: #143d75 !important; color: #ffffff !important;"',
+    $headerHtml,
+    1
+);
 ?>
 <!doctype html>
 <html lang="vi">
@@ -124,28 +155,28 @@ if (isset($_SESSION['flash']) && is_array($_SESSION['flash'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Trang giới thiệu cá nhân sinh viên Đoàn Thùy Thảo Trâm thực hiện đồ án MiniPos.">
     <title>Giới thiệu Cá nhân | MiniPos</title>
+    <link rel="stylesheet" href="<?php echo e($goc); ?>css/style.css">
     <link rel="stylesheet" href="tram_style.css">
-  </head>
-  <body>
-   <div class="page-title-banner"> 
-    <?php require_once __DIR__ . '/../../inc/header.php';?> 
-    
     <!-- Đoạn code CSS dùng để xóa nhanh viền dọc xanh -->
     <style>
-        .page-title-banner ul li, 
+        .page-title-banner ul li,
         .page-title-banner nav a,
-        .page-title-banner [class*="menu"] li { 
-            border: none !important; 
+        .page-title-banner [class*="menu"] li {
+            border: none !important;
             border-left: none !important;
             border-right: none !important;
         }
     </style>
+  </head>
+  <body>
+   <div class="page-title-banner">
+     <?php echo $headerHtml; ?>
 
    <h1 style="text-align: center; width: 100%; max-width: 1170px; margin: 0 auto; background-color: #ffffff; color: #0056b3; border: 2px solid #0056b3; padding: 15px 0; border-radius: 8px;">Trang giới thiệu cá nhân</h1>
 
 
 </div>
-    <nav style="max-width: 1170px;margin: 0 auto">
+    <nav aria-label="Liên kết nhóm" style="max-width: 1170px;margin: 0 auto">
       <a href="https://sgtr1108.github.io/ltweb-doan-nhom05/index.html">Quay về Trang chủ Nhóm</a> |
       <a href="https://sgtr1108.github.io/ltweb-doan-nhom05/gioi-thieu.html">Quay lại Giới thiệu Nhóm</a>
     </nav>
@@ -313,9 +344,9 @@ if (isset($_SESSION['flash']) && is_array($_SESSION['flash'])) {
       </section>
     </main>
 
-   <?php require_once $goc . 'inc/footer.php'; ?>
+   <?php echo $footerHtml; ?>
 
-    <button id="scrollToTopBtn" title="Lên đầu trang">&#10148;</button>
+    <button type="button" id="scrollToTopBtn" title="Lên đầu trang" aria-label="Lên đầu trang">&#10148;</button>
 
     <div id="imageLightbox" class="lightbox" aria-hidden="true" role="dialog" aria-label="Trình xem ảnh phóng to">
       <button type="button" class="lightbox-close" aria-label="Đóng trình xem ảnh">&times;</button>
@@ -324,11 +355,3 @@ if (isset($_SESSION['flash']) && is_array($_SESSION['flash'])) {
     <script src="js/canhan.js" defer></script>
   </body>
 </html>
-
-
-
-
-
-
-
-
