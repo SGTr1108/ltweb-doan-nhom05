@@ -1,7 +1,9 @@
 <?php
 /*
- * Tệp: gioithieu.php
- * Sinh viên: Trần Xuân Sang (MSSV: 3120224122)
+ * Tệp: gioithieu.php (Sinh viên: Trần Xuân Sang - 3120224122)
+ * Chức năng: Hiển thị thông tin cá nhân, danh sách dự án (đọc từ mảng PHP) và Sổ lưu bút (Ghi/đọc tệp JSONL).
+ * Cách thử: Mở trình duyệt truy cập vào trang. Xem danh sách dự án. 
+ * Nhập tên và lời nhắn vào Sổ lưu bút rồi Gửi. Kiểm tra việc chống XSS bằng cách nhập thẻ <script> và xem file có sinh ra trong thư mục storage không.
  */
 
 // Xác định đường dẫn gốc dự án so với thư mục hiện tại
