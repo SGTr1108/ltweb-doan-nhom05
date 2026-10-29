@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 date_default_timezone_set('Asia/Ho_Chi_Minh');
@@ -11,6 +12,18 @@ require_once __DIR__ . '/ham.php';
 
 // Môi trường phát triển; khi triển khai thật đổi thành 'prod'.
 const MOI_TRUONG = 'dev';
+
+// ----- ĐOẠN BỔ SUNG: TỰ ĐỘNG TẠO THƯ MỤC NẾU CHƯA CÓ -----
+$log_dir = dirname(__DIR__) . '/logs';
+$storage_dir = dirname(__DIR__) . '/storage';
+
+if (!is_dir($log_dir)) {
+    mkdir($log_dir, 0777, true);
+}
+if (!is_dir($storage_dir)) {
+    mkdir($storage_dir, 0777, true);
+}
+// ---------------------------------------------------------
 
 error_reporting(E_ALL);
 
