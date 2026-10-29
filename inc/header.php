@@ -29,7 +29,7 @@ $trangHienTai = basename(
 $soLuongGioHang = 0;
 
 try {
-    $khoSanPhamHeader = new \App\Data\KhoSanPham();
+    $khoSanPhamHeader = new \App\Data\KhoSanPham(db());
     $gioHangHeader = new \App\Services\GioHang($khoSanPhamHeader);
     $soLuongGioHang = $gioHangHeader->demSoLuong();
 } catch (\Throwable $loi) {
@@ -68,6 +68,7 @@ if ($laQuanTriHeader) {
 ?>
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -79,76 +80,77 @@ if ($laQuanTriHeader) {
         <link rel="stylesheet" href="<?= e($cssTrang) ?>">
     <?php endif; ?>
 </head>
+
 <body>
 
-<header class="dau-trang">
-    <strong>
-        <a class="lien-ket-logo-minipos" href="<?= e($goc) ?>index.php">
-            MiniPos
-        </a>
-    </strong>
-    <span>| Quản lý bán hàng thông minh</span>
+    <header class="dau-trang">
+        <strong>
+            <a class="lien-ket-logo-minipos" href="<?= e($goc) ?>index.php">
+                MiniPos
+            </a>
+        </strong>
+        <span>| Quản lý bán hàng thông minh</span>
 
-    <span class="thong-tin-yeu-thich-header">
-        Yêu thích:
-        <span data-so-luong-yeu-thich aria-live="polite">0</span>
-    </span>
+        <span class="thong-tin-yeu-thich-header">
+            Yêu thích:
+            <span data-so-luong-yeu-thich aria-live="polite">0</span>
+        </span>
 
-    <span class="thong-tin-nguoi-dung-header">
-        <?php if ($dangNhapHeader): ?>
-            Xin chào,
-            <strong><?= e((string) ($nguoiDungHeader['ten_hien_thi'] ?? $nguoiDungHeader['ten_dang_nhap'])) ?></strong>
-        <?php else: ?>
-            Bạn đang xem với tư cách khách.
-        <?php endif; ?>
-    </span>
-</header>
+        <span class="thong-tin-nguoi-dung-header">
+            <?php if ($dangNhapHeader): ?>
+                Xin chào,
+                <strong><?= e((string) ($nguoiDungHeader['ten_hien_thi'] ?? $nguoiDungHeader['ten_dang_nhap'])) ?></strong>
+            <?php else: ?>
+                Bạn đang xem với tư cách khách.
+            <?php endif; ?>
+        </span>
+    </header>
 
-<nav aria-label="Menu chính">
-    <button
-        class="nut-menu"
-        type="button"
-        aria-expanded="false"
-        aria-controls="menu-chinh">
-        ☰ Menu
-    </button>
+    <nav aria-label="Menu chính">
+        <button
+            class="nut-menu"
+            type="button"
+            aria-expanded="false"
+            aria-controls="menu-chinh">
+            ☰ Menu
+        </button>
 
-    <ul id="menu-chinh">
-        <?php foreach ($menuHeader as $tep => $nhan): ?>
-            <?php
-            $dangXemMuc = $trangHienTai === $tep
-                || (
-                    $tep === 'danh-sach'
-                    && $trangHienTai === 'chi-tiet'
-                );
-            ?>
-            <li>
-                <a
-                    href="<?= e($goc . $tep . '.php') ?>"
-                    <?= $dangXemMuc ? 'aria-current="page"' : '' ?>>
-                    <?= e($nhan) ?><?php if ($tep === 'gio-hang'): ?>
+        <ul id="menu-chinh">
+            <?php foreach ($menuHeader as $tep => $nhan): ?>
+                <?php
+                $dangXemMuc = $trangHienTai === $tep
+                    || (
+                        $tep === 'danh-sach'
+                        && $trangHienTai === 'chi-tiet'
+                    );
+                ?>
+                <li>
+                    <a
+                        href="<?= e($goc . $tep . '.php') ?>"
+                        <?= $dangXemMuc ? 'aria-current="page"' : '' ?>>
+                        <?= e($nhan) ?><?php if ($tep === 'gio-hang'): ?>
                         (<span data-so-luong-gio-hang aria-live="polite"><?= e($soLuongGioHang) ?></span>)
                     <?php endif; ?>
-                </a>
-            </li>
-        <?php endforeach; ?>
+                    </a>
+                </li>
+            <?php endforeach; ?>
 
-        <li class="muc-tai-khoan-header">
-            <?php if ($dangNhapHeader): ?>
-                <form method="post" action="<?= e($goc) ?>dang-xuat.php" class="form-dang-xuat-header">
-                    <input
-                        type="hidden"
-                        name="csrf_token"
-                        value="<?= e((string) $_SESSION['csrf_dang_xuat']) ?>">
-                    <button type="submit">Đăng xuất</button>
-                </form>
-            <?php else: ?>
-                <a
-                    href="<?= e($goc) ?>dang-nhap.php"
-                    <?= $trangHienTai === 'dang-nhap' ? 'aria-current="page"' : '' ?>>
-                    Đăng nhập
-                </a>
-            <?php endif; ?>
-        </li>
-    </ul>
-</nav>
+            <li class="muc-tai-khoan-header">
+                <?php if ($dangNhapHeader): ?>
+                    <form method="post" action="<?= e($goc) ?>dang-xuat.php" class="form-dang-xuat-header">
+                        <input
+                            type="hidden"
+                            name="csrf_token"
+                            value="<?= e((string) $_SESSION['csrf_dang_xuat']) ?>">
+                        <button type="submit">Đăng xuất</button>
+                    </form>
+                <?php else: ?>
+                    <a
+                        href="<?= e($goc) ?>dang-nhap.php"
+                        <?= $trangHienTai === 'dang-nhap' ? 'aria-current="page"' : '' ?>>
+                        Đăng nhập
+                    </a>
+                <?php endif; ?>
+            </li>
+        </ul>
+    </nav>

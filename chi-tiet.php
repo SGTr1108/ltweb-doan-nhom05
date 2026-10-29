@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 require_once __DIR__ . '/inc/config.php';
@@ -8,7 +9,7 @@ $maSanPham = isset($_GET['id']) && is_string($_GET['id'])
     ? trim($_GET['id'])
     : '';
 
-$khoSanPham = new \App\Data\KhoSanPham();
+$khoSanPham = new \App\Data\KhoSanPham(db());
 $sanPham = $maSanPham !== ''
     ? $khoSanPham->timTheoId($maSanPham)
     : null;
@@ -23,7 +24,7 @@ if ($sanPham !== null) {
     if (isset($_COOKIE['da_xem']) && is_string($_COOKIE['da_xem'])) {
         $lichSuXem = array_filter(
             explode(',', $_COOKIE['da_xem']),
-            static fn(string $id): bool => preg_match('/^SP\d{3}$/', $id) === 1
+            static fn(string $id): bool => preg_match('/^\d+$/', $id) === 1
         );
     }
 
@@ -50,8 +51,8 @@ $tieuDeTrang = $sanPham !== null
 
 $moTaTrang = $sanPham !== null
     ? 'Thông tin sản phẩm ' . $sanPham->getTen()
-        . ', mã ' . $sanPham->getId()
-        . ', giá bán và số lượng tồn kho.'
+    . ', mã ' . $sanPham->getId()
+    . ', giá bán và số lượng tồn kho.'
     : 'Không tìm thấy sản phẩm được yêu cầu trên MiniPos.';
 
 
@@ -202,7 +203,7 @@ require __DIR__ . '/inc/header.php';
                     </table>
                 </div>
 
-                                <h2>Lịch sử nhập kho</h2>
+                <h2>Lịch sử nhập kho</h2>
                 <p>Dữ liệu dưới đây là dữ liệu minh họa, chưa phải lịch sử giao dịch thực tế.</p>
 
                 <?php $lichSu = $lichSuNhapKho[$sanPham->getId()] ?? []; ?>

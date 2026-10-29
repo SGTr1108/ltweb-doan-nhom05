@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Services;
@@ -56,10 +57,8 @@ final class GioHang
             );
         }
 
-        $soLuongHienTai = (int) (
-            $_SESSION[self::KHOA_SESSION][$id] ?? 0
-        );
-
+        $khoa = $sanPham->getId();
+        $soLuongHienTai = (int) ($_SESSION[self::KHOA_SESSION][$khoa] ?? 0);
         $soLuongMoi = $soLuongHienTai + $soLuong;
 
         if ($soLuongMoi > $sanPham->getTonKho()) {
@@ -68,50 +67,48 @@ final class GioHang
             );
         }
 
-        $_SESSION[self::KHOA_SESSION][$id] = $soLuongMoi;
+        $_SESSION[self::KHOA_SESSION][$khoa] = $soLuongMoi;
     }
 
-/**
-* Cập nhật số lượng một sản phẩm trong giỏ.
-  */
-  public function capNhatSoLuong(
-    string $id,
-    int $soLuong
-    ): void {
-    if ($soLuong < 1) {
-    throw new InvalidArgumentException(
-    'Số lượng phải lớn hơn hoặc bằng 1.'
-    );
+    /**
+     * Cập nhật số lượng một sản phẩm trong giỏ.
+     */
+    public function capNhatSoLuong(string $id, int $soLuong): void
+    {
+        if ($soLuong < 1) {
+            throw new InvalidArgumentException(
+                'Số lượng phải lớn hơn hoặc bằng 1.'
+            );
+        }
+
+        $sanPham = $this->khoSanPham->timTheoId($id);
+
+        if ($sanPham === null) {
+            throw new InvalidArgumentException(
+                'Sản phẩm không tồn tại.'
+            );
+        }
+
+        if ($soLuong > $sanPham->getTonKho()) {
+            throw new RuntimeException(
+                'Số lượng vượt quá hàng tồn kho.'
+            );
+        }
+
+        $_SESSION[self::KHOA_SESSION][$sanPham->getId()] = $soLuong;
     }
-  
-    $sanPham = $this->khoSanPham->timTheoId($id);
-  
-    if ($sanPham === null) {
-    throw new InvalidArgumentException(
-    'Sản phẩm không tồn tại.'
-    );
-    }
-  
-    if ($soLuong > $sanPham->getTonKho()) {
-    throw new RuntimeException(
-    'Số lượng vượt quá hàng tồn kho.'
-    );
-    }
-  
-    $_SESSION[self::KHOA_SESSION][$id] = $soLuong;
-    }
-  
 
     /**
      * Xóa một sản phẩm khỏi giỏ.
      */
     public function xoa(string $id): void
     {
-        unset($_SESSION[self::KHOA_SESSION][$id]);
+        unset($_SESSION[self::KHOA_SESSION][(int) $id]);
     }
 
     /**
      * Lấy các sản phẩm trong giỏ cùng số lượng và thành tiền.
+     * Cả giỏ lấy bằng MỘT câu WHERE id IN (?, …), không truy vấn trong vòng lặp.
      *
      * @return list<array{
      *     sanPham: \App\Models\SanPham,
@@ -121,10 +118,12 @@ final class GioHang
      */
     public function layDanhSach(): array
     {
+        $gio = $_SESSION[self::KHOA_SESSION];
+        $dsSanPham = $this->khoSanPham->timTheoNhieuId(array_keys($gio));
         $danhSach = [];
 
-        foreach ($_SESSION[self::KHOA_SESSION] as $id => $soLuong) {
-            $sanPham = $this->khoSanPham->timTheoId((string) $id);
+        foreach ($gio as $id => $soLuong) {
+            $sanPham = $dsSanPham[(int) $id] ?? null;
             $soLuong = (int) $soLuong;
 
             if ($sanPham === null || $soLuong < 1) {
@@ -143,6 +142,16 @@ final class GioHang
     }
 
     /**
+     * Giỏ hàng dạng [id sản phẩm => số lượng] để truyền cho KhoDonHang::tao().
+     *
+     * @return array<int, int>
+     */
+    public function layMang(): array
+    {
+        return array_map('intval', $_SESSION[self::KHOA_SESSION]);
+    }
+
+    /**
      * Tính tổng tiền giỏ hàng.
      */
     public function tinhTongTien(): int
@@ -157,7 +166,7 @@ final class GioHang
     }
 
     /**
-     * Đếm tổng số sản phẩm trong giỏ.
+     * Đếm tổng số sản phẩm trong giỏ (không cần truy vấn CSDL).
      */
     public function demSoLuong(): int
     {

@@ -1,48 +1,39 @@
-"use strict";
+document.addEventListener('DOMContentLoaded', () => {
+    const formsThemGio = document.querySelectorAll('.form-them-gio-hang');
+    const badgeSoMonHeader = document.getElementById('so-luong-gio-hang-header');
 
-document.addEventListener("click", function (event) {
-    const button = event.target.closest("[data-gio-hang-step]");
+    formsThemGio.forEach(form => {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const idSp = form.querySelector('input[name="id"]')?.value;
+            const soLuong = form.querySelector('input[name="so_luong"]')?.value || 1;
 
-    if (!button || button.disabled) {
-        return;
-    }
-
-    const form = button.closest(".gio-hang-quantity-form-v2");
-    const input = form?.querySelector('input[name="so_luong"]');
-
-    if (!form || !input) {
-        return;
-    }
-
-    const min = Number(input.min || 1);
-    const max = Number(input.max || Number.MAX_SAFE_INTEGER);
-    const current = Number.parseInt(input.value, 10);
-
-    const safeCurrent = Number.isFinite(current) ? current : min;
-    const step = Number(button.dataset.gioHangStep);
-    const next = Math.max(min, Math.min(max, safeCurrent + step));
-
-    if (next === safeCurrent) {
-        return;
-    }
-
-    input.value = String(next);
-    form.requestSubmit();
-});
-// MINIPOS-GIO-HANG-CHANGE-V2
-document.addEventListener("change", function (event) {
-    const input = event.target;
-
-    if (
-        !(input instanceof HTMLInputElement) ||
-        input.name !== "so_luong"
-    ) {
-        return;
-    }
-
-    const form = input.closest(".gio-hang-quantity-form-v2");
-
-    if (form && input.checkValidity()) {
-        form.requestSubmit();
-    }
+            fetch('api/gio-hang.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({
+                    id: parseInt(idSp, 10),
+                    so_luong: parseInt(soLuong, 10)
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.loi) {
+                    alert(data.loi);
+                } else {
+                    alert(data.thong_bao);
+                    if (badgeSoMonHeader) {
+                        badgeSoMonHeader.textContent = data.tong_so_luong;
+                    }
+                }
+            })
+            .catch(err => {
+                console.error('Lỗi khi thêm giỏ hàng:', err);
+                form.submit(); // Chuyển về submit form thuần nếu JS lỗi
+            });
+        });
+    });
 });

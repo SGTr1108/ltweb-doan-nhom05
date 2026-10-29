@@ -10,6 +10,12 @@ require_once __DIR__ . '/../vendor/autoload.php';
 // Nạp các hàm dùng chung như e() và vnd().
 require_once __DIR__ . '/ham.php';
 
+// Kết nối CSDL: hàm db() và maLoiSql() (PDO, MySQL).
+require_once __DIR__ . '/db.php';
+
+// Nạp hệ thống xác thực & phân quyền (chứa hàm nguoiDung, yeuCauDangNhap...)
+require_once __DIR__ . '/xac-thuc.php';
+
 // Môi trường phát triển; khi triển khai thật đổi thành 'prod'.
 const MOI_TRUONG = 'dev';
 

@@ -1,185 +1,73 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Data;
 
-use JsonException;
-use RuntimeException;
+use PDO;
 
 /**
- * Kho lưu phiếu liên hệ theo định dạng JSON Lines.
- * Mỗi phiếu là một dòng JSON riêng trong storage/lien-he.jsonl.
- * Các trang chỉ đọc và ghi dữ liệu liên hệ thông qua lớp này.
+ * Lớp truy cập dữ liệu của lien_he (thay storage/lien-he.jsonl).
+ * Giữ nguyên tên khóa của Bài tập 5 (manhanvien, mucdouutien, noidung…)
+ * nên lien-he.php và quan-tri.php gần như không phải sửa.
  */
 final class KhoLienHe
 {
-    private string $duongDan;
-
-    public function __construct(?string $duongDan = null)
-    {
-        $this->duongDan = $duongDan
-            ?? dirname(__DIR__, 2)
-                . DIRECTORY_SEPARATOR
-                . 'storage'
-                . DIRECTORY_SEPARATOR
-                . 'lien-he.jsonl';
-    }
+    public function __construct(private PDO $db) {}
 
     /**
-     * Đọc tất cả phiếu; mỗi dòng là một đối tượng JSON.
+     * Mọi phiếu, mới nhất trước.
      *
-     * @return array<int, array<string, mixed>>
-     * @throws RuntimeException
-     * @throws JsonException
+     * @return list<array<string, mixed>>
      */
     public function layDanhSach(): array
     {
-        if (!is_file($this->duongDan)) {
-            return [];
-        }
+        $st = $this->db->query(
+            'SELECT ma_phieu, thoi_gian_tao,
+                    ma_nhan_vien   AS manhanvien,
+                    email,
+                    ngay_bao_cao   AS ngaybaocao,
+                    muc_do_uu_tien AS mucdouutien,
+                    noi_dung       AS noidung,
+                    loai_yeu_cau   AS loaiyeucau,
+                    anh_dinh_kem
+               FROM lien_he
+           ORDER BY thoi_gian_tao DESC, id DESC'
+        );
 
-        $tep = fopen($this->duongDan, 'rb');
-
-        if ($tep === false) {
-            throw new RuntimeException(
-                'Không thể mở file dữ liệu liên hệ.'
-            );
-        }
-
-        $daKhoa = false;
-
-        try {
-            if (!flock($tep, LOCK_SH)) {
-                throw new RuntimeException(
-                    'Không thể khóa file dữ liệu liên hệ.'
-                );
-            }
-
-            $daKhoa = true;
-            $noiDung = stream_get_contents($tep);
-
-            if ($noiDung === false) {
-                throw new RuntimeException(
-                    'Không thể đọc dữ liệu liên hệ.'
-                );
-            }
-        } finally {
-            if ($daKhoa) {
-                flock($tep, LOCK_UN);
-            }
-
-            fclose($tep);
-        }
-
-        $danhSach = [];
-        $cacDong = preg_split('/\r\n|\r|\n/', $noiDung);
-
-        if ($cacDong === false) {
-            throw new RuntimeException(
-                'Không thể phân tách dữ liệu liên hệ.'
-            );
-        }
-
-        foreach ($cacDong as $dong) {
-            if (trim($dong) === '') {
-                continue;
-            }
-
-            $phieu = json_decode(
-                $dong,
-                true,
-                512,
-                JSON_THROW_ON_ERROR
-            );
-
-            if (!is_array($phieu)) {
-                throw new RuntimeException(
-                    'Một dòng dữ liệu liên hệ không hợp lệ.'
-                );
-            }
-
-            $danhSach[] = $phieu;
-        }
-
-        return $danhSach;
+        return $st->fetchAll();
     }
 
     /**
-     * Thêm một phiếu bằng cách ghi thêm đúng một dòng JSON.
+     * Thêm một phiếu. $phieu có các khóa như lien-he.php dựng:
+     * ma_phieu, manhanvien, email, ngaybaocao, mucdouutien, noidung,
+     * loaiyeucau, anh_dinh_kem (thoi_gian_tao do CSDL tự đặt).
      *
      * @param array<string, mixed> $phieu
-     * @throws RuntimeException
-     * @throws JsonException
      */
     public function them(array $phieu): void
     {
-        $thuMuc = dirname($this->duongDan);
-
-        if (
-            !is_dir($thuMuc)
-            && !mkdir($thuMuc, 0775, true)
-            && !is_dir($thuMuc)
-        ) {
-            throw new RuntimeException(
-                'Không thể tạo thư mục lưu liên hệ.'
-            );
-        }
-
-        $json = json_encode(
-            $phieu,
-            JSON_UNESCAPED_UNICODE
-                | JSON_UNESCAPED_SLASHES
-                | JSON_THROW_ON_ERROR
+        $st = $this->db->prepare(
+            'INSERT INTO lien_he
+                 (ma_phieu, ma_nhan_vien, email, ngay_bao_cao,
+                  muc_do_uu_tien, loai_yeu_cau, noi_dung, anh_dinh_kem)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
         );
+        $st->execute([
+            (string) $phieu['ma_phieu'],
+            (string) $phieu['manhanvien'],
+            (string) $phieu['email'],
+            (string) $phieu['ngaybaocao'],
+            (int) $phieu['mucdouutien'],
+            (string) $phieu['loaiyeucau'],
+            (string) $phieu['noidung'],
+            $phieu['anh_dinh_kem'] ?? null,
+        ]);
+    }
 
-        $noiDungGhi = $json . PHP_EOL;
-        $tep = fopen($this->duongDan, 'ab');
-
-        if ($tep === false) {
-            throw new RuntimeException(
-                'Không thể mở file để lưu liên hệ.'
-            );
-        }
-
-        $daKhoa = false;
-
-        try {
-            if (!flock($tep, LOCK_EX)) {
-                throw new RuntimeException(
-                    'Không thể khóa file để lưu liên hệ.'
-                );
-            }
-
-            $daKhoa = true;
-            $doDai = strlen($noiDungGhi);
-            $daGhi = 0;
-
-            while ($daGhi < $doDai) {
-                $soByte = fwrite(
-                    $tep,
-                    substr($noiDungGhi, $daGhi)
-                );
-
-                if ($soByte === false || $soByte === 0) {
-                    throw new RuntimeException(
-                        'Không thể ghi đầy đủ phiếu liên hệ.'
-                    );
-                }
-
-                $daGhi += $soByte;
-            }
-
-            if (!fflush($tep)) {
-                throw new RuntimeException(
-                    'Không thể hoàn tất ghi dữ liệu liên hệ.'
-                );
-            }
-        } finally {
-            if ($daKhoa) {
-                flock($tep, LOCK_UN);
-            }
-
-            fclose($tep);
-        }
+    /** Tổng số phiếu (trang quản trị). */
+    public function dem(): int
+    {
+        return (int) $this->db->query('SELECT COUNT(*) FROM lien_he')->fetchColumn();
     }
 }

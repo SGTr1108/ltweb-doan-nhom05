@@ -170,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ];
 
         try {
-            $khoLienHe = new \App\Data\KhoLienHe();
+            $khoLienHe = new \App\Data\KhoLienHe(db());
             $khoLienHe->them($phieu);
         } catch (\Throwable $loi) {
             error_log(
