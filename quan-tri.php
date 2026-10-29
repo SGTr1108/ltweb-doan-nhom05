@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 require_once __DIR__ . '/inc/bao-ve.php';
@@ -18,13 +19,13 @@ if (($nguoiDung['vai_tro'] ?? '') !== 'admin') {
     $tieuDeTrang = '403 - Không có quyền truy cập | MiniPos';
 
     require __DIR__ . '/inc/header.php';
-    ?>
+?>
     <main class="bao trang-quan-tri">
         <h1>403 - Không có quyền truy cập</h1>
         <p>Tài khoản hiện tại không có quyền quản trị.</p>
         <p><a href="index.php">Quay lại trang chủ</a></p>
     </main>
-    <?php
+<?php
     require __DIR__ . '/inc/footer.php';
     exit;
 }
@@ -41,15 +42,8 @@ try {
     $khoLienHe = new \App\Data\KhoLienHe();
     $danhSachPhieu = $khoLienHe->layDanhSach();
 
-    // Hiển thị phiếu mới nhất trước.
-    usort(
-        $danhSachPhieu,
-        static fn(array $a, array $b): int =>
-            strcmp(
-                (string) ($b['thoi_gian_tao'] ?? ''),
-                (string) ($a['thoi_gian_tao'] ?? '')
-            )
-    );
+    // Đảo ngược mảng để hiển thị phiếu mới nhất (nằm ở cuối tệp) lên trước
+    $danhSachPhieu = array_reverse($danhSachPhieu);
 } catch (\Throwable $loi) {
     error_log(
         'Lỗi tải dữ liệu trang quản trị: ' . $loi->getMessage()
@@ -70,11 +64,11 @@ require __DIR__ . '/inc/header.php';
         </p>
 
         <form class="form-dang-xuat-quan-tri" method="post" action="dang-xuat.php">
-        <input
-            type="hidden"
-            name="csrf_token"
-            value="<?= e($_SESSION['csrf_dang_xuat']) ?>">
-        <button type="submit">Đăng xuất</button>
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="<?= e($_SESSION['csrf_dang_xuat']) ?>">
+            <button type="submit">Đăng xuất</button>
         </form>
     </div>
 
@@ -159,7 +153,15 @@ require __DIR__ . '/inc/header.php';
                                     <td><?= e((string) ($phieu['noidung'] ?? '')) ?></td>
                                     <td><?= e((string) ($phieu['loaiyeucau'] ?? '')) ?></td>
                                     <td>
-                                        <?= !empty($phieu['anh_dinh_kem']) ? 'Có' : 'Không' ?>
+                                        <?php if (!empty($phieu['anh_dinh_kem'])): ?>
+                                            <a href="uploads/<?= e((string) $phieu['anh_dinh_kem']) ?>" target="_blank">
+                                                <img src="uploads/<?= e((string) $phieu['anh_dinh_kem']) ?>"
+                                                    alt="Ảnh đính kèm"
+                                                    style="max-width: 80px; height: auto; border-radius: 4px;">
+                                            </a>
+                                        <?php else: ?>
+                                            Không
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
