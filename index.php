@@ -111,8 +111,8 @@ require __DIR__ . '/inc/header.php';
 
                         <div class="noi-dung-da-xem">
                             <h3>
-                                href="chi-tiet.php?id=<?= e(rawurlencode((string) $spDaXem->getId())) ?>">
-                                <?= e($spDaXem->getTen()) ?>
+                                <a href="chi-tiet.php?id=<?= e(rawurlencode((string) $spDaXem->getId())) ?>">
+                                    <?= e($spDaXem->getTen()) ?>
                                 </a>
                             </h3>
 

@@ -3359,3 +3359,85 @@ footer.footer-minipos-v2 .footer-thong-tin-nhom span {
         padding-top: 13px;
     }
 }
+
+/* MiniPos: chỉnh riêng trang danh sách sản phẩm */
+.trang-danh-sach-san-pham .the-san-pham .hang-nut-san-pham {
+    display: flex !important;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 8px;
+}
+.trang-danh-sach-san-pham .the-san-pham .hang-nut-san-pham > .nut-xem-chi-tiet,
+.trang-danh-sach-san-pham .the-san-pham .hang-nut-san-pham > .form-them-gio-hang {
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    margin: 0;
+}
+.trang-danh-sach-san-pham .the-san-pham .hang-nut-san-pham > .nut-xem-chi-tiet {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 6px;
+    white-space: normal;
+    text-align: center;
+}
+.trang-danh-sach-san-pham .the-san-pham .form-them-gio-hang button {
+    width: 100%;
+    height: 100%;
+    min-height: 42px;
+    padding: 10px 6px;
+    white-space: normal;
+}
+.trang-danh-sach-san-pham .the-san-pham .hang-nut-san-pham > .form-them-gio-hang {
+    display: flex;
+}
+
+
+/* FIX V3: lọc ẩn thẻ sản phẩm thật sự và giữ chữ hai nút trên một dòng */
+.trang-danh-sach-san-pham .luoi-san-pham > .the-san-pham[hidden] {
+    display: none !important;
+}
+
+.trang-danh-sach-san-pham .the-san-pham .hang-nut-san-pham {
+    display: flex !important;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 8px;
+}
+
+.trang-danh-sach-san-pham .the-san-pham .hang-nut-san-pham > .nut-xem-chi-tiet,
+.trang-danh-sach-san-pham .the-san-pham .hang-nut-san-pham > .form-them-gio-hang {
+    flex: 1 1 0;
+    width: 0;
+    min-width: 0;
+    max-width: none;
+    margin: 0;
+}
+
+.trang-danh-sach-san-pham .the-san-pham .hang-nut-san-pham > .nut-xem-chi-tiet {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 3px;
+    white-space: nowrap;
+    text-align: center;
+    font-size: .8rem;
+}
+
+.trang-danh-sach-san-pham .the-san-pham .form-them-gio-hang {
+    display: flex;
+}
+
+.trang-danh-sach-san-pham .the-san-pham .form-them-gio-hang button {
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    height: 100%;
+    padding: 9px 3px;
+    white-space: nowrap;
+    font-size: .8rem;
+}
