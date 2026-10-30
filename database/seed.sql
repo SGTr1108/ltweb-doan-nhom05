@@ -86,3 +86,12 @@ INSERT INTO tv_du_an (mssv, ten_du_an, cong_nghe, mo_ta) VALUES
 ('3120224122', 'Thùng rác thông minh AI', 'Arduino, ESP8266, Python, YOLO', 'Tự động phân loại rác qua nhận diện hình ảnh và gửi cảnh báo qua ứng dụng Blynk IoT.'),
 ('3120224122', 'Ứng dụng Chat TCP/UDP', 'Python, Socket, Multi-threading', 'Xây dựng máy chủ và máy khách giao tiếp mạng đa luồng, hỗ trợ broadcast tin nhắn.'),
 ('3120224122', 'Giải quyết Extended Knapsack', 'C++, Giải thuật PSO & Tham lam', 'Tối ưu hóa bài toán cái túi mở rộng bằng thuật toán bầy đàn (Particle Swarm Optimization).');
+
+-- Dữ liệu mẫu Phần B của Nguyễn Võ Khánh Linh (3120224086)
+INSERT INTO thanh_vien (mssv, ho_ten, nguoi_dung_id) VALUES
+('3120224086', 'Nguyễn Võ Khánh Linh', NULL);
+
+INSERT INTO tv_nhat_ky (mssv, dia_chi_ip, trinh_duyet, thoi_gian_tao) VALUES
+('3120224086', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0) Chrome/130.0', '2026-10-27 08:15:00'),
+('3120224086', '127.0.0.1', 'Mozilla/5.0 (Android 14) Chrome/130.0', '2026-10-28 09:02:30'),
+('3120224086', '::1', 'Mozilla/5.0 (Macintosh) Safari/17', '2026-10-29 20:40:10');
