@@ -15,6 +15,32 @@ $cssTrang = 'profile.css';
 
 // Nạp tệp cấu hình của nhóm. config.php đã tự nạp ham.php (có hàm e()) nên không cần nạp lại.
 require_once $goc . 'inc/config.php';
+// --- CHỨC NĂNG 2: BỘ ĐẾM LƯỢT XEM THEO NGÀY ---
+
+$pdo = db();
+$mssv = '3120224086';
+
+// Tăng lượt xem của ngày hiện tại
+$sql = "INSERT INTO tv_luot_xem (mssv, ngay_xem, so_luot)
+        VALUES (?, CURDATE(), 1)
+        ON DUPLICATE KEY UPDATE so_luot = so_luot + 1";
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute([$mssv]);
+
+// Lấy thống kê lượt xem trong 7 ngày gần nhất
+$sql = "SELECT ngay_xem, so_luot
+        FROM tv_luot_xem
+        WHERE mssv = ?
+          AND ngay_xem >= CURDATE() - INTERVAL 6 DAY
+          AND ngay_xem <= CURDATE()
+        ORDER BY ngay_xem DESC";
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute([$mssv]);
+
+$luotXem = $stmt->fetchAll();
+
 
 // --- CHỨC NĂNG 1: Nhật ký truy cập cá nhân ---
 // Dùng đường dẫn tuyệt đối theo __DIR__ để chạy từ thư mục nào cũng ghi đúng chỗ.
@@ -131,6 +157,35 @@ require_once $goc . 'inc/header.php';
             <?php endif; ?>
         </ul>
     </section>
+
+    <!-- Chức năng 2: Thống kê lượt xem theo ngày -->
+<section class="view-count-section">
+    <h2>📊 Thống kê lượt xem trong 7 ngày gần nhất</h2>
+
+    <?php if (!empty($luotXem)): ?>
+        <div class="table-responsive">
+            <table class="schedule-table">
+                <thead>
+                    <tr>
+                        <th>Ngày truy cập</th>
+                        <th>Số lượt xem</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <?php foreach ($luotXem as $item): ?>
+                        <tr>
+                            <td><?= e($item['ngay_xem']) ?></td>
+                            <td><?= e((string) $item['so_luot']) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php else: ?>
+        <p>Chưa có dữ liệu lượt xem.</p>
+    <?php endif; ?>
+</section>
 
     <!-- Bảng: Thời khóa biểu tuần -->
     <section>

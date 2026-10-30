@@ -150,7 +150,7 @@ CREATE TABLE tv_du_an (
         FOREIGN KEY (mssv) REFERENCES thanh_vien(mssv) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- Bảng riêng của Nguyễn Võ Khánh Linh (3120224086): tv_nhat_ky
+-- 4Bảng riêng của Nguyễn Võ Khánh Linh (3120224086): tv_nhat_ky
 CREATE TABLE tv_nhat_ky (
     id             INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     mssv           VARCHAR(15) NOT NULL,
@@ -160,4 +160,19 @@ CREATE TABLE tv_nhat_ky (
     CONSTRAINT fk_tv_nhat_ky_thanh_vien
         FOREIGN KEY (mssv) REFERENCES thanh_vien(mssv) ON DELETE CASCADE,
     KEY idx_tv_nhat_ky_mssv_thoi_gian (mssv, thoi_gian_tao)
+) ENGINE=InnoDB;
+
+-- 5. Bảng riêng của Nguyễn Võ Khánh Linh: tv_luot_xem
+CREATE TABLE tv_luot_xem (
+    id             INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    mssv           VARCHAR(15) NOT NULL,
+    ngay_xem       DATE NOT NULL,
+    so_luot        INT UNSIGNED NOT NULL DEFAULT 0,
+
+    CONSTRAINT fk_tv_luot_xem_thanh_vien
+        FOREIGN KEY (mssv)
+        REFERENCES thanh_vien(mssv)
+        ON DELETE CASCADE,
+
+    UNIQUE KEY uq_tv_luot_xem_mssv_ngay (mssv, ngay_xem)
 ) ENGINE=InnoDB;
