@@ -153,7 +153,7 @@ CREATE TABLE tv_du_an (
         FOREIGN KEY (mssv) REFERENCES thanh_vien(mssv) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- 4Bảng riêng của Nguyễn Võ Khánh Linh (3120224086): tv_nhat_ky
+-- 4. Bảng riêng của Nguyễn Võ Khánh Linh (3120224086): tv_nhat_ky
 CREATE TABLE tv_nhat_ky (
     id             INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     mssv           VARCHAR(15) NOT NULL,
@@ -179,3 +179,39 @@ CREATE TABLE tv_luot_xem (
 
     UNIQUE KEY uq_tv_luot_xem_mssv_ngay (mssv, ngay_xem)
 ) ENGINE=InnoDB;
+
+-- 6. Bảng riêng của thành viên 3120224092: Theo dõi hạn nộp bài
+CREATE TABLE tv_han_nop (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    mssv VARCHAR(15) NOT NULL,
+    ten_bai VARCHAR(120) NOT NULL,
+    ngay_han DATE NOT NULL,
+    hoan_thanh TINYINT(1) NOT NULL DEFAULT 0,
+    ngay_tao DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    KEY idx_tv_han_nop_mssv_ngay (mssv, ngay_han),
+
+    CONSTRAINT fk_tv_han_nop_thanh_vien
+        FOREIGN KEY (mssv)
+        REFERENCES thanh_vien(mssv)
+        ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- 7. Bảng riêng của thành viên 3120224092: Quản lý kỹ năng cá nhân
+CREATE TABLE tv_ky_nang (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    mssv VARCHAR(15) NOT NULL,
+    ten_ky_nang VARCHAR(120) NOT NULL,
+    nhom_ky_nang VARCHAR(100) NOT NULL,
+    muc_do VARCHAR(50) NOT NULL,
+    mo_ta TEXT NULL,
+    ngay_tao DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    KEY idx_tv_ky_nang_mssv (mssv),
+
+    CONSTRAINT fk_tv_ky_nang_thanh_vien
+        FOREIGN KEY (mssv)
+        REFERENCES thanh_vien(mssv)
+        ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

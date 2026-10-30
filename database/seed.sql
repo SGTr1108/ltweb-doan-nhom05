@@ -79,7 +79,8 @@ INSERT INTO lien_he (ma_phieu, ma_nhan_vien, email, ngay_bao_cao, muc_do_uu_tien
 
 -- Dữ liệu mẫu Phần B: thanh_vien và các bảng tv_
 INSERT INTO thanh_vien (mssv, ho_ten, nguoi_dung_id) VALUES
-('3120224122', 'Trần Xuân Sang', 1);
+('3120224122', 'Trần Xuân Sang', 1),
+('3120224092', 'Thới Đình Thị Thanh Lũy', NULL);
 
 -- Dữ liệu mẫu dự án cá nhân (tv_du_an)
 INSERT INTO tv_du_an (mssv, ten_du_an, cong_nghe, mo_ta) VALUES
@@ -105,3 +106,15 @@ INSERT INTO tv_luot_xem (mssv, ngay_xem, so_luot) VALUES
 ('3120224086', '2026-10-28', 20),
 ('3120224086', '2026-10-29', 17),
 ('3120224086', '2026-10-30', 25);
+
+-- Dữ liệu mẫu theo dõi hạn nộp bài của thành viên 3120224092
+INSERT INTO tv_han_nop (mssv, ten_bai, ngay_han, hoan_thanh) VALUES
+('3120224092', 'Bài tập Khai phá dữ liệu', '2026-11-05', 0),
+('3120224092', 'Bài tập Lập trình Web', '2026-11-08', 1),
+('3120224092', 'Hoàn thành báo cáo nhóm', '2026-11-12', 0);
+
+-- Dữ liệu mẫu kỹ năng cá nhân của thành viên 3120224092
+INSERT INTO tv_ky_nang (mssv, ten_ky_nang, nhom_ky_nang, muc_do, mo_ta) VALUES
+('3120224092', 'HTML và CSS', 'Lập trình Web', 'Cơ bản', 'Xây dựng cấu trúc và giao diện trang web'),
+('3120224092', 'PHP', 'Lập trình Web', 'Cơ bản', 'Xử lý dữ liệu phía máy chủ'),
+('3120224092', 'SQL', 'Cơ sở dữ liệu', 'Cơ bản', 'Truy vấn và quản lý cơ sở dữ liệu');
