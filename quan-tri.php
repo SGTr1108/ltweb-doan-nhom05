@@ -119,6 +119,7 @@ require __DIR__ . '/inc/header.php';
                 <thead>
                     <tr>
                         <th>Mã đơn</th>
+                        <th>Nhân viên lập</th>
                         <th>Khách hàng</th>
                         <th>Ngày đặt</th>
                         <th>Số món</th>
@@ -131,7 +132,13 @@ require __DIR__ . '/inc/header.php';
                     <?php foreach ($danhSachDonHang as $don): ?>
                         <tr>
                             <td>#<?= e($don['id']) ?></td>
-                            <td><?= e($don['ho_ten']) ?><br><small>(<?= e($don['email']) ?>)</small></td>
+                            <td><?= e($don['ten_nhan_vien'] ?? 'N/A') ?></td>
+                            <td>
+                                <?= e($don['ten_khach_hang'] ?: 'Khách vãng lai') ?>
+                                <?php if (!empty($don['sdt_khach_hang'])): ?>
+                                    <br><small>(<?= e($don['sdt_khach_hang']) ?>)</small>
+                                <?php endif; ?>
+                            </td>
                             <td><?= e($don['ngay_dat']) ?></td>
                             <td><?= e($don['so_mon']) ?></td>
                             <td><?= e(vnd($don['tong_tien'])) ?></td>

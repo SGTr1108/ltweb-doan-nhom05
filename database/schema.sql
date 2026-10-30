@@ -50,7 +50,7 @@ CREATE TABLE nguoi_dung (
     email    VARCHAR(100) NOT NULL,
     ho_ten   VARCHAR(100) NOT NULL,
     mat_khau VARCHAR(255) NOT NULL,
-    vai_tro  ENUM('quan_tri', 'khach_hang') NOT NULL DEFAULT 'khach_hang',
+    vai_tro  ENUM('quan_tri', 'nhan_vien') NOT NULL DEFAULT 'nhan_vien',
     ngay_tao DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY uq_nguoi_dung_email (email)
 ) ENGINE=InnoDB;
@@ -63,14 +63,17 @@ CREATE TABLE nguoi_dung (
 --    hoan_thanh; cho_xu_ly / dang_giao → da_huy.
 -- ---------------------------------------------------------------------
 CREATE TABLE don_hang (
-    id            INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    nguoi_dung_id INT UNSIGNED NOT NULL,
-    trang_thai    ENUM('cho_xu_ly', 'dang_giao', 'hoan_thanh', 'da_huy')
-                  NOT NULL DEFAULT 'cho_xu_ly',
+    id             INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nhan_vien_id   INT UNSIGNED NOT NULL,
+    ten_khach_hang VARCHAR(100) NULL,
+    sdt_khach_hang VARCHAR(20) NULL,
+    tien_khach_dua INT UNSIGNED NOT NULL DEFAULT 0,
+    trang_thai     ENUM('cho_xu_ly', 'dang_giao', 'hoan_thanh', 'da_huy')
+                  NOT NULL DEFAULT 'hoan_thanh',
     ghi_chu       VARCHAR(255) NULL,
     ngay_dat      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_don_hang_nguoi_dung
-        FOREIGN KEY (nguoi_dung_id) REFERENCES nguoi_dung(id),
+    CONSTRAINT fk_don_hang_nhan_vien
+        FOREIGN KEY (nhan_vien_id) REFERENCES nguoi_dung(id),
     KEY idx_don_hang_ngay_dat (ngay_dat)
 ) ENGINE=InnoDB;
 

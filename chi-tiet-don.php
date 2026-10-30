@@ -15,9 +15,9 @@ if ($donId === false || $donId < 1) {
 
 $khoDonHang = new \App\Data\KhoDonHang(db());
 
-// Nếu quan_tri -> null để xem mọi đơn; khach_hang -> truyền uid cá nhân
-$nguoiDungIdLoc = ($user['vai_tro'] === 'quan_tri') ? null : (int) $user['id'];
-$chiTiet        = $khoDonHang->chiTiet($donId, $nguoiDungIdLoc);
+// Quản trị viên xem mọi đơn; Nhân viên chỉ xem hóa đơn do mình lập
+$nhanVienIdLoc = ($user['vai_tro'] === 'quan_tri') ? null : (int) $user['id'];
+$chiTiet       = $khoDonHang->chiTiet($donId, $nhanVienIdLoc);
 
 if ($chiTiet === null) {
     http_response_code(404);
@@ -28,20 +28,21 @@ if ($chiTiet === null) {
 $don  = $chiTiet['don'];
 $dong = $chiTiet['dong'];
 
-$tieuDeTrang  = "Chi tiết đơn hàng #{$don['id']} | MiniPos";
-$moTaTrang    = "Xem thông tin chi tiết đơn hàng #{$don['id']}.";
+$tieuDeTrang  = "Chi tiết hóa đơn #{$don['id']} | MiniPos";
+$moTaTrang    = "Xem thông tin chi tiết hóa đơn #{$don['id']}.";
 $scriptsTrang = [];
 
 require __DIR__ . '/inc/header.php';
 ?>
 
 <main class="bao">
-    <h1>Chi tiết đơn hàng #<?= e($don['id']) ?></h1>
+    <h1>Chi tiết hóa đơn #<?= e($don['id']) ?></h1>
 
     <section>
         <h2>Thông tin chung</h2>
-        <p><strong>Khách hàng:</strong> <?= e($don['ho_ten']) ?> (<?= e($don['email']) ?>)</p>
-        <p><strong>Ngày đặt:</strong> <?= e($don['ngay_dat']) ?></p>
+        <p><strong>Nhân viên lập đơn:</strong> <?= e($don['ten_nhan_vien'] ?? 'N/A') ?> (<?= e($don['email_nhan_vien'] ?? '') ?>)</p>
+        <p><strong>Khách hàng:</strong> <?= e($don['ten_khach_hang'] ?: 'Khách vãng lai') ?> <?= !empty($don['sdt_khach_hang']) ? '- SĐT: ' . e($don['sdt_khach_hang']) : '' ?></p>
+        <p><strong>Ngày lập:</strong> <?= e($don['ngay_dat']) ?></p>
         <p><strong>Trạng thái:</strong> <?= e(\App\Data\KhoDonHang::TRANG_THAI[$don['trang_thai']] ?? $don['trang_thai']) ?></p>
         <?php if (!empty($don['ghi_chu'])): ?>
             <p><strong>Ghi chú:</strong> <?= e($don['ghi_chu']) ?></p>
@@ -55,7 +56,7 @@ require __DIR__ . '/inc/header.php';
                 <thead>
                     <tr>
                         <th>Sản phẩm</th>
-                        <th>Đơn giá lúc đặt</th>
+                        <th>Đơn giá</th>
                         <th>Số lượng</th>
                         <th>Thành tiền</th>
                     </tr>
@@ -72,10 +73,12 @@ require __DIR__ . '/inc/header.php';
                 </tbody>
             </table>
         </div>
-        <p><strong>Tổng cộng: <?= e(vnd($don['tong_tien'])) ?></strong></p>
+        <p><strong>Tổng tiền hóa đơn: <?= e(vnd($don['tong_tien'])) ?></strong></p>
+        <p><strong>Tiền khách đưa:</strong> <?= e(vnd($don['tien_khach_dua'] ?? 0)) ?></p>
+        <p><strong>Tiền thối lại:</strong> <?= e(vnd($don['tien_thoi_lai'] ?? 0)) ?></p>
     </section>
 
-    <p><a href="don-hang.php">Quay lại danh sách đơn hàng</a></p>
+    <p><a href="don-hang.php">Quay lại danh sách hóa đơn</a></p>
 </main>
 
 <?php require __DIR__ . '/inc/footer.php'; ?>

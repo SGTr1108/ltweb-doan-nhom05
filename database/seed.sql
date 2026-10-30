@@ -30,40 +30,40 @@ INSERT INTO san_pham (id, danh_muc_id, ten, gia, ton_kho, anh, mo_ta) VALUES
 (10, 1, 'Cá viên chiên',                   35000,  25, 'images/cvc.webp',          'Cá viên chiên nóng, kèm tương ớt.'),
 (11, 1, 'Bánh tráng',                      10000,  70, 'images/banhtrang.jpeg',    'Bánh tráng trộn cay.'),
 (12, 1, 'Khoai tây chiên',                 22000,  45, 'images/khoaitaychien.webp','Khoai tây chiên giòn.'),
-(13, 1, 'Xúc xích tiệt trùng',             12000,  60, 'images/cvc.webp',          'Xúc xích ăn liền, đóng gói tiện lợi.'),
-(14, 1, 'Bánh mì kẹp chả',                 20000,  15, 'images/banhtrang.jpeg',    'Bánh mì kẹp chả lụa, làm trong ngày.'),
-(15, 1, 'Cơm cuộn rong biển',              18000,  20, 'images/khoaitaychien.webp','Cơm cuộn rong biển nhân trứng.'),
-(16, 1, 'Mì gói Hảo Hảo',                   5000, 150, 'images/myly.jpg',          'Mì gói vị tôm chua cay.'),
-(17, 1, 'Combo mì ly khuyến mãi 50%',      30000,  12, 'images/myly.jpg',          'Combo 3 mì ly giảm 50% cho ly thứ ba.'),
-(18, 1, 'Trứng gà luộc',                    6000,  40, 'images/cvc.webp',          'Trứng gà luộc sẵn, ăn liền.'),
-(19, 2, 'Sữa tươi tiệt trùng 180 ml',       8000,  80, 'images/nuoccam.jpg',       'Sữa tươi tiệt trùng có đường.'),
-(20, 2, 'Nước ngọt có ga lon 330 ml',      12000,  90, 'images/AQUAFINA.webp',     'Nước ngọt có ga lon 330 ml.'),
-(21, 2, 'Trà đào cam sả',                  28000,  18, 'images/trasua.jpg',        'Trà đào cam sả pha tại quầy.'),
-(22, 2, 'Cà phê sữa lon',                  15000,   0, 'images/cafe.jpg',          'Cà phê sữa lon uống liền (tạm hết hàng).'),
-(23, 2, 'Nước tăng lực',                   14000,  50, 'images/traxanh.jpeg',      'Nước tăng lực chai 330 ml.'),
-(24, 2, 'Nước dừa đóng hộp',               18000,  30, 'images/nuoccam.jpg',       'Nước dừa tươi đóng hộp 330 ml.'),
+(13, 1, 'Xúc xích tiệt trùng',             12000,  60, 'images/xucxinhtiettrung.jpg',          'Xúc xích ăn liền, đóng gói tiện lợi.'),
+(14, 1, 'Bánh mì kẹp chả',                 20000,  15, 'images/banhmikepcha.jpg',    'Bánh mì kẹp chả lụa, làm trong ngày.'),
+(15, 1, 'Cơm cuộn rong biển',              18000,  20, 'images/comcuonrongbien.jpg','Cơm cuộn rong biển nhân trứng.'),
+(16, 1, 'Mì gói Hảo Hảo',                   5000, 150, 'images/haohao.jpg',          'Mì gói vị tôm chua cay.'),
+(17, 1, 'Combo mì ly khuyến mãi 50%',      30000,  12, 'images/combomily.jpg',          'Combo 3 mì ly giảm 50% cho ly thứ ba.'),
+(18, 1, 'Trứng gà luộc',                    6000,  40, 'images/Trunggaluoc.jpg',          'Trứng gà luộc sẵn, ăn liền.'),
+(19, 2, 'Sữa tươi tiệt trùng 180 ml',       8000,  80, 'images/suatuoitiettrung180ml.jpg',       'Sữa tươi tiệt trùng có đường.'),
+(20, 2, 'Nước ngọt có ga lon 330 ml',      12000,  90, 'images/nuocngotcagalon330ml.png',     'Nước ngọt có ga lon 330 ml.'),
+(21, 2, 'Trà đào cam sả',                  28000,  18, 'images/tradaocamsa.jpg',        'Trà đào cam sả pha tại quầy.'),
+(22, 2, 'Cà phê sữa lon',                  15000,   0, 'images/caphesualon.jpg',          'Cà phê sữa lon uống liền (tạm hết hàng).'),
+(23, 2, 'Nước tăng lực',                   14000,  50, 'images/nuoctangluc.jpg',      'Nước tăng lực chai 330 ml.'),
+(24, 2, 'Nước dừa đóng hộp',               18000,  30, 'images/nuocduadonghop.webp',       'Nước dừa tươi đóng hộp 330 ml.'),
 (25, 3, 'Snack Lay''s vị tự nhiên',        15000,  40, 'images/lays.png',          'Snack khoai tây Lay''s vị tự nhiên.'),
 (26, 3, 'Kẹo dẻo trái cây',                 9000,  70, 'images/chug.jpg',          'Kẹo dẻo nhiều hương vị trái cây.'),
-(27, 3, 'Socola thanh',                    22000,  35, 'images/banhquy.jpg',       'Socola sữa thanh 40 g.'),
-(28, 3, 'Bánh gạo vị ngọt',                11000,  45, 'images/banhtrang.jpeg',    'Bánh gạo nướng vị ngọt.'),
-(29, 3, 'Kẹo cao su bạc hà',                6000, 100, 'images/chug.jpg',          'Kẹo cao su bạc hà thanh mát.'),
-(30, 3, 'Bánh quy kem sô-cô-la',           14000,  55, 'images/banhquy.jpg',       'Bánh quy kẹp kem sô-cô-la.'),
-(31, 4, 'Khăn giấy bỏ túi',                 5000, 120, 'images/MiniPOS.webp',      'Khăn giấy bỏ túi 10 tờ.'),
-(32, 4, 'Bàn chải đánh răng',              25000,  30, 'images/MiniPOS.webp',      'Bàn chải lông mềm.'),
-(33, 4, 'Kem đánh răng 100 g',             32000,  25, 'images/MiniPOS.webp',      'Kem đánh răng bạc hà 100 g.'),
-(34, 4, 'Ly giấy (20 cái)',                15000,  40, 'images/MiniPOS.webp',      'Ly giấy dùng một lần, 20 cái.'),
-(35, 4, 'Túi nilon (1 kg)',                10000, 200, 'images/MiniPOS.webp',      'Túi nilon đựng hàng, 1 kg.');
+(27, 3, 'Socola thanh',                    22000,  35, 'images/socolathanh.jpg',       'Socola sữa thanh 40 g.'),
+(28, 3, 'Bánh gạo vị ngọt',                11000,  45, 'images/banhgaovingot.jpg',    'Bánh gạo nướng vị ngọt.'),
+(29, 3, 'Kẹo cao su bạc hà',                6000, 100, 'images/keocaosubacha.webp',          'Kẹo cao su bạc hà thanh mát.'),
+(30, 3, 'Bánh quy kem sô-cô-la',           14000,  55, 'images/banhquykemsocola.jpg',       'Bánh quy kẹp kem sô-cô-la.'),
+(31, 4, 'Khăn giấy bỏ túi',                 5000, 120, 'images/khangiaybotui.webp',      'Khăn giấy bỏ túi 10 tờ.'),
+(32, 4, 'Bàn chải đánh răng',              25000,  30, 'images/banchaidanhrang.png',      'Bàn chải lông mềm.'),
+(33, 4, 'Kem đánh răng 100 g',             32000,  25, 'images/kemdanhrang100g.jpg',      'Kem đánh răng bạc hà 100 g.'),
+(34, 4, 'Ly giấy (20 cái)',                15000,  40, 'images/lygiay.jpg',      'Ly giấy dùng một lần, 20 cái.'),
+(35, 4, 'Túi nilon (1 kg)',                10000, 200, 'images/tuinilon.jpg',      'Túi nilon đựng hàng, 1 kg.');
 
--- Tài khoản thử (mật khẩu: matkhau123): 1 quản trị, 2 khách hàng
+-- Tài khoản thử (mật khẩu: matkhau123): 1 quản trị, 2 nhân viên quầy
 INSERT INTO nguoi_dung (id, email, ho_ten, mat_khau, vai_tro) VALUES
 (1, 'admin@minipos.vn', 'Quản trị viên',  '$2y$12$FU9nwjXpW5WmbNG9niDgrebwytDPYVtr7xQI0BIr32nmsQmxROXY2', 'quan_tri'),
-(2, 'lan@minipos.vn',   'Nguyễn Thị Lan', '$2y$12$j7zLCQ30BXZtr2.dNCKXMOM7zM464Xg/5/pg1aTZk9BygOudr0PSO', 'khach_hang'),
-(3, 'an@minipos.vn',    'Trần Văn An',    '$2y$12$DXcUwhVRy06a0e2BfgIjtuaX9wP.68.TTUSPG6K9TxB.su.CVQON.', 'khach_hang');
+(2, 'nv01@minipos.vn',   'Trần Bán Hàng',   '$2y$12$j7zLCQ30BXZtr2.dNCKXMOM7zM464Xg/5/pg1aTZk9BygOudr0PSO', 'nhan_vien'),
+(3, 'nv02@minipos.vn',   'Lê Thu Ngân',     '$2y$12$DXcUwhVRy06a0e2BfgIjtuaX9wP.68.TTUSPG6K9TxB.su.CVQON.', 'nhan_vien');
 
--- Mỗi khách hàng một đơn. don_gia = giá niêm yết tại thời điểm đặt.
-INSERT INTO don_hang (id, nguoi_dung_id, trang_thai, ghi_chu, ngay_dat) VALUES
-(1, 2, 'hoan_thanh', 'Giao giờ nghỉ trưa',  '2026-10-20 11:45:00'),
-(2, 3, 'cho_xu_ly',  NULL,                  '2026-10-27 08:30:00');
+-- Đơn hàng bán tại quầy do nhân viên lập
+INSERT INTO don_hang (id, nhan_vien_id, ten_khach_hang, sdt_khach_hang, tien_khach_dua, trang_thai, ghi_chu, ngay_dat) VALUES
+(1, 2, 'Nguyễn Thị Lan', '0905123456', 50000,  'hoan_thanh', 'Thanh toán tiền mặt', '2026-10-20 11:45:00'),
+(2, 3, 'Trần Văn An',    '0914987654', 100000, 'hoan_thanh', NULL,                 '2026-10-27 08:30:00');
 
 INSERT INTO chi_tiet_don (don_hang_id, san_pham_id, so_luong, don_gia) VALUES
 (1, 1,  2, 15000),   -- Bánh snack ×2
