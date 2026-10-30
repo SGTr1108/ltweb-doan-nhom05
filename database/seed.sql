@@ -76,3 +76,13 @@ INSERT INTO chi_tiet_don (don_hang_id, san_pham_id, so_luong, don_gia) VALUES
 INSERT INTO lien_he (ma_phieu, ma_nhan_vien, email, ngay_bao_cao, muc_do_uu_tien, loai_yeu_cau, noi_dung, thoi_gian_tao) VALUES
 ('a1b2c3d4e5f60708', 'NV001', 'nv001@minipos.vn', '2026-10-25', 3, 'loi',     'Máy quét mã vạch quầy 2 thỉnh thoảng không nhận mã.', '2026-10-25 09:10:00'),
 ('0f9e8d7c6b5a4321', 'NV002', 'nv002@minipos.vn', '2026-10-28', 5, 'nhapkho', 'Cà phê sữa lon đã hết, cần nhập thêm gấp.',             '2026-10-28 16:40:00');
+
+-- Dữ liệu mẫu Phần B: thanh_vien và các bảng tv_
+INSERT INTO thanh_vien (mssv, ho_ten, nguoi_dung_id) VALUES
+('3120224122', 'Trần Xuân Sang', 1);
+
+-- Dữ liệu mẫu dự án cá nhân (tv_du_an)
+INSERT INTO tv_du_an (mssv, ten_du_an, cong_nghe, mo_ta) VALUES
+('3120224122', 'Thùng rác thông minh AI', 'Arduino, ESP8266, Python, YOLO', 'Tự động phân loại rác qua nhận diện hình ảnh và gửi cảnh báo qua ứng dụng Blynk IoT.'),
+('3120224122', 'Ứng dụng Chat TCP/UDP', 'Python, Socket, Multi-threading', 'Xây dựng máy chủ và máy khách giao tiếp mạng đa luồng, hỗ trợ broadcast tin nhắn.'),
+('3120224122', 'Giải quyết Extended Knapsack', 'C++, Giải thuật PSO & Tham lam', 'Tối ưu hóa bài toán cái túi mở rộng bằng thuật toán bầy đàn (Particle Swarm Optimization).');
