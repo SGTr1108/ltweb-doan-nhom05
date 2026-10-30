@@ -113,6 +113,39 @@ CREATE TABLE lien_he (
     KEY idx_lien_he_thoi_gian_tao (thoi_gian_tao)
 ) ENGINE=InnoDB;
 
--- ---------------------------------------------------------------------
--- Phần B (mỗi thành viên tự thêm): thanh_vien và các bảng tv_… — xem đề.
--- ---------------------------------------------------------------------
+-- =================================================--------------------
+-- Phần B: Bảng thanh_vien và các bảng riêng của thành viên (tv_...)
+-- =================================================--------------------
+
+-- 1. Bảng thanh_vien: Lưu danh sách thành viên nhóm
+CREATE TABLE thanh_vien (
+    mssv          VARCHAR(15) PRIMARY KEY,
+    ho_ten        VARCHAR(100) NOT NULL,
+    nguoi_dung_id INT UNSIGNED NULL,
+    CONSTRAINT fk_thanh_vien_nguoi_dung
+        FOREIGN KEY (nguoi_dung_id) REFERENCES nguoi_dung(id) ON DELETE SET NULL
+) ENGINE=InnoDB;
+
+-- 2. Bảng riêng của Trần Xuân Sang (MSSV: 3120224122): tv_luu_but
+CREATE TABLE tv_luu_but (
+    id             INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    mssv           VARCHAR(15) NOT NULL,
+    ten_nguoi_gui  VARCHAR(100) NOT NULL,
+    loi_nhan       TEXT NOT NULL,
+    thoi_gian_tao  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_tv_luu_but_thanh_vien
+        FOREIGN KEY (mssv) REFERENCES thanh_vien(mssv) ON DELETE CASCADE,
+    KEY idx_tv_luu_but_thoi_gian (thoi_gian_tao)
+) ENGINE=InnoDB;
+
+-- 3. Bảng riêng của Trần Xuân Sang (MSSV: 3120224122): tv_du_an
+CREATE TABLE tv_du_an (
+    id            INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    mssv          VARCHAR(15) NOT NULL,
+    ten_du_an     VARCHAR(200) NOT NULL,
+    cong_nghe     VARCHAR(255) NOT NULL,
+    mo_ta         TEXT NOT NULL,
+    ngay_tao      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_tv_du_an_thanh_vien
+        FOREIGN KEY (mssv) REFERENCES thanh_vien(mssv) ON DELETE CASCADE
+) ENGINE=InnoDB;
