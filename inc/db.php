@@ -14,10 +14,10 @@ function db(): PDO
     static $pdo = null;
 
     if ($pdo === null) {
-        $host = getenv('DB_HOST') ?: '127.0.0.1;port=3307';
+        $host = getenv('DB_HOST') ?: '127.0.0.1;port=3306';
         $ten  = getenv('DB_NAME') ?: 'ltweb_nhom05';
-        $user = getenv('DB_USER') ?: 'sang';
-        $pass = getenv('DB_PASS') !== false ? (string) getenv('DB_PASS') : '1';
+        $user = getenv('DB_USER') ?: 'root';
+        $pass = getenv('DB_PASS') !== false ? (string) getenv('DB_PASS') : '';
 
         $pdo = new PDO(
             "mysql:host=$host;dbname=$ten;charset=utf8mb4",
