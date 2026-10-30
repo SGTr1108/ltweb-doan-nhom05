@@ -1,12 +1,84 @@
 <?php
-// Chức năng gồm bộ đếm lượt xem và máy tính điểm học phần.
-// Cách thử 1: mở trang bằng XAMPP (http://localhost/.../gioithieu.php); mở lại tab ẩn danh thì số lượt xem tăng 1.
-// Cách thử 2: nhập A1, A2, A3 (0-10) rồi bấm "Tính điểm ngay"; trang chuyển hướng (PRG), F5 không gửi lại form.
-// Cách thử 3: để trống / nhập chữ / nhập 11 để xem thông báo lỗi do máy chủ kiểm tra.
+/*
+ * Tệp: gioithieu.php (Sinh viên: Đoàn Thùy Thảo Trâm - 3120224149)
+ * Chức năng: Nhật ký công nghệ / Blog, Thống kê và Đếm lượt xem.
+ * Cách thử: 
+ *   - Cách thử 1 (Đếm lượt xem): Mở trang bằng XAMPP (http://localhost/.../gioithieu.php); 
+ *     Mở lại trang bằng tab ẩn danh (hoặc trình duyệt khác) thì tổng số lượt xem sẽ tăng thêm 1.
+ *   - Cách thử 2 (Nhật ký công nghệ / Blog): Điền đầy đủ thông tin vào Form gồm Tiêu đề, 
+ *     Nội dung ngắn, Nội dung chi tiết rồi bấm "Thêm bài viết". Hệ thống sẽ lưu vào CSDL 
+ *     và hiển thị thông báo thành công hoặc lỗi khóa ngoại (nếu MSSV không khớp).
+ *   - Cách thử 3 (Thống kê): Xem bảng tổng hợp danh sách bài viết hoặc lượt xem được lấy 
+ *     trực tiếp dữ liệu từ cơ sở dữ liệu `quanlydulieu`.
+ */
 
 
 // gioithieu.php - Trang giới thiệu cá nhân gồm bộ đếm lượt xem và máy tính điểm học phần.
 declare(strict_types=1);
+
+
+$servername = "localhost";
+$username = "root"; // Thay bằng username của bạn
+$password = "";     // Thay bằng password của bạn
+$dbname = "quanlydulieu";
+$conn = null;
+
+$conn = mysqli_connect("localhost", "root", "", "quanlydulieu");
+mysqli_set_charset($conn, "utf8mb4");
+// XỬ LÝ KHI BẤM NÚT "THÊM BÀI VIẾT"
+if (isset($_POST['btn_them'])) {
+    // Lấy dữ liệu từ Form và chống lỗi dấu nháy (')
+    $mssv              = mysqli_real_escape_string($conn, $_POST['mssv']);
+    $tieu_de           = mysqli_real_escape_string($conn, $_POST['tieu_de']);
+    $noi_dung_ngan     = mysqli_real_escape_string($conn, $_POST['noi_dung_ngan']);
+    $noi_dung_chi_tiet = mysqli_real_escape_string($conn, $_POST['noi_dung_chi_tiet']);
+
+    // Câu lệnh chèn vào bảng tv_blog
+    $sql = "INSERT INTO tv_blog (mssv, tieu_de, noi_dung_ngan, noi_dung_chi_tiet) 
+            VALUES ('$mssv', '$tieu_de', '$noi_dung_ngan', '$noi_dung_chi_tiet')";
+
+    // Sử dụng try...catch để bắt lỗi khóa ngoại mượt mà
+    try {
+        if (mysqli_query($conn, $sql)) {
+            $thong_bao = "<p style='color: green; font-weight: bold;'> Chèn dữ liệu thành công!</p>";
+        }
+    } catch (mysqli_sql_exception $e) {
+        // Kiểm tra nếu mã lỗi là 1452 (Lỗi liên quan đến Khóa ngoại - Foreign Key)
+        if ($e->getCode() == 1452) {
+            $thong_bao = "<p style='color: red; font-weight: bold;'> Lỗi: Mã số sinh viên (MSSV) '$mssv' không tồn tại trong hệ thống thành viên. Vui lòng kiểm tra lại!</p>";
+        } else {
+            $thong_bao = "<p style='color: red;'> Lỗi hệ thống: " . $e->getMessage() . "</p>";
+        }
+    }
+}
+
+
+
+function ghiLuotXem(PDO $pdo, string $mssv): void
+{
+    $ua = substr($_SERVER['HTTP_USER_AGENT'] ?? 'unknown', 0, 255);
+
+    // Băm IP kèm "muối" bí mật để không lưu IP thật
+    $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+    $ipHash = hash('sha256', $ip . 'CHUOI_BI_MAT_CUA_BAN');
+
+    // Chống đếm trùng: cùng mssv + cùng IP trong 30 phút chỉ tính 1 lượt
+    $check = $pdo->prepare(
+        "SELECT 1 FROM tv_luot_xem
+         WHERE mssv = ? AND ip_vi_tri = ?
+           AND thoi_gian > (NOW() - INTERVAL 30 MINUTE)
+         LIMIT 1"
+    );
+    $check->execute([$mssv, $ipHash]);
+    if ($check->fetch()) return;
+
+    $stmt = $pdo->prepare(
+        "INSERT INTO tv_luot_xem (mssv, trinh_duyet, ip_vi_tri) VALUES (?, ?, ?)"
+    );
+    $stmt->execute([$mssv, $ua, $ipHash]);
+}
+
+
 
 // --- CẤU HÌNH ĐƯỜNG DẪN VÀ GIAO DIỆN DÙNG CHUNG ---
 $goc = '../../'; // Đường dẫn quay về gốc dự án từ thư mục thanhvien/3120224149_tram/
@@ -208,6 +280,35 @@ $headerHtml = (string)preg_replace(
         </div>
       </section>
 
+
+        <h2>Nhập thông tin Blog</h2>
+    
+    <!-- Hiển thị thông báo thành công hoặc lỗi tại đây -->
+    <?php echo $thong_bao; ?>
+
+    <!-- 3. GIAO DIỆN FORM ĐỂ NHẬP VÀ BẤM NÚT -->
+    <form action="" method="POST">
+        <label>Mã số sinh viên (MSSV):</label><br>
+        <input type="text" name="mssv" required placeholder="Ví dụ: 20123456"><br><br>
+
+        <label>Tiêu đề bài viết:</label><br>
+        <input type="text" name="tieu_de" required style="width: 300px;"><br><br>
+
+        <label>Nội dung ngắn:</label><br>
+        <input type="text" name="noi_dung_ngan" style="width: 300px;"><br><br>
+
+        <label>Nội dung chi tiết:</label><br>
+        <textarea name="noi_dung_chi_tiet" required rows="5" style="width: 300px;"></textarea><br><br>
+
+        <!-- Nút bấm kích hoạt hành động chèn -->
+        <button type="submit" name="btn_them">Bấm để chèn dữ liệu</button>
+    </form>
+
+
+    <button id="btn-view" style="padding: 10px 20px; cursor: pointer;">
+  Xem nội dung
+</button>
+
       <article>
         <h2>Định hướng và Sở thích</h2>
         <p>
@@ -355,3 +456,16 @@ $headerHtml = (string)preg_replace(
     <script src="js/canhan.js" defer></script>
   </body>
 </html>
+
+<script>
+document.getElementById('btn-view').addEventListener('click', function() {
+    // Gửi yêu cầu ngầm đến file backend xử lý (ví dụ: luot_xem.php)
+    fetch('luot_xem.php', { method: 'POST' })
+    .then(response => response.text())
+    .then(data => {
+        console.log(data); // Log kết quả "Ghi nhận lượt xem thành công!"
+        alert("Đã ghi nhận 1 lượt xem tự do!");
+    })
+    .catch(error => console.error('Lỗi:', error));
+});
+</script>
