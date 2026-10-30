@@ -11,6 +11,23 @@ $tieuDeTrang = 'Giới thiệu cá nhân của Lũy | MiniPos';
 $moTaTrang = 'Trang giới thiệu cá nhân, kỹ năng và thời khóa biểu của Lũy.';
 $cssTrang = 'luy_style_php.css';
 require_once __DIR__ . '/../../inc/config.php';
+/* Kiểm tra tài khoản có phải chủ trang cá nhân không */
+$mssvLuy = '3120224092';
+$pdoHanNop = db();
+$nguoiDungLuy = nguoiDung();
+
+$stChuTrang = $pdoHanNop->prepare(
+    'SELECT nguoi_dung_id FROM thanh_vien WHERE mssv = ?'
+);
+$stChuTrang->execute([$mssvLuy]);
+
+$idChuTrang = $stChuTrang->fetchColumn();
+
+$laChuTrangLuy = (
+    $nguoiDungLuy !== null
+    && $idChuTrang !== false
+    && (int) $idChuTrang === (int) $nguoiDungLuy['id']
+);
 
 /* Xử lý tải ảnh đại diện cá nhân */
 $_SESSION['csrf_avatar_luy'] ??= bin2hex(random_bytes(32));
@@ -22,6 +39,10 @@ if (
     && isset($_POST['hanh_dong_avatar'])
     && $_POST['hanh_dong_avatar'] === 'tai_len'
 ) {
+    if (!$laChuTrangLuy) {
+        http_response_code(403);
+        exit('Bạn không có quyền thay đổi ảnh đại diện của trang này.');
+    }
     $tokenGui = is_string($_POST['csrf_token'] ?? null)
         ? $_POST['csrf_token'] : '';
 
