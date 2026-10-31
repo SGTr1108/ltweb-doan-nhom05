@@ -128,14 +128,24 @@ require __DIR__ . '/inc/header.php';
 
         <p>
             <label for="danh_muc_id">Danh mục *:</label>
+
             <select id="danh_muc_id" name="danh_muc_id" required>
+                <option value="" disabled>-- Chọn danh mục --</option>
+
                 <?php foreach ($danhMucList as $dm): ?>
-                    <option value="<?= e($dm['id']) ?>" <?= (string)$dm['id'] === $old['danh_muc_id'] ? 'selected' : '' ?>>
+                    <option
+                        value="<?= e($dm['id']) ?>"
+                        <?= (string) $dm['id'] === $old['danh_muc_id'] ? 'selected' : '' ?>>
                         <?= e($dm['ten']) ?>
                     </option>
                 <?php endforeach; ?>
             </select>
-            <?php if (isset($loi['danh_muc_id'])): ?><span class="thong-bao-loi" role="alert"><?= e($loi['danh_muc_id']) ?></span><?php endif; ?>
+
+            <?php if (isset($loi['danh_muc_id'])): ?>
+                <span class="thong-bao-loi" role="alert">
+                    <?= e($loi['danh_muc_id']) ?>
+                </span>
+            <?php endif; ?>
         </p>
 
         <p>
