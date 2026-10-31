@@ -96,6 +96,25 @@ if (isset($_SESSION['success_message'])) {
     unset($_SESSION['success_message']);
 }
 
+//
+// Lấy dữ liệu từ bảng tv_blog
+$sql    = "SELECT id, mssv, tieu_de, noi_dung_ngan, noi_dung_chi_tiet, ngay_dang
+           FROM tv_blog
+           ORDER BY ngay_dang DESC";
+$result = mysqli_query($conn, $sql);
+if (!$result) {
+    die("Lỗi truy vấn: " . mysqli_error($conn));
+}
+
+
+// Lấy dữ liệu từ bảng tv_gop_y
+$sql    = "SELECT id, mssv, ho_ten, email, noi_dung, trang_thai, ngay_gui
+           FROM tv_gop_y
+           ORDER BY ngay_gui DESC";
+$result1 = mysqli_query($conn, $sql);
+if (!$result1) {
+    die("Lỗi truy vấn: " . mysqli_error($conn));
+}
 
 // --- CẤU HÌNH ĐƯỜNG DẪN VÀ GIAO DIỆN DÙNG CHUNG ---
 $goc = '../../'; // Đường dẫn quay về gốc dự án từ thư mục thanhvien/3120224149_tram/
@@ -373,6 +392,38 @@ $headerHtml = (string)preg_replace(
         <!-- Nút bấm kích hoạt hành động chèn -->
         <button type="submit" name="btn_them">Bấm để chèn dữ liệu</button>
     </form>
+
+<br>
+<div style="overflow-x:auto; width:500px;">
+    <table border="1" cellpadding="10" style="white-space:nowrap; font-size:18px; width:100%; min-width:1800px;">
+        <thead>
+            <tr>
+                <th style="min-width:60px;">ID</th>
+                <th style="min-width:150px;">MSSV</th>
+                <th style="min-width:300px;">Tiêu đề</th>
+                <th style="min-width:350px;">Nội dung ngắn</th>
+                <th style="min-width:450px;">Nội dung chi tiết</th>
+                <th style="min-width:200px;">Ngày đăng</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php if (mysqli_num_rows($result) > 0): ?>
+            <?php while ($row = mysqli_fetch_assoc($result)): ?>
+            <tr>
+                <td><?= htmlspecialchars($row['id']) ?></td>
+                <td><?= htmlspecialchars($row['mssv']) ?></td>
+                <td><?= htmlspecialchars($row['tieu_de']) ?></td>
+                <td><?= htmlspecialchars($row['noi_dung_ngan']) ?></td>
+                <td><?= htmlspecialchars($row['noi_dung_chi_tiet']) ?></td>
+                <td><?= htmlspecialchars($row['ngay_dang']) ?></td>
+            </tr>
+            <?php endwhile; ?>
+        <?php else: ?>
+            <tr><td colspan="6">Chưa có bài viết nào.</td></tr>
+        <?php endif; ?>
+        </tbody>
+    </table>
+</div>
 </article>
 
 
@@ -404,6 +455,41 @@ $headerHtml = (string)preg_replace(
         <button type="submit" name="btn_submit" style="padding: 8px 15px; cursor: pointer;">
             Gửi góp ý
         </button>
+
+      <br>
+<br>
+        <div style="overflow-x:auto;">
+        <table border="1" cellpadding="10" style="white-space:nowrap; font-size:18px; width:100%; min-width:1800px;">
+            <thead>
+                <tr>
+                    <th style="min-width:60px;">ID</th>
+                    <th style="min-width:150px;">MSSV</th>
+                    <th style="min-width:250px;">Họ tên</th>
+                    <th style="min-width:300px;">Email</th>
+                    <th style="min-width:550px;">Nội dung</th>
+                    <th style="min-width:120px;">Trạng thái</th>
+                    <th style="min-width:200px;">Ngày gửi</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php if (mysqli_num_rows($result1) > 0): ?>
+                <?php while ($row = mysqli_fetch_assoc($result1)): ?>
+                <tr>
+                    <td><?= htmlspecialchars($row['id']) ?></td>
+                    <td><?= htmlspecialchars($row['mssv']) ?></td>
+                    <td><?= htmlspecialchars($row['ho_ten']) ?></td>
+                    <td><?= htmlspecialchars($row['email']) ?></td>
+                    <td><?= htmlspecialchars($row['noi_dung']) ?></td>
+                    <td><?= htmlspecialchars($row['trang_thai']) ?></td>
+                    <td><?= htmlspecialchars($row['ngay_gui']) ?></td>
+                </tr>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <tr><td colspan="7">Chưa có góp ý nào.</td></tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+      </div>
     </form>
 
 
