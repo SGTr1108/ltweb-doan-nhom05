@@ -54,6 +54,7 @@ $dm       = filter_var($_GET['dm'] ?? null, FILTER_VALIDATE_INT) ?: null;
 $giaToiDa = filter_var($_GET['giaToiDa'] ?? null, FILTER_VALIDATE_INT) ?: null;
 
 $loc      = ['q' => $q, 'dm' => $dm, 'giaToiDa' => $giaToiDa];
-$danhSach = $khoSanPham->trang($loc, 'moi', 20, 0);
+$sx       = (string) ($_GET['sx'] ?? 'moi');   // giá trị lạ → trang() rơi về 'moi'
+$danhSach = $khoSanPham->trang($loc, $sx, 20, 0);
 
 echo json_encode($danhSach, JSON_UNESCAPED_UNICODE);

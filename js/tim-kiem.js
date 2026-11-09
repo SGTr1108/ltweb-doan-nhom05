@@ -1,49 +1,95 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const oTimKiem = document.getElementById('tim-kiem');
-    const khungKetQua = document.querySelector('.luoi-san-pham');
-    const trangThai = document.getElementById('trang-thai-san-pham');
+"use strict";
 
-    if (!oTimKiem || !khungKetQua) return;
+// Tìm kiếm tức thì: gõ/chọn bộ lọc → chờ 300 ms → gọi api/san-pham.php → vẽ lại lưới.
+// Bấm "Áp dụng" (hoặc Enter) vẫn gửi form GET bình thường để có phân trang đầy đủ.
 
-    let timeoutId = null;
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("bo-loc-san-pham");
+    const luoi = document.getElementById("luoi-san-pham");
+    const trangThai = document.getElementById("trang-thai-san-pham");
+    const phanTrang = document.getElementById("phan-trang");
 
-    oTimKiem.addEventListener('input', (e) => {
-        clearTimeout(timeoutId);
-        const tuKhoa = e.target.value.trim();
+    if (!form || !luoi || !trangThai) return;
 
-        // Chờ 300ms sau khi ngừng gõ
-        timeoutId = setTimeout(() => {
-            fetch(`api/san-pham.php?q=${encodeURIComponent(tuKhoa)}`)
-                .then(res => {
-                    if (!res.ok) throw new Error('Lỗi truy vấn API');
-                    return res.json();
-                })
-                .then(data => {
-                    if (trangThai) {
-                        trangThai.textContent = `Có ${data.length} sản phẩm phù hợp.`;
-                    }
+    const GIOI_HAN_API = 20; // khớp LIMIT trong api/san-pham.php
+    let hen = null;
+    let yeuCauCu = null;
 
-                    if (data.length === 0) {
-                        khungKetQua.innerHTML = '<p>Không tìm thấy sản phẩm phù hợp.</p>';
-                        return;
-                    }
+    const esc = (giaTri) => String(giaTri ?? "").replace(/[&<>"']/g, (c) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+    }[c]));
 
-                    khungKetQua.innerHTML = data.map(sp => `
-                        <article class="the-san-pham">
-                            <img src="${sp.anh || 'images/MiniPOS.webp'}" alt="${sp.ten}" width="800" height="533">
-                            <div class="noi-dung-san-pham">
-                                <h3>${sp.ten}</h3>
-                                <p class="ma-san-pham">Mã sản phẩm: ${sp.id}</p>
-                                <p class="gia-san-pham">${new Intl.NumberFormat('vi-VN').format(sp.gia)} đ</p>
-                                <p>Tồn kho: ${sp.tonKho}</p>
-                                <div class="hang-nut-san-pham">
-                                    <a href="chi-tiet.php?id=${sp.id}">Xem chi tiết</a>
-                                </div>
-                            </div>
-                        </article>
-                    `).join('');
-                })
-                .catch(err => console.error(err));
-        }, 300);
-    });
+    const vnd = (soTien) => new Intl.NumberFormat("vi-VN").format(soTien) + " ₫";
+
+    const theSanPham = (sp) => `
+        <article class="the-san-pham">
+            <img src="${esc(sp.anh || "images/MiniPOS.webp")}" alt="Hình ảnh ${esc(sp.ten)}"
+                width="800" height="533" loading="lazy"
+                onerror="this.onerror=null;this.src='images/MiniPOS.webp';">
+            <div class="noi-dung-san-pham">
+                <h3>${esc(sp.ten)}</h3>
+                <p class="ma-san-pham">Mã sản phẩm: ${esc(sp.id)}</p>
+                <p class="gia-san-pham">${esc(vnd(sp.gia))}</p>
+                <p>Tồn kho: ${esc(sp.tonKho)}</p>
+                <div class="hang-nut-san-pham">
+                    <a class="nut-xem-chi-tiet" href="chi-tiet.php?id=${encodeURIComponent(sp.id)}">Xem chi tiết</a>
+                    <form method="post" action="gio-hang.php" class="form-them-gio-hang">
+                        <input type="hidden" name="csrf_token" value="${esc(luoi.dataset.csrf)}">
+                        <input type="hidden" name="hanh_dong" value="them">
+                        <input type="hidden" name="id" value="${esc(sp.id)}">
+                        <input type="hidden" name="so_luong" value="1">
+                        <button type="submit" ${sp.tonKho < 1 ? "disabled" : ""}>Thêm vào giỏ</button>
+                    </form>
+                </div>
+            </div>
+        </article>`;
+
+    async function timKiem() {
+        const tham = new URLSearchParams();
+        const q = form.elements["q"].value.trim();
+        const dm = form.elements["danh-muc"].value;
+        const gia = form.elements["giaToiDa"].value.trim();
+
+        if (q !== "") tham.set("q", q);
+        if (dm !== "") tham.set("dm", dm);
+        if (gia !== "") tham.set("giaToiDa", gia);
+        tham.set("sx", form.elements["sap-xep"].value);
+
+        // Bỏ yêu cầu cũ để kết quả đến trễ không ghi đè kết quả mới.
+        if (yeuCauCu) yeuCauCu.abort();
+        yeuCauCu = new AbortController();
+
+        try {
+            const res = await fetch("api/san-pham.php?" + tham.toString(), { signal: yeuCauCu.signal });
+            if (!res.ok) throw new Error("Lỗi truy vấn API: " + res.status);
+            const dsSanPham = await res.json();
+
+            if (phanTrang) phanTrang.hidden = true;
+
+            if (dsSanPham.length === 0) {
+                luoi.innerHTML = "<p>Không tìm thấy sản phẩm nào phù hợp với bộ lọc.</p>";
+                trangThai.textContent = "Có 0 sản phẩm.";
+                return;
+            }
+
+            luoi.innerHTML = dsSanPham.map(theSanPham).join("");
+            trangThai.textContent = dsSanPham.length >= GIOI_HAN_API
+                ? `Hiển thị ${dsSanPham.length} kết quả đầu tiên. Bấm Áp dụng để xem đủ và phân trang.`
+                : `Có ${dsSanPham.length} sản phẩm.`;
+        } catch (loi) {
+            if (loi.name === "AbortError") return;
+            console.error(loi);
+            trangThai.textContent = "Không tải được kết quả. Hãy thử lại hoặc bấm Áp dụng.";
+        }
+    }
+
+    function hoanTimKiem() {
+        clearTimeout(hen);
+        hen = setTimeout(timKiem, 300);
+    }
+
+    form.elements["q"].addEventListener("input", hoanTimKiem);
+    form.elements["giaToiDa"].addEventListener("input", hoanTimKiem);
+    form.elements["danh-muc"].addEventListener("change", hoanTimKiem);
+    form.elements["sap-xep"].addEventListener("change", hoanTimKiem);
 });

@@ -19,75 +19,32 @@ if (!in_array($sx, ['moi', 'gia-tang', 'gia-giam', 'ten'], true)) {
     $sx = 'moi';
 }
 
-// Xây dựng mảng điều kiện
-$dieuKien = [];
-if ($q !== '') {
-    $dieuKien['q']        = $q;
-    $dieuKien['tu_khoa']  = $q;
-}
-if ($dm !== null && $dm > 0) {
-    $dieuKien['danh_muc_id'] = $dm;
-}
-if ($giaToiDa !== null && $giaToiDa > 0) {
-    $dieuKien['gia_toi_da'] = $giaToiDa;
-}
+// Bộ lọc dùng chung cho dem() và trang() (đúng khóa mà KhoSanPham::dieuKien đọc)
+$loc = ['q' => $q, 'dm' => $dm, 'giaToiDa' => $giaToiDa];
 
-// 1. Lấy tất cả sản phẩm theo thứ tự sắp xếp
-$danhSachGoc = $khoSanPham->trang($dieuKien, $sx, 100, 0);
-if (empty($danhSachGoc)) {
-    $danhSachGoc = $khoSanPham->tatCa();
-}
+// Phân trang: COUNT(*) để biết tổng, LIMIT ? OFFSET ? để lấy đúng một trang
+$soSpMotTrang = 12;
+$tongDong     = $khoSanPham->dem($loc);
+$soTrang      = max(1, (int) ceil($tongDong / $soSpMotTrang));
+$trang        = filter_var($_GET['trang'] ?? 1, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) ?: 1;
+$trang        = min($trang, $soTrang);
+$danhSach     = $khoSanPham->trang($loc, $sx, $soSpMotTrang, ($trang - 1) * $soSpMotTrang);
 
-// 2. Lọc chính xác ở phía PHP (bảo đảm loại bỏ 100% sản phẩm không khớp khỏi HTML)
-$danhSach = array_filter($danhSachGoc, function ($sanPham) use ($q, $dm, $giaToiDa) {
-    // Lọc theo từ khóa (tên hoặc mã ID)
-    if ($q !== '') {
-        $ten = mb_strtolower($sanPham->getTen(), 'UTF-8');
-        $ma  = (string) $sanPham->getId();
-        $tk  = mb_strtolower($q, 'UTF-8');
-        if (mb_strpos($ten, $tk) === false && mb_strpos($ma, $tk) === false) {
-            return false;
-        }
-    }
+// Giữ bộ lọc khi chuyển trang
+$thamSoLoc = array_filter(
+    ['q' => $q, 'danh-muc' => $dm, 'giaToiDa' => $giaToiDa, 'sap-xep' => $sx],
+    static fn($giaTri) => $giaTri !== null && $giaTri !== ''
+);
+$lienKetTrang = static fn(int $t): string => 'danh-sach.php?' . http_build_query($thamSoLoc + ['trang' => $t]);
 
-    // Lọc theo danh mục
-    if ($dm !== null && $dm > 0) {
-        $spDm = method_exists($sanPham, 'getDanhMucId') ? (int) $sanPham->getDanhMucId() : 0;
-        if ($spDm !== $dm) {
-            return false;
-        }
-    }
-
-    // Lọc theo giá tối đa
-    if ($giaToiDa !== null && $giaToiDa > 0) {
-        if ($sanPham->getGia() > $giaToiDa) {
-            return false;
-        }
-    }
-
-    return true;
-});
-
-// Reset lại chỉ số mảng sau khi lọc
-$danhSach = array_values($danhSach);
-$tongDong = count($danhSach);
 $danhMucList = $khoDanhMuc->tatCa();
 
 $tieuDeTrang  = 'Danh sách sản phẩm | MiniPos';
 $moTaTrang    = 'Danh sách sản phẩm MiniPos với tìm kiếm, lọc và sắp xếp tức thì.';
-$scriptsTrang = ['js/gio-hang.js', 'js/trang-danh-sach.js'];
+$scriptsTrang = ['js/gio-hang.js', 'js/tim-kiem.js'];
 
 require __DIR__ . '/inc/header.php';
 ?>
-
-<!-- Đảm bảo các sản phẩm bị ẩn triệt để, không bị CSS khác ghi đè -->
-<style>
-    .luoi-san-pham .the-san-pham[hidden],
-    .luoi-san-pham .the-san-pham.an,
-    .luoi-san-pham .the-san-pham.hidden {
-        display: none !important;
-    }
-</style>
 
 <main class="bao trang-danh-sach-san-pham">
     <h1>Danh sách sản phẩm</h1>
@@ -128,10 +85,11 @@ require __DIR__ . '/inc/header.php';
         </form>
 
         <p id="trang-thai-san-pham" aria-live="polite">
-            Có <?= e($tongDong) ?> sản phẩm.
+            Có <?= e($tongDong) ?> sản phẩm<?= $soTrang > 1 ? ' (trang ' . e($trang) . '/' . e($soTrang) . ')' : '' ?>.
         </p>
 
-        <div class="luoi-san-pham" id="luoi-san-pham">
+        <div class="luoi-san-pham" id="luoi-san-pham"
+            data-csrf="<?= e($_SESSION['csrf_gio_hang']) ?>">
             <?php if ($danhSach === []): ?>
                 <p>Không tìm thấy sản phẩm nào phù hợp với bộ lọc.</p>
             <?php else: ?>
@@ -179,59 +137,25 @@ require __DIR__ . '/inc/header.php';
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
+        <?php if ($soTrang > 1): ?>
+            <nav class="phan-trang" id="phan-trang" aria-label="Phân trang sản phẩm">
+                <ul>
+                    <?php if ($trang > 1): ?>
+                        <li><a href="<?= e($lienKetTrang($trang - 1)) ?>" rel="prev">Trước</a></li>
+                    <?php endif; ?>
+                    <?php for ($t = 1; $t <= $soTrang; $t++): ?>
+                        <li>
+                            <a href="<?= e($lienKetTrang($t)) ?>"
+                                <?= $t === $trang ? 'aria-current="page"' : '' ?>><?= e($t) ?></a>
+                        </li>
+                    <?php endfor; ?>
+                    <?php if ($trang < $soTrang): ?>
+                        <li><a href="<?= e($lienKetTrang($trang + 1)) ?>" rel="next">Sau</a></li>
+                    <?php endif; ?>
+                </ul>
+            </nav>
+        <?php endif; ?>
     </section>
 </main>
-
-<script>
-    // Lọc tức thì trên giao diện khi người dùng nhập từ khóa / chọn danh mục
-    document.addEventListener('DOMContentLoaded', function() {
-        const inputQ = document.getElementById('tim-kiem');
-        const selectDm = document.getElementById('loc-danh-muc');
-        const inputGia = document.getElementById('gia-toi-da');
-        const luoi = document.getElementById('luoi-san-pham');
-        const trangThai = document.getElementById('trang-thai-san-pham');
-
-        if (!luoi) return;
-
-        function locTucThi() {
-            const q = (inputQ ? inputQ.value : '').trim().toLowerCase();
-            const dm = selectDm ? selectDm.value : '';
-            const giaMax = inputGia && inputGia.value !== '' ? parseFloat(inputGia.value) : Infinity;
-
-            const cards = luoi.querySelectorAll('.the-san-pham');
-            let dem = 0;
-
-            cards.forEach(card => {
-                const ten = (card.dataset.ten || '').toLowerCase();
-                const ma = (card.dataset.ma || '').toLowerCase();
-                const cardDm = card.dataset.danhMuc || '';
-                const gia = parseFloat(card.dataset.gia) || 0;
-
-                const khopQ = !q || ten.includes(q) || ma.includes(q);
-                const khopDm = !dm || cardDm === dm;
-                const khopGia = gia <= giaMax;
-
-                if (khopQ && khopDm && khopGia) {
-                    card.classList.remove('an', 'hidden');
-                    card.removeAttribute('hidden');
-                    card.style.setProperty('display', 'flex', 'important');
-                    dem++;
-                } else {
-                    card.classList.add('an');
-                    card.setAttribute('hidden', 'true');
-                    card.style.setProperty('display', 'none', 'important');
-                }
-            });
-
-            if (trangThai) {
-                trangThai.textContent = 'Có ' + dem + ' sản phẩm.';
-            }
-        }
-
-        if (inputQ) inputQ.addEventListener('input', locTucThi);
-        if (selectDm) selectDm.addEventListener('change', locTucThi);
-        if (inputGia) inputGia.addEventListener('input', locTucThi);
-    });
-</script>
 
 <?php require __DIR__ . '/inc/footer.php'; ?>

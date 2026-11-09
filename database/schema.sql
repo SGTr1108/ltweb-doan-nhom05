@@ -195,7 +195,7 @@ CREATE TABLE tv_han_nop (
         FOREIGN KEY (mssv)
         REFERENCES thanh_vien(mssv)
         ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB;
 
 
 -- 7. Bảng riêng của thành viên 3120224092: Quản lý kỹ năng cá nhân
@@ -214,4 +214,4 @@ CREATE TABLE tv_ky_nang (
         FOREIGN KEY (mssv)
         REFERENCES thanh_vien(mssv)
         ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB;

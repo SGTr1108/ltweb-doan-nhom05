@@ -1,11 +1,12 @@
 # MiniPos - Quản lý bán hàng thông minh
 
-Website MiniPos là bài tập nhóm số 5, học phần Thiết kế và Lập trình web. Dự án được phát triển bằng PHP phía máy chủ từ website của Bài tập nhóm số 4.
+Website MiniPos là bài tập nhóm của học phần Thiết kế và Lập trình web. Dự án viết bằng PHP phía máy chủ (từ Bài tập nhóm số 4 và 5); ở Bài tập nhóm số 6, dữ liệu được chuyển sang MySQL/MariaDB và truy cập bằng PDO.
 
 ## 1. Yêu cầu môi trường
 
 * PHP 8.1 trở lên.
 * Composer.
+* MySQL 8 hoặc MariaDB 10.4 trở lên (cần extension `pdo_mysql` của PHP).
 * Trình duyệt web hiện đại.
 * Git.
 
@@ -18,6 +19,25 @@ Mở PowerShell tại thư mục gốc của dự án và chạy:
 ```bash
 composer install
 ```
+
+### Tạo cơ sở dữ liệu
+
+Chạy từ thư mục gốc của dự án (lệnh `schema.sql` xóa và tạo lại CSDL `ltweb_nhom05`, nên chạy lại nhiều lần được):
+
+```bash
+mysql -u root -p < database/schema.sql
+mysql -u root -p < database/seed.sql
+```
+
+Với XAMPP mặc định (tài khoản `root`, không mật khẩu) bỏ tùy chọn `-p`. Kết nối được cấu hình qua biến môi trường, nếu không đặt thì dùng giá trị mặc định:
+
+| Biến       | Mặc định       |
+| ---------- | -------------- |
+| `DB_HOST`  | `127.0.0.1`    |
+| `DB_PORT`  | `3306`         |
+| `DB_NAME`  | `ltweb_nhom05` |
+| `DB_USER`  | `root`         |
+| `DB_PASS`  | (rỗng)         |
 
 ### Chạy bằng PHP built-in server
 
@@ -37,54 +57,73 @@ Dừng máy chủ bằng `Ctrl + C` trong cửa sổ PowerShell đang chạy PHP
 
 http://localhost/ltweb-doan-nhom05/
 
-## 3. Tài khoản quản trị thử nghiệm
+## 3. Tài khoản thử nghiệm
 
-* **Tên đăng nhập:** `admin`
-* **Mật khẩu thử:** `MiniPos@2026`
-* **Trang đăng nhập:** `/dang-nhap.php`
-* **Trang quản trị:** `/quan-tri.php`
+Mọi tài khoản đều dùng mật khẩu `matkhau123` (băm bằng `password_hash`, lưu trong bảng `nguoi_dung` do `database/seed.sql` tạo):
 
-Tài khoản này chỉ dùng để kiểm thử website của nhóm, không dùng cho hệ thống thật. Mật khẩu được lưu dưới dạng hash trong `inc/tai-khoan.php`.
+| Email              | Vai trò     |
+| ------------------ | ----------- |
+| `admin@minipos.vn` | `quan_tri`  |
+| `nv01@minipos.vn`  | `nhan_vien` |
+| `nv02@minipos.vn`  | `nhan_vien` |
+
+Trang đăng nhập: `/dang-nhap.php`. Trang quản trị: `/quan-tri.php`. Các tài khoản này chỉ dùng để kiểm thử, không dùng cho hệ thống thật.
 
 ## 4. Bảng chức năng – URL – tệp PHP
 
-| Chức năng                                           | URL                      | Tệp PHP chính    |
-| --------------------------------------------------- | ------------------------ | ---------------- |
-| Trang chủ, sản phẩm đã xem gần đây                  | `/index.php`             | `index.php`      |
-| Danh sách, tìm kiếm, lọc và sắp xếp sản phẩm        | `/danh-sach.php`         | `danh-sach.php`  |
-| Chi tiết sản phẩm theo mã                           | `/chi-tiet.php?id=SP001` | `chi-tiet.php`   |
-| Giỏ hàng: thêm, đổi số lượng, xóa và tính tổng tiền | `/gio-hang.php`          | `gio-hang.php`   |
-| Gửi phiếu báo cáo và tải ảnh minh chứng             | `/lien-he.php`           | `lien-he.php`    |
-| Đăng nhập                                           | `/dang-nhap.php`         | `dang-nhap.php`  |
-| Đăng xuất                                           | `/dang-xuat.php`         | `dang-xuat.php`  |
-| Quản trị và xem phiếu báo cáo                       | `/quan-tri.php`          | `quan-tri.php`   |
-| Giới thiệu nhóm                                     | `/gioi-thieu.php`        | `gioi-thieu.php` |
-| Trang lỗi không tìm thấy                            | `/404.php`               | `404.php`        |
-| Trang lỗi máy chủ                                   | `/500.php`               | `500.php`        |
+| Chức năng                                                           | URL                      | Tệp PHP chính         | Quyền            |
+| ------------------------------------------------------------------- | ------------------------ | --------------------- | ---------------- |
+| Trang chủ, sản phẩm đã xem gần đây                                  | `/index.php`             | `index.php`           | Công khai        |
+| Danh sách sản phẩm: tìm kiếm, lọc, sắp xếp, phân trang (12 SP/trang) | `/danh-sach.php`         | `danh-sach.php`       | Công khai        |
+| Chi tiết sản phẩm theo mã                                           | `/chi-tiet.php?id=1`     | `chi-tiet.php`        | Công khai        |
+| Giỏ hàng: thêm, đổi số lượng, xóa, tính tổng tiền                   | `/gio-hang.php`          | `gio-hang.php`        | Công khai        |
+| Đặt hàng (một giao dịch, trừ tồn kho)                               | `/dat-hang.php`          | `dat-hang.php`        | Đã đăng nhập     |
+| Danh sách đơn hàng và chi tiết đơn                                  | `/don-hang.php`, `/chi-tiet-don.php` | `don-hang.php`, `chi-tiet-don.php` | Đã đăng nhập (quản trị xem mọi đơn) |
+| Gửi phiếu báo cáo và tải ảnh minh chứng                             | `/lien-he.php`           | `lien-he.php`         | Công khai        |
+| Đăng ký, đăng nhập, đăng xuất                                       | `/dang-ky.php`, `/dang-nhap.php`, `/dang-xuat.php` | `dang-ky.php`, `dang-nhap.php`, `dang-xuat.php` | Công khai |
+| Quản trị: đơn hàng, đổi trạng thái đơn, phiếu liên hệ               | `/quan-tri.php`          | `quan-tri.php`        | `quan_tri`       |
+| Thêm, sửa, xóa sản phẩm                                             | `/them-san-pham.php`, `/sua-san-pham.php`, `/xoa-san-pham.php` | tương ứng | `quan_tri` |
+| Giới thiệu nhóm, trang cá nhân thành viên                           | `/gioi-thieu.php`, `/thanhvien/<mssv>/gioithieu.php` | `gioi-thieu.php` | Công khai |
+| Trang lỗi 403, 404, 500                                             | `/403.php`, `/404.php`, `/500.php` | cùng tên    | —                |
+
+### API JSON
+
+Các ví dụ yêu cầu nằm trong `api.http`.
+
+| Phương thức, URL                                   | Chức năng                           | Mã trả về           |
+| -------------------------------------------------- | ----------------------------------- | ------------------- |
+| `GET /api/san-pham.php?q=&dm=&giaToiDa=&sx=`       | Tìm sản phẩm (tối đa 20 mục)        | 200                 |
+| `GET /api/san-pham.php?id=1`                       | Chi tiết một sản phẩm               | 200, 400, 404       |
+| `GET /api/gio-hang.php`                            | Xem giỏ hàng trong session          | 200                 |
+| `POST /api/gio-hang.php` (JSON `id`, `so_luong`)   | Thêm sản phẩm vào giỏ               | 200, 400, 404, 422  |
+| Phương thức khác                                   | Không hỗ trợ                        | 405                 |
 
 ## 5. Cấu trúc mã nguồn
 
-* `inc/`: cấu hình, hàm dùng chung, header, footer, bảo vệ trang và tài khoản thử nghiệm.
+* `inc/`: cấu hình (`config.php`), kết nối PDO (`db.php`), hàm dùng chung, xác thực và phân quyền (`xac-thuc.php`), header, footer.
+* `database/`: `schema.sql` (tạo lại CSDL từ đầu) và `seed.sql` (dữ liệu mẫu, tài khoản thử).
 * `src/Models/`: lớp thực thể sản phẩm.
-* `src/Data/`: lớp truy cập dữ liệu sản phẩm và phiếu liên hệ.
+* `src/Data/`: các lớp truy cập dữ liệu nhận PDO (`KhoSanPham`, `KhoDanhMuc`, `KhoDonHang`, `KhoNguoiDung`, `KhoLienHe`); mọi câu SQL nằm ở đây.
 * `src/Services/`: lớp quản lý giỏ hàng bằng session.
-* `data/san-pham.json`: dữ liệu sản phẩm.
-* `storage/lien-he.jsonl`: phiếu liên hệ, mỗi phiếu là một dòng JSON.
+* `api/`: các điểm cuối trả JSON.
 * `uploads/`: ảnh minh chứng được tải lên.
 * `logs/php-error.log`: nhật ký lỗi PHP.
 * `css/`, `js/`, `images/`: tài nguyên giao diện.
 * `kiemtra/`: ảnh và kết quả kiểm thử.
-* `thanhvien/`: trang cá nhân của thành viên.
+* `thanhvien/`: trang cá nhân của thành viên (Phần B) và các bảng riêng `tv_...` trong `schema.sql`.
 
 ## 6. Xử lý dữ liệu và bảo mật
 
+* Mọi truy vấn dùng PDO với prepared statement; chuỗi `ORDER BY` chỉ chọn từ danh sách cho phép.
+* Đặt hàng chạy trong một giao dịch: trừ tồn kho bằng `UPDATE ... WHERE ton_kho >= ?`, thiếu hàng thì rollback; đơn giá được lưu tại thời điểm đặt.
+* Phân trang bằng `COUNT(*)` và `LIMIT ? OFFSET ?`.
+* Mật khẩu lưu bằng `password_hash()`, kiểm tra bằng `password_verify()`; đăng nhập báo một lỗi chung và đổi mã phiên.
+* Phân quyền bằng `yeuCauDangNhap()` và `yeuCauQuyen('quan_tri')`; tài khoản tự đăng ký có vai trò mặc định `nhan_vien`, không nhận vai trò từ form.
 * Kiểm tra dữ liệu ở phía máy chủ trước khi xử lý.
-* Sử dụng hàm `e()` để escape dữ liệu động trước khi hiển thị HTML.
-* Sử dụng CSRF token cho các thao tác POST có liên quan.
+* Dùng hàm `e()` để escape dữ liệu động trước khi hiển thị HTML.
+* Dùng CSRF token cho các thao tác POST.
 * Chuyển hướng sau khi xử lý thành công theo mô hình Post/Redirect/Get.
 * Kiểm tra kiểu ảnh thật bằng `finfo` và dùng tên tệp ngẫu nhiên.
-* Dùng `password_verify()` để xác thực mật khẩu.
-* Sử dụng session cho trạng thái đăng nhập và giỏ hàng.
 * Ghi lỗi PHP vào `logs/php-error.log`.
 * Không đưa `vendor/` và dữ liệu phát sinh khi chạy vào Git.
 
@@ -92,5 +131,6 @@ Tài khoản này chỉ dùng để kiểm thử website của nhóm, không dù
 
 * Môi trường nộp bài sử dụng `MOI_TRUONG = 'dev'` theo yêu cầu của đề.
 * Giỏ hàng hiện hỗ trợ quản lý sản phẩm và tính tổng tiền; thanh toán trực tuyến chưa được triển khai.
+* Tìm kiếm tức thì trên trang danh sách gọi API và hiển thị tối đa 20 kết quả; bấm "Áp dụng" để xem đầy đủ và phân trang.
+* Trước khi nộp: clone lại repo vào thư mục mới, chạy `composer install`, tạo CSDL từ `schema.sql` và `seed.sql`, rồi mở thử các trang.
 * Các kết quả kiểm thử PHP, HTML, Lighthouse và ảnh chụp phải được cập nhật theo kết quả thực tế trước khi nộp.
-* Nhóm cần hoàn thiện báo cáo, bảng phân công, lịch sử commit và kiểm tra các trang cá nhân trong `thanhvien/` theo yêu cầu của giảng viên.

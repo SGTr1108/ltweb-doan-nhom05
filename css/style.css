@@ -3441,3 +3441,29 @@ footer.footer-minipos-v2 .footer-thong-tin-nhom span {
     white-space: nowrap;
     font-size: .8rem;
 }
+
+/* Phân trang danh sách sản phẩm */
+.phan-trang ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 24px 0;
+    padding: 0;
+    list-style: none;
+}
+
+.phan-trang a {
+    display: inline-block;
+    min-width: 40px;
+    padding: 8px 12px;
+    border: 1px solid currentColor;
+    border-radius: 6px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.phan-trang a[aria-current="page"] {
+    font-weight: 700;
+    text-decoration: underline;
+}

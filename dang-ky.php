@@ -38,7 +38,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
         $khoNguoiDung = new \App\Data\KhoNguoiDung(db());
 
         try {
-            // Không nhận vai_tro từ form; luôn là khach_hang
+            // Không nhận vai_tro từ form; cột lấy giá trị mặc định 'nhan_vien'
             $uid = $khoNguoiDung->tao($old['email'], $old['ho_ten'], $matKhauBam);
             $_SESSION['flash_thanh_cong'] = 'Đăng ký tài khoản thành công! Vui lòng đăng nhập.';
             header('Location: dang-nhap.php', true, 303);

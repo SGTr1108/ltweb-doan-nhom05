@@ -8,7 +8,7 @@ use PDO;
 
 /**
  * Lớp truy cập dữ liệu của nguoi_dung. Mật khẩu chỉ là chuỗi băm
- * password_hash(); vai_tro không bao giờ lấy từ form (tao() luôn là khach_hang).
+ * password_hash(); vai_tro không bao giờ lấy từ form (tao() luôn để mặc định 'nhan_vien').
  */
 final class KhoNguoiDung
 {
@@ -48,14 +48,13 @@ final class KhoNguoiDung
     }
 
     /**
-     * Đăng ký tài khoản khách hàng; trả id mới. Email trùng → PDOException
+     * Đăng ký tài khoản (vai_tro lấy mặc định của cột); trả id mới. Email trùng → PDOException
      * mã 1062 (trang bắt bằng maLoiSql() và báo "email đã được đăng ký").
      */
     public function tao(string $email, string $hoTen, string $matKhauBam): int
     {
         $st = $this->db->prepare(
-            "INSERT INTO nguoi_dung (email, ho_ten, mat_khau, vai_tro)
-             VALUES (?, ?, ?, 'khach_hang')"
+            'INSERT INTO nguoi_dung (email, ho_ten, mat_khau) VALUES (?, ?, ?)'
         );
         $st->execute([$email, $hoTen, $matKhauBam]);
 

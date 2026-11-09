@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
 
     const formsThemGio = document.querySelectorAll('.form-them-gio-hang');
-    const badgeSoMonHeader = document.getElementById('so-luong-gio-hang-header');
+    const badgeSoMonHeader = document.querySelector('[data-so-luong-gio-hang]');
 
     formsThemGio.forEach(form => {
 
