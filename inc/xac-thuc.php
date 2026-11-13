@@ -21,6 +21,31 @@ function nguoiDung(): ?array
     return $user;
 }
 
+/** Ghi nhận đăng nhập thành công: đổi mã phiên (chống cố định phiên) rồi lưu uid. */
+function dangNhap(int $id): void
+{
+    session_regenerate_id(true);
+    $_SESSION['uid'] = $id;
+}
+
+/** Đăng xuất: xóa dữ liệu phiên, cookie phiên và hủy phiên. */
+function dangXuat(): void
+{
+    $_SESSION = [];
+
+    $p = session_get_cookie_params();
+    setcookie(session_name(), '', [
+        'expires'  => time() - 3600,
+        'path'     => $p['path'],
+        'domain'   => $p['domain'],
+        'secure'   => $p['secure'],
+        'httponly' => $p['httponly'],
+        'samesite' => $p['samesite'],
+    ]);
+
+    session_destroy();
+}
+
 /** Bắt buộc phải đăng nhập. */
 function yeuCauDangNhap(): array
 {

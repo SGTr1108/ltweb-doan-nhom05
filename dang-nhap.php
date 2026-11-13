@@ -23,8 +23,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
     if ($user === null || !password_verify($matKhau, $user['mat_khau'])) {
         $loiChung = 'Email hoặc mật khẩu không chính xác.';
     } else {
-        session_regenerate_id(true);
-        $_SESSION['uid'] = (int) $user['id'];
+        dangNhap((int) $user['id']); // đổi mã phiên rồi lưu uid
 
         if (password_needs_rehash($user['mat_khau'], PASSWORD_DEFAULT)) {
             $khoNguoiDung->capNhatMatKhau((int) $user['id'], password_hash($matKhau, PASSWORD_DEFAULT));

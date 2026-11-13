@@ -7,9 +7,8 @@ require_once __DIR__ . '/inc/config.php';
 // Chỉ nhận POST (mã CSRF đã được kiểm tra tập trung trong inc/config.php).
 yeuCauPost();
 
-// Xóa thông tin đăng nhập và hủy phiên làm việc
-unset($_SESSION['uid'], $_SESSION['nguoi_dung'], $_SESSION['csrf']);
-session_destroy();
+// Xóa dữ liệu phiên, cookie phiên và hủy phiên làm việc
+dangXuat();
 
 header('Location: index.php', true, 303);
 exit;

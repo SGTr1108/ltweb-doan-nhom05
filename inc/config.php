@@ -41,10 +41,30 @@ ini_set('display_errors', '0');
 ini_set('log_errors', '1');
 ini_set('error_log', dirname(__DIR__) . '/logs/php-error.log');
 
+// Cookie phiên an toàn — đặt TRƯỚC session_start().
+$dangHttps = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+
+ini_set('session.use_strict_mode', '1');   // bỏ qua mã phiên lạ (chống cố định phiên)
+ini_set('session.use_only_cookies', '1');  // không nhận mã phiên trên URL
+session_set_cookie_params([
+    'lifetime' => 0,
+    'path'     => '/',
+    'secure'   => $dangHttps,   // chỉ gửi qua HTTPS khi đang chạy HTTPS
+    'httponly' => true,         // JavaScript không đọc được PHPSESSID
+    'samesite' => 'Lax',        // hạn chế gửi cookie từ site khác
+]);
+
 // Khởi tạo session nếu chưa có.
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+// 30 phút không hoạt động: bỏ phiên cũ, cấp mã mới → phải đăng nhập lại.
+if (time() - ($_SESSION['hoat_dong'] ?? time()) > 30 * 60) {
+    $_SESSION = [];
+    session_regenerate_id(true);
+}
+$_SESSION['hoat_dong'] = time();
 
 // Mọi request POST (form hoặc fetch) phải mang mã CSRF đúng.
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && !csrfHopLe()) {

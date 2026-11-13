@@ -56,7 +56,9 @@ document.addEventListener("DOMContentLoaded", () => {
   function ghiCookie(name, value, days = 30) {
     const d = new Date();
     d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
-    document.cookie = `${name}=${value};path=/;expires=${d.toUTCString()}`;
+    // JavaScript cần đọc cookie giao diện nên không đặt được HttpOnly; vẫn đặt SameSite (và Secure khi chạy HTTPS).
+    const secure = location.protocol === "https:" ? ";Secure" : "";
+    document.cookie = `${name}=${value};path=/;expires=${d.toUTCString()};SameSite=Lax${secure}`;
   }
 
   function apDungGiaoDien(toi) {
