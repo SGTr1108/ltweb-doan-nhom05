@@ -3,11 +3,11 @@
  * Tệp: gioithieu.php (Sinh viên: Trần Xuân Sang - 3120224122)
  * Chức năng: 
  *   1. Hiển thị thông tin cá nhân và danh sách dự án đọc từ CSDL MySQL (bảng tv_du_an) kèm tìm kiếm.
- *   2. Sổ lưu bút CSDL MySQL (bảng tv_luu_but) có phân trang, bảo vệ CSRF, chống XSS và chỉ chủ trang/quản trị viên đăng nhập mới được xóa lời nhắn.
+ *   2. Sổ lưu bút CSDL MySQL (bảng tv_luu_but) có phân trang, bảo vệ CSRF, chống XSS và chỉ chủ trang đã liên kết MSSV mới được xóa lời nhắn.
  * Cách thử: 
  *   - Truy cập trang, thử tìm kiếm dự án theo từ khóa.
  *   - Nhập tên và lời nhắn vào Sổ lưu bút rồi bấm Gửi. Kiểm tra danh sách và phân trang.
- *   - Đăng nhập tài khoản Quản trị (admin@minipos.vn / matkhau123) rồi quay lại trang để sử dụng chức năng Xóa lời nhắn.
+ *   - Đăng nhập bằng tài khoản đã được liên kết với MSSV 3120224122 để sử dụng chức năng Xóa lời nhắn.
  */
 
 $goc = '../../';
@@ -21,35 +21,54 @@ $mssvSang = '3120224122';
 $pdo = db();
 $u = nguoiDung();
 
-// Kiểm tra quyền chủ trang / quản trị viên
-$laChuTrang = ($u !== null && (($u['vai_tro'] ?? '') === 'quan_tri' || (int) ($u['id'] ?? 0) === 1));
+// Chỉ tài khoản được gắn với MSSV của Sang trong bảng thanh_vien mới là chủ trang.
+$laChuTrang = false;
+if ($u !== null) {
+    $stChuTrang = $pdo->prepare(
+        'SELECT 1 FROM thanh_vien WHERE mssv = ? AND nguoi_dung_id = ? LIMIT 1'
+    );
+    $stChuTrang->execute([$mssvSang, (int) $u['id']]);
+    $laChuTrang = (bool) $stChuTrang->fetchColumn();
+}
 
 // --- XỬ LÝ POST: THÊM / XÓA LỜI NHẮN SỔ LƯU BÚT ---
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
-    $hanhDong = $_POST['hanh_dong'] ?? '';
+    $hanhDong = chuoi($_POST['hanh_dong'] ?? '');
 
     if ($hanhDong === 'them_luu_but') {
-        $ten = trim((string) ($_POST['ten'] ?? ''));
-        $loiNhan = trim((string) ($_POST['loi_nhan'] ?? ''));
+        $ten = trim(chuoi($_POST['ten'] ?? ''));
+        $loiNhan = trim(chuoi($_POST['loi_nhan'] ?? ''));
 
-        if ($ten !== '' && $loiNhan !== '') {
-            $st = $pdo->prepare('INSERT INTO tv_luu_but (mssv, ten_nguoi_gui, loi_nhan) VALUES (?, ?, ?)');
+        if (
+            $ten !== ''
+            && $loiNhan !== ''
+            && mb_strlen($ten) <= 100
+            && mb_strlen($loiNhan) <= 5000
+        ) {
+            $st = $pdo->prepare(
+                'INSERT INTO tv_luu_but (mssv, ten_nguoi_gui, loi_nhan) VALUES (?, ?, ?)'
+            );
             $st->execute([$mssvSang, $ten, $loiNhan]);
             $_SESSION['flash_luu_but'] = 'Cảm ơn bạn đã để lại lời nhắn!';
         } else {
-            $_SESSION['flash_luu_but_loi'] = 'Vui lòng nhập đầy đủ tên và lời nhắn.';
+            $_SESSION['flash_luu_but_loi'] = 'Vui lòng nhập tên (tối đa 100 ký tự) và lời nhắn (tối đa 5000 ký tự).';
         }
     } elseif ($hanhDong === 'xoa_luu_but') {
         if (!$laChuTrang) {
+            ghiLogBaoMat('cam_truy_cap', ['trang' => $_SERVER['REQUEST_URI'] ?? '']);
             http_response_code(403);
-            die('Bạn không có quyền xóa lời nhắn này.');
+            exit('Bạn không có quyền xóa lời nhắn trên trang này.');
         }
 
         $idXoa = filter_var($_POST['id_luu_but'] ?? null, FILTER_VALIDATE_INT);
-        if ($idXoa !== false && $idXoa > 0) {
-            $st = $pdo->prepare('DELETE FROM tv_luu_but WHERE id = ? AND mssv = ?');
+        if ($idXoa !== false && $idXoa !== null && $idXoa > 0) {
+            $st = $pdo->prepare(
+                'DELETE FROM tv_luu_but WHERE id = ? AND mssv = ?'
+            );
             $st->execute([$idXoa, $mssvSang]);
-            $_SESSION['flash_luu_but'] = 'Đã xóa lời nhắn thành công.';
+            $_SESSION['flash_luu_but'] = $st->rowCount() === 1
+                ? 'Đã xóa lời nhắn thành công.'
+                : 'Không tìm thấy lời nhắn thuộc trang này.';
         }
     }
 
@@ -58,7 +77,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
 }
 
 // --- CHỨC NĂNG 1: DANH SÁCH DỰ ÁN TỪ CSDL (tv_du_an) ---
-$tuKhoaDuAn = trim((string) ($_GET['q_duan'] ?? ''));
+$tuKhoaDuAn = trim(chuoi($_GET['q_duan'] ?? ''));
 $sqlDuAn = 'SELECT ten_du_an, cong_nghe, mo_ta FROM tv_du_an WHERE mssv = ?';
 $paramDuAn = [$mssvSang];
 
@@ -75,7 +94,10 @@ $stDuAn->execute($paramDuAn);
 $dsDuAn = $stDuAn->fetchAll();
 
 // --- CHỨC NĂNG 2: SỔ LƯU BÚT TỪ CSDL (tv_luu_but) KÈM PHÂN TRANG ---
-$trangLuuBut = max(1, filter_var($_GET['trang_lb'] ?? 1, FILTER_VALIDATE_INT) ?: 1);
+$giaTriTrang = filter_var($_GET['trang_lb'] ?? '1', FILTER_VALIDATE_INT);
+$trangLuuBut = ($giaTriTrang !== false && $giaTriTrang !== null && $giaTriTrang > 0)
+    ? $giaTriTrang
+    : 1;
 $soDongLB = 5;
 $boQuaLB = ($trangLuuBut - 1) * $soDongLB;
 
@@ -83,12 +105,14 @@ $stDemLB = $pdo->prepare('SELECT COUNT(*) FROM tv_luu_but WHERE mssv = ?');
 $stDemLB->execute([$mssvSang]);
 $tongLuuBut = (int) $stDemLB->fetchColumn();
 $tongTrangLB = max(1, (int) ceil($tongLuuBut / $soDongLB));
+$trangLuuBut = min($trangLuuBut, $tongTrangLB);
+$boQuaLB = ($trangLuuBut - 1) * $soDongLB;
 
 $stLB = $pdo->prepare(
-    'SELECT id, ten_nguoi_gui, loi_nhan, thoi_gian_tao 
-       FROM tv_luu_but 
-      WHERE mssv = ? 
-   ORDER BY thoi_gian_tao DESC, id DESC 
+    'SELECT id, ten_nguoi_gui, loi_nhan, thoi_gian_tao
+       FROM tv_luu_but
+      WHERE mssv = ?
+   ORDER BY thoi_gian_tao DESC, id DESC
       LIMIT ? OFFSET ?'
 );
 $stLB->bindValue(1, $mssvSang, PDO::PARAM_STR);
@@ -193,7 +217,7 @@ require_once $goc . 'inc/header.php';
 
             <!-- Danh sách -->
             <div class="sang-tach-13">
-                <h3 class="sang-tach-14">Lời nhắn mới nhất (Tổng: <?= $tongLuuBut ?>)</h3>
+                <h3 class="sang-tach-14">Lời nhắn mới nhất (Tổng: <?= e($tongLuuBut) ?>)</h3>
                 <?php if ($dsLuuBut === []): ?>
                     <p class="sang-tach-15">Chưa có lời nhắn nào.</p>
                 <?php else: ?>
@@ -201,7 +225,7 @@ require_once $goc . 'inc/header.php';
                         <div class="sang-tach-16">
                             <strong class="sang-tach-17"><?= e($lb['ten_nguoi_gui']) ?></strong>
                             <small class="sang-tach-18"><?= e($lb['thoi_gian_tao']) ?></small>
-                            <p class="sang-tach-19"><?= e($lb['loi_nhan']) ?></p>
+                            <p class="sang-tach-19"><?= nl2br(e($lb['loi_nhan'])) ?></p>
 
                             <?php if ($laChuTrang): ?>
                                 <form method="POST" action="gioithieu.php#so-luu-but" class="sang-tach-20" data-xac-nhan="Bạn có chắc muốn xóa lời nhắn này?">
@@ -218,7 +242,7 @@ require_once $goc . 'inc/header.php';
                         <div class="sang-tach-22">
                             Trang:
                             <?php for ($i = 1; $i <= $tongTrangLB; $i++): ?>
-                                <a href="gioithieu.php?trang_lb=<?= $i ?>#so-luu-but"<?= $i === $trangLuuBut ? ' class="trang-hien-tai"' : '' ?>>[<?= $i ?>]</a>
+                                <a href="gioithieu.php?trang_lb=<?= e($i) ?>#so-luu-but"<?= $i === $trangLuuBut ? ' class="trang-hien-tai"' : '' ?>>[<?= e($i) ?>]</a>
                             <?php endfor; ?>
                         </div>
                     <?php endif; ?>

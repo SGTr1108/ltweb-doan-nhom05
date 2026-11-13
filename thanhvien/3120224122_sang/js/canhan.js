@@ -48,7 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Kiểm tra dữ liệu đầu vào hợp lệ không
             if (!heightCm || !weightKg || heightCm <= 0 || weightKg <= 0) {
                 kqBMI.textContent = 'Vui lòng nhập chiều cao và cân nặng hợp lệ bằng số!';
-                kqBMI.style.color = '#d9534f'; // Màu đỏ báo lỗi
+                kqBMI.classList.remove('bmi-result-success');
+                kqBMI.classList.add('bmi-result-error');
                 return;
             }
 
@@ -70,7 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Gắn kết quả ra HTML (Dùng textContent để chống XSS theo đúng yêu cầu đề bài)
             kqBMI.textContent = `Chỉ số BMI của bạn là ${bmi} (${danhGia}).`;
-            kqBMI.style.color = '#2b5c92'; // Màu xanh biển thành công
+            kqBMI.classList.remove('bmi-result-error');
+            kqBMI.classList.add('bmi-result-success');
         });
     }
 });
