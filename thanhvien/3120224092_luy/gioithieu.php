@@ -30,6 +30,16 @@ $laChuTrangLuy = (
     && (int) $idChuTrang === (int) $nguoiDungLuy['id']
 );
 
+// Cho phép chủ trang hoặc quản trị viên thay đổi ảnh đại diện.
+$laQuanTriLuy = (
+    $nguoiDungLuy !== null
+    && ($nguoiDungLuy['vai_tro'] ?? '') === 'quan_tri'
+);
+
+$duocDoiAvatarLuy = $laChuTrangLuy || $laQuanTriLuy;
+// Cho phép chủ trang hoặc quản trị viên quản lý hạn nộp bài.
+$duocQuanLyHanNopLuy = $laChuTrangLuy || $laQuanTriLuy;
+
 /* Xử lý tải ảnh đại diện cá nhân */
 $_SESSION['csrf_avatar_luy'] ??= bin2hex(random_bytes(32));
 $thongBaoAvatarLuy = $_SESSION['thong_bao_avatar_luy'] ?? '';
@@ -40,7 +50,7 @@ if (
     && isset($_POST['hanh_dong_avatar'])
     && $_POST['hanh_dong_avatar'] === 'tai_len'
 ) {
-    if (!$laChuTrangLuy) {
+    if (!$duocDoiAvatarLuy) {
         http_response_code(403);
         exit('Bạn không có quyền thay đổi ảnh đại diện của trang này.');
     }
@@ -133,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (!hash_equals($_SESSION['csrf_han_nop_luy'], $tokenHanNop)) {
             $thongBaoHanNopLuy = 'Phiên gửi biểu mẫu không hợp lệ. Vui lòng thử lại.';
-        } elseif (!$laChuTrangLuy) {
+        } elseif (!$duocQuanLyHanNopLuy) {
             http_response_code(403);
             exit('Bạn không có quyền chỉnh sửa hạn nộp bài.');
         } elseif ($hanhDong === 'them') {
@@ -293,6 +303,7 @@ require_once __DIR__ . '/../../inc/header.php';
             height="150"
         >
 
+        <?php if ($duocDoiAvatarLuy): ?>
         <form action="gioithieu.php#anh-dai-dien" method="post" enctype="multipart/form-data">
             <input type="hidden" name="hanh_dong_avatar" value="tai_len">
             <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_avatar_luy']) ?>">
@@ -308,6 +319,7 @@ require_once __DIR__ . '/../../inc/header.php';
 
             <button type="submit">Cập nhật ảnh đại diện</button>
         </form>
+        <?php endif; ?>
 
         <?php if ($thongBaoAvatarLuy !== ''): ?>
             <p role="status"><?= e($thongBaoAvatarLuy) ?></p>
