@@ -131,12 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ? $_POST['hanh_dong_han_nop'] : '';
 
     if (in_array($hanhDong, ['them', 'hoan_thanh', 'xoa'], true)) {
-        $tokenHanNop = is_string($_POST['csrf_han_nop'] ?? null)
-            ? $_POST['csrf_han_nop'] : '';
-
-        if (!hash_equals($_SESSION['csrf_han_nop_luy'], $tokenHanNop)) {
-            $thongBaoHanNopLuy = 'Phiên gửi biểu mẫu không hợp lệ. Vui lòng thử lại.';
-        } elseif (!$laChuTrangLuy) {
+        if (!$duocQuanLyHanNopLuy) {
             http_response_code(403);
             exit('Bạn không có quyền chỉnh sửa hạn nộp bài.');
         } elseif ($hanhDong === 'them') {
@@ -288,20 +283,20 @@ require_once __DIR__ . '/../../inc/header.php';
             height="150">
 
         <?php if ($duocDoiAvatarLuy): ?>
-        <form action="gioithieu.php#anh-dai-dien" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="hanh_dong_avatar" value="tai_len">
-            <?= csrfField() ?>
+            <form action="gioithieu.php#anh-dai-dien" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="hanh_dong_avatar" value="tai_len">
+                <?= csrfField() ?>
 
-            <label for="avatar_moi">Chọn ảnh đại diện (JPG, PNG hoặc WebP, tối đa 2 MB):</label>
-            <input
-                type="file"
-                id="avatar_moi"
-                name="avatar_moi"
-                accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
-                required>
+                <label for="avatar_moi">Chọn ảnh đại diện (JPG, PNG hoặc WebP, tối đa 2 MB):</label>
+                <input
+                    type="file"
+                    id="avatar_moi"
+                    name="avatar_moi"
+                    accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                    required>
 
-            <button type="submit">Cập nhật ảnh đại diện</button>
-        </form>
+                <button type="submit">Cập nhật ảnh đại diện</button>
+            </form>
         <?php endif; ?>
 
         <?php if ($thongBaoAvatarLuy !== ''): ?>
