@@ -33,7 +33,8 @@ if (!is_dir($storage_dir)) {
 
 error_reporting(E_ALL);
 
-ini_set('display_errors', MOI_TRUONG === 'dev' ? '1' : '0');
+// Không hiển thị lỗi kỹ thuật trực tiếp ra trình duyệt.
+ini_set('display_errors', '0');
 ini_set('log_errors', '1');
 ini_set('error_log', dirname(__DIR__) . '/logs/php-error.log');
 
@@ -42,8 +43,10 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Xử lý các ngoại lệ chưa được bắt và ghi chi tiết vào log.
+
+// Xử lý các ngoại lệ chưa được bắt.
 set_exception_handler(static function (Throwable $loi): void {
+    // Ghi chi tiết lỗi vào log để lập trình viên kiểm tra.
     error_log(sprintf(
         "[%s] %s in %s:%d\n%s",
         date('c'),
@@ -53,21 +56,11 @@ set_exception_handler(static function (Throwable $loi): void {
         $loi->getTraceAsString()
     ));
 
+    // Trả về mã lỗi 500 và hiển thị trang lỗi thân thiện.
     if (!headers_sent()) {
         http_response_code(500);
         header('Content-Type: text/html; charset=UTF-8');
     }
 
-    if (MOI_TRUONG === 'dev') {
-        echo '<h1>Lỗi máy chủ</h1><pre>'
-            . htmlspecialchars(
-                (string) $loi,
-                ENT_QUOTES | ENT_SUBSTITUTE,
-                'UTF-8'
-            )
-            . '</pre>';
-    } else {
-        // Hiển thị trang lỗi thân thiện khi chạy ở môi trường prod.
-        require dirname(__DIR__) . '/500.php';
-    }
+    require dirname(__DIR__) . '/500.php';
 });

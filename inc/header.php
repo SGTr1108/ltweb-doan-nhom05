@@ -23,19 +23,31 @@ $trangHienTai = basename(
     '.php'
 );
 
-// Đếm tổng số lượng sản phẩm trong giỏ từ session
+
+// Đếm tổng số lượng sản phẩm trong giỏ từ session.
+// Trang lỗi 500 không truy cập CSDL.
 $soLuongGioHang = 0;
 
-try {
-    $khoSanPhamHeader = new \App\Data\KhoSanPham(db());
-    $gioHangHeader = new \App\Services\GioHang($khoSanPhamHeader);
-    $soLuongGioHang = $gioHangHeader->demSoLuong();
-} catch (\Throwable $loi) {
-    error_log('Không thể lấy số lượng giỏ hàng trên header: ' . $loi->getMessage());
+if (empty($khongGoiCsdl)) {
+    try {
+        $khoSanPhamHeader = new \App\Data\KhoSanPham(db());
+        $gioHangHeader = new \App\Services\GioHang($khoSanPhamHeader);
+        $soLuongGioHang = $gioHangHeader->demSoLuong();
+    } catch (\Throwable $loi) {
+        error_log('Không thể lấy số lượng giỏ hàng trên header: ' . $loi->getMessage());
+    }
 }
 
 // Trạng thái đăng nhập
-$uHeader = empty($khongGoiCsdl) ? nguoiDung() : null; // 500.php đặt $khongGoiCsdl để khỏi truy vấn CSDL
+$uHeader = null;
+
+if (empty($khongGoiCsdl)) {
+    try {
+        $uHeader = nguoiDung();
+    } catch (\Throwable $loi) {
+        error_log('Không thể lấy thông tin người dùng trên header: ' . $loi->getMessage());
+    }
+}
 $dangNhapHeader = ($uHeader !== null);
 
 if ($dangNhapHeader && empty($_SESSION['csrf_dang_xuat'])) {
