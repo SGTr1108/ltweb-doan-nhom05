@@ -7,6 +7,23 @@ date_default_timezone_set('Asia/Ho_Chi_Minh');
 // Nạp tự động các lớp App\... bằng Composer.
 require_once __DIR__ . '/../vendor/autoload.php';
 
+// Cấu hình và bí mật nằm trong .env (không commit). Thiếu biến bắt buộc thì dừng ngay.
+// safeLoad(): không có tệp .env vẫn dùng được biến môi trường thật (hosting), nhưng
+// required() vẫn bắt buộc đủ biến. Chi tiết lỗi chỉ ghi log, không in ra trình duyệt.
+$env = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+try {
+    $env->safeLoad();
+    $env->required(['DB_HOST', 'DB_DATABASE', 'DB_USERNAME', 'DB_PASSWORD']);
+} catch (Dotenv\Exception\ExceptionInterface $loi) {
+    error_log('[cau-hinh] ' . $loi->getMessage());
+    http_response_code(500);
+    header('Content-Type: text/plain; charset=UTF-8');
+    exit('Lỗi cấu hình máy chủ: thiếu biến trong .env (xem .env.example).');
+}
+
+// Gỡ lỗi chỉ bật khi APP_DEBUG=true; thiếu hoặc giá trị khác thì tắt.
+define('DEBUG', ($_ENV['APP_DEBUG'] ?? '') === 'true');
+
 // Nạp các hàm dùng chung như e() và vnd().
 require_once __DIR__ . '/ham.php';
 
@@ -36,8 +53,8 @@ if (!is_dir($storage_dir)) {
 
 error_reporting(E_ALL);
 
-// Không hiển thị lỗi kỹ thuật trực tiếp ra trình duyệt.
-ini_set('display_errors', '0');
+// Chỉ hiển thị lỗi kỹ thuật ra trình duyệt khi APP_DEBUG=true (máy cá nhân).
+ini_set('display_errors', DEBUG ? '1' : '0');
 ini_set('log_errors', '1');
 ini_set('error_log', dirname(__DIR__) . '/logs/php-error.log');
 

@@ -7,13 +7,12 @@ function db(): PDO
     static $pdo = null;
 
     if ($pdo === null) {
-        $host = getenv('DB_HOST') ?: '127.0.0.1';
-        $port = getenv('DB_PORT') ?: '3306';
-        $ten  = getenv('DB_NAME') ?: 'ltweb_nhom05';
-        $user = getenv('DB_USER') ?: 'root';
-        $pass = getenv('DB_PASS') !== false
-            ? (string) getenv('DB_PASS')
-            : '';
+        // Giá trị do inc/config.php nạp từ .env và đã kiểm tra bằng required().
+        $host = $_ENV['DB_HOST'];
+        $port = $_ENV['DB_PORT'] ?? '3306';
+        $ten  = $_ENV['DB_DATABASE'];
+        $user = $_ENV['DB_USERNAME'];
+        $pass = $_ENV['DB_PASSWORD'];
 
         $pdo = new PDO(
             "mysql:host=$host;port=$port;dbname=$ten;charset=utf8mb4",

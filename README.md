@@ -4,11 +4,11 @@ Website MiniPos là bài tập nhóm của học phần Thiết kế và Lập t
 
 ## 1. Yêu cầu môi trường
 
-* PHP 8.1 trở lên.
-* Composer.
-* MySQL 8 hoặc MariaDB 10.4 trở lên (cần extension `pdo_mysql` của PHP).
-* Trình duyệt web hiện đại.
-* Git.
+- PHP 8.1 trở lên.
+- Composer.
+- MySQL 8 hoặc MariaDB 10.4 trở lên (cần extension `pdo_mysql` của PHP).
+- Trình duyệt web hiện đại.
+- Git.
 
 ## 2. Cài đặt và chạy website
 
@@ -29,15 +29,22 @@ mysql -u root -p < database/schema.sql
 mysql -u root -p < database/seed.sql
 ```
 
-Với XAMPP mặc định (tài khoản `root`, không mật khẩu) bỏ tùy chọn `-p`. Kết nối được cấu hình qua biến môi trường, nếu không đặt thì dùng giá trị mặc định:
+Với XAMPP mặc định (tài khoản `root`, không mật khẩu) bỏ tùy chọn `-p`. Kết nối được cấu hình trong tệp `.env` (không commit). Tạo từ bản mẫu rồi sửa giá trị:
 
-| Biến       | Mặc định       |
-| ---------- | -------------- |
-| `DB_HOST`  | `127.0.0.1`    |
-| `DB_PORT`  | `3306`         |
-| `DB_NAME`  | `ltweb_nhom05` |
-| `DB_USER`  | `root`         |
-| `DB_PASS`  | (rỗng)         |
+```bash
+cp .env.example .env
+```
+
+| Biến          | Ý nghĩa                                              |
+| ------------- | ---------------------------------------------------- |
+| `APP_DEBUG`   | `true` chỉ trên máy cá nhân; thiếu hoặc khác thì tắt |
+| `DB_HOST`     | Máy chủ CSDL (bắt buộc)                              |
+| `DB_PORT`     | Cổng, mặc định `3306` (tùy chọn)                     |
+| `DB_DATABASE` | Tên CSDL (bắt buộc)                                  |
+| `DB_USERNAME` | Tài khoản CSDL (bắt buộc)                            |
+| `DB_PASSWORD` | Mật khẩu (bắt buộc phải có khai báo, được để rỗng)   |
+
+Thiếu biến bắt buộc, trang trả về lỗi 500 và nguyên nhân được ghi vào log PHP.
 
 ### Chạy bằng PHP built-in server
 
@@ -71,66 +78,66 @@ Trang đăng nhập: `/dang-nhap.php`. Trang quản trị: `/quan-tri.php`. Các
 
 ## 4. Bảng chức năng – URL – tệp PHP
 
-| Chức năng                                                           | URL                      | Tệp PHP chính         | Quyền            |
-| ------------------------------------------------------------------- | ------------------------ | --------------------- | ---------------- |
-| Trang chủ, sản phẩm đã xem gần đây                                  | `/index.php`             | `index.php`           | Công khai        |
-| Danh sách sản phẩm: tìm kiếm, lọc, sắp xếp, phân trang (12 SP/trang) | `/danh-sach.php`         | `danh-sach.php`       | Công khai        |
-| Chi tiết sản phẩm theo mã                                           | `/chi-tiet.php?id=1`     | `chi-tiet.php`        | Công khai        |
-| Giỏ hàng: thêm, đổi số lượng, xóa, tính tổng tiền                   | `/gio-hang.php`          | `gio-hang.php`        | Công khai        |
-| Đặt hàng (một giao dịch, trừ tồn kho)                               | `/dat-hang.php`          | `dat-hang.php`        | Đã đăng nhập     |
-| Danh sách đơn hàng và chi tiết đơn                                  | `/don-hang.php`, `/chi-tiet-don.php` | `don-hang.php`, `chi-tiet-don.php` | Đã đăng nhập (quản trị xem mọi đơn) |
-| Gửi phiếu báo cáo và tải ảnh minh chứng                             | `/lien-he.php`           | `lien-he.php`         | Công khai        |
-| Đăng ký, đăng nhập, đăng xuất                                       | `/dang-ky.php`, `/dang-nhap.php`, `/dang-xuat.php` | `dang-ky.php`, `dang-nhap.php`, `dang-xuat.php` | Công khai |
-| Quản trị: đơn hàng, đổi trạng thái đơn, phiếu liên hệ               | `/quan-tri.php`          | `quan-tri.php`        | `quan_tri`       |
-| Thêm, sửa, xóa sản phẩm                                             | `/them-san-pham.php`, `/sua-san-pham.php`, `/xoa-san-pham.php` | tương ứng | `quan_tri` |
-| Giới thiệu nhóm, trang cá nhân thành viên                           | `/gioi-thieu.php`, `/thanhvien/<mssv>/gioithieu.php` | `gioi-thieu.php` | Công khai |
-| Trang lỗi 403, 404, 500                                             | `/403.php`, `/404.php`, `/500.php` | cùng tên    | —                |
+| Chức năng                                                            | URL                                                            | Tệp PHP chính                                   | Quyền                               |
+| -------------------------------------------------------------------- | -------------------------------------------------------------- | ----------------------------------------------- | ----------------------------------- |
+| Trang chủ, sản phẩm đã xem gần đây                                   | `/index.php`                                                   | `index.php`                                     | Công khai                           |
+| Danh sách sản phẩm: tìm kiếm, lọc, sắp xếp, phân trang (12 SP/trang) | `/danh-sach.php`                                               | `danh-sach.php`                                 | Công khai                           |
+| Chi tiết sản phẩm theo mã                                            | `/chi-tiet.php?id=1`                                           | `chi-tiet.php`                                  | Công khai                           |
+| Giỏ hàng: thêm, đổi số lượng, xóa, tính tổng tiền                    | `/gio-hang.php`                                                | `gio-hang.php`                                  | Công khai                           |
+| Đặt hàng (một giao dịch, trừ tồn kho)                                | `/dat-hang.php`                                                | `dat-hang.php`                                  | Đã đăng nhập                        |
+| Danh sách đơn hàng và chi tiết đơn                                   | `/don-hang.php`, `/chi-tiet-don.php`                           | `don-hang.php`, `chi-tiet-don.php`              | Đã đăng nhập (quản trị xem mọi đơn) |
+| Gửi phiếu báo cáo và tải ảnh minh chứng                              | `/lien-he.php`                                                 | `lien-he.php`                                   | Công khai                           |
+| Đăng ký, đăng nhập, đăng xuất                                        | `/dang-ky.php`, `/dang-nhap.php`, `/dang-xuat.php`             | `dang-ky.php`, `dang-nhap.php`, `dang-xuat.php` | Công khai                           |
+| Quản trị: đơn hàng, đổi trạng thái đơn, phiếu liên hệ                | `/quan-tri.php`                                                | `quan-tri.php`                                  | `quan_tri`                          |
+| Thêm, sửa, xóa sản phẩm                                              | `/them-san-pham.php`, `/sua-san-pham.php`, `/xoa-san-pham.php` | tương ứng                                       | `quan_tri`                          |
+| Giới thiệu nhóm, trang cá nhân thành viên                            | `/gioi-thieu.php`, `/thanhvien/<mssv>/gioithieu.php`           | `gioi-thieu.php`                                | Công khai                           |
+| Trang lỗi 403, 404, 500                                              | `/403.php`, `/404.php`, `/500.php`                             | cùng tên                                        | —                                   |
 
 ### API JSON
 
 Các ví dụ yêu cầu nằm trong `api.http`.
 
-| Phương thức, URL                                   | Chức năng                           | Mã trả về           |
-| -------------------------------------------------- | ----------------------------------- | ------------------- |
-| `GET /api/san-pham.php?q=&dm=&giaToiDa=&sx=`       | Tìm sản phẩm (tối đa 20 mục)        | 200                 |
-| `GET /api/san-pham.php?id=1`                       | Chi tiết một sản phẩm               | 200, 400, 404       |
-| `GET /api/gio-hang.php`                            | Xem giỏ hàng trong session          | 200                 |
-| `POST /api/gio-hang.php` (JSON `id`, `so_luong`)   | Thêm sản phẩm vào giỏ               | 200, 400, 404, 422  |
-| Phương thức khác                                   | Không hỗ trợ                        | 405                 |
+| Phương thức, URL                                 | Chức năng                    | Mã trả về          |
+| ------------------------------------------------ | ---------------------------- | ------------------ |
+| `GET /api/san-pham.php?q=&dm=&giaToiDa=&sx=`     | Tìm sản phẩm (tối đa 20 mục) | 200                |
+| `GET /api/san-pham.php?id=1`                     | Chi tiết một sản phẩm        | 200, 400, 404      |
+| `GET /api/gio-hang.php`                          | Xem giỏ hàng trong session   | 200                |
+| `POST /api/gio-hang.php` (JSON `id`, `so_luong`) | Thêm sản phẩm vào giỏ        | 200, 400, 404, 422 |
+| Phương thức khác                                 | Không hỗ trợ                 | 405                |
 
 ## 5. Cấu trúc mã nguồn
 
-* `inc/`: cấu hình (`config.php`), kết nối PDO (`db.php`), hàm dùng chung, xác thực và phân quyền (`xac-thuc.php`), header, footer.
-* `database/`: `schema.sql` (tạo lại CSDL từ đầu) và `seed.sql` (dữ liệu mẫu, tài khoản thử).
-* `src/Models/`: lớp thực thể sản phẩm.
-* `src/Data/`: các lớp truy cập dữ liệu nhận PDO (`KhoSanPham`, `KhoDanhMuc`, `KhoDonHang`, `KhoNguoiDung`, `KhoLienHe`); mọi câu SQL nằm ở đây.
-* `src/Services/`: lớp quản lý giỏ hàng bằng session.
-* `api/`: các điểm cuối trả JSON.
-* `uploads/`: ảnh minh chứng được tải lên.
-* `logs/php-error.log`: nhật ký lỗi PHP.
-* `css/`, `js/`, `images/`: tài nguyên giao diện.
-* `kiemtra/`: ảnh và kết quả kiểm thử.
-* `thanhvien/`: trang cá nhân của thành viên (Phần B) và các bảng riêng `tv_...` trong `schema.sql`.
+- `inc/`: cấu hình (`config.php`), kết nối PDO (`db.php`), hàm dùng chung, xác thực và phân quyền (`xac-thuc.php`), header, footer.
+- `database/`: `schema.sql` (tạo lại CSDL từ đầu) và `seed.sql` (dữ liệu mẫu, tài khoản thử).
+- `src/Models/`: lớp thực thể sản phẩm.
+- `src/Data/`: các lớp truy cập dữ liệu nhận PDO (`KhoSanPham`, `KhoDanhMuc`, `KhoDonHang`, `KhoNguoiDung`, `KhoLienHe`); mọi câu SQL nằm ở đây.
+- `src/Services/`: lớp quản lý giỏ hàng bằng session.
+- `api/`: các điểm cuối trả JSON.
+- `uploads/`: ảnh minh chứng được tải lên.
+- `logs/php-error.log`: nhật ký lỗi PHP.
+- `css/`, `js/`, `images/`: tài nguyên giao diện.
+- `kiemtra/`: ảnh và kết quả kiểm thử.
+- `thanhvien/`: trang cá nhân của thành viên (Phần B) và các bảng riêng `tv_...` trong `schema.sql`.
 
 ## 6. Xử lý dữ liệu và bảo mật
 
-* Mọi truy vấn dùng PDO với prepared statement; chuỗi `ORDER BY` chỉ chọn từ danh sách cho phép.
-* Đặt hàng chạy trong một giao dịch: trừ tồn kho bằng `UPDATE ... WHERE ton_kho >= ?`, thiếu hàng thì rollback; đơn giá được lưu tại thời điểm đặt.
-* Phân trang bằng `COUNT(*)` và `LIMIT ? OFFSET ?`.
-* Mật khẩu lưu bằng `password_hash()`, kiểm tra bằng `password_verify()`; đăng nhập báo một lỗi chung và đổi mã phiên.
-* Phân quyền bằng `yeuCauDangNhap()` và `yeuCauQuyen('quan_tri')`; tài khoản tự đăng ký có vai trò mặc định `nhan_vien`, không nhận vai trò từ form.
-* Kiểm tra dữ liệu ở phía máy chủ trước khi xử lý.
-* Dùng hàm `e()` để escape dữ liệu động trước khi hiển thị HTML.
-* Dùng CSRF token cho các thao tác POST.
-* Chuyển hướng sau khi xử lý thành công theo mô hình Post/Redirect/Get.
-* Kiểm tra kiểu ảnh thật bằng `finfo` và dùng tên tệp ngẫu nhiên.
-* Ghi lỗi PHP vào `logs/php-error.log`.
-* Không đưa `vendor/` và dữ liệu phát sinh khi chạy vào Git.
+- Mọi truy vấn dùng PDO với prepared statement; chuỗi `ORDER BY` chỉ chọn từ danh sách cho phép.
+- Đặt hàng chạy trong một giao dịch: trừ tồn kho bằng `UPDATE ... WHERE ton_kho >= ?`, thiếu hàng thì rollback; đơn giá được lưu tại thời điểm đặt.
+- Phân trang bằng `COUNT(*)` và `LIMIT ? OFFSET ?`.
+- Mật khẩu lưu bằng `password_hash()`, kiểm tra bằng `password_verify()`; đăng nhập báo một lỗi chung và đổi mã phiên.
+- Phân quyền bằng `yeuCauDangNhap()` và `yeuCauQuyen('quan_tri')`; tài khoản tự đăng ký có vai trò mặc định `nhan_vien`, không nhận vai trò từ form.
+- Kiểm tra dữ liệu ở phía máy chủ trước khi xử lý.
+- Dùng hàm `e()` để escape dữ liệu động trước khi hiển thị HTML.
+- Dùng CSRF token cho các thao tác POST.
+- Chuyển hướng sau khi xử lý thành công theo mô hình Post/Redirect/Get.
+- Kiểm tra kiểu ảnh thật bằng `finfo` và dùng tên tệp ngẫu nhiên.
+- Ghi lỗi PHP vào `logs/php-error.log`.
+- Không đưa `vendor/` và dữ liệu phát sinh khi chạy vào Git.
 
 ## 7. Ghi chú
 
-* Môi trường nộp bài sử dụng `MOI_TRUONG = 'dev'` theo yêu cầu của đề.
-* Giỏ hàng hiện hỗ trợ quản lý sản phẩm và tính tổng tiền; thanh toán trực tuyến chưa được triển khai.
-* Tìm kiếm tức thì trên trang danh sách gọi API và hiển thị tối đa 20 kết quả; bấm "Áp dụng" để xem đầy đủ và phân trang.
-* Trước khi nộp: clone lại repo vào thư mục mới, chạy `composer install`, tạo CSDL từ `schema.sql` và `seed.sql`, rồi mở thử các trang.
-* Các kết quả kiểm thử PHP, HTML, Lighthouse và ảnh chụp phải được cập nhật theo kết quả thực tế trước khi nộp.
+- Môi trường nộp bài sử dụng `MOI_TRUONG = 'dev'` theo yêu cầu của đề.
+- Giỏ hàng hiện hỗ trợ quản lý sản phẩm và tính tổng tiền; thanh toán trực tuyến chưa được triển khai.
+- Tìm kiếm tức thì trên trang danh sách gọi API và hiển thị tối đa 20 kết quả; bấm "Áp dụng" để xem đầy đủ và phân trang.
+- Trước khi nộp: clone lại repo vào thư mục mới, chạy `composer install`, tạo CSDL từ `schema.sql` và `seed.sql`, rồi mở thử các trang.
+- Các kết quả kiểm thử PHP, HTML, Lighthouse và ảnh chụp phải được cập nhật theo kết quả thực tế trước khi nộp.
