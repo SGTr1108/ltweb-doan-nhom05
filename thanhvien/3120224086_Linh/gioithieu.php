@@ -1,11 +1,10 @@
 <?php
 /*
  * Tệp: gioithieu.php (Sinh viên: Nguyễn Võ Khánh Linh - 3120224086)
- * Chức năng: Hiển thị thông tin cá nhân, giao diện sáng/tối ghi nhớ bằng Cookie
- *            và nhật ký truy cập ghi vào thư mục storage của dự án.
- * Cách thử: Mở trang qua localhost, tải lại vài lần rồi xem mục nhật ký truy cập.
- *           Bấm nút chuyển giao diện để kiểm tra cookie. Kiểm tra tệp nhật ký
- *           được sinh ra trong thư mục storage (không phải cạnh tệp trang).
+* Chức năng: Hiển thị thông tin cá nhân, giao diện sáng/tối ghi nhớ bằng Cookie,
+ *            nhật ký truy cập và thống kê lượt xem bằng MySQL.
+ * Cách thử: Mở trang qua localhost, bấm nút ghi nhận lượt truy cập,
+ *           kiểm tra dữ liệu trong hai bảng tv_nhat_ky và tv_luot_xem.
  */
 
 // Xác định đường dẫn gốc dự án so với thư mục hiện tại
@@ -15,57 +14,74 @@ $cssTrang = 'profile.css';
 
 // Nạp tệp cấu hình của nhóm. config.php đã tự nạp ham.php (có hàm e()) nên không cần nạp lại.
 require_once $goc . 'inc/config.php';
-// --- CHỨC NĂNG 2: BỘ ĐẾM LƯỢT XEM THEO NGÀY ---
+// Nạp chức năng CSRF của nhóm (config.php cần khởi tạo session trước).
+require_once $goc . 'inc/csrf.php';
 
+// Thông tin dùng chung cho hai chức năng.
 $pdo = db();
 $mssv = '3120224086';
 
-// Tăng lượt xem của ngày hiện tại
-$sql = "INSERT INTO tv_luot_xem (mssv, ngay_xem, so_luot)
-        VALUES (?, CURDATE(), 1)
-        ON DUPLICATE KEY UPDATE so_luot = so_luot + 1";
+// POST: chỉ khi người dùng gửi form hợp lệ mới ghi lượt xem và nhật ký.
+if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
+    if (!csrfHopLe()) {
+        http_response_code(403);
+        exit('Yêu cầu không hợp lệ (CSRF). Vui lòng tải lại trang và thử lại.');
+    }
+
+    if (($_POST['action'] ?? '') !== 'ghi_nhan_truy_cap') {
+        http_response_code(400);
+        exit('Thao tác không hợp lệ.');
+    }
+
+    // Chức năng 1: ghi nhật ký truy cập vào CSDL tv_nhat_ky.
+$ip = $_SERVER['REMOTE_ADDR'] ?? 'Không rõ';
+$trinh_duyet = $_SERVER['HTTP_USER_AGENT'] ?? 'Không rõ';
+
+// Lưu nhật ký vào bảng tv_nhat_ky bằng Prepared Statement.
+$sql = "INSERT INTO tv_nhat_ky
+        (mssv, dia_chi_ip, trinh_duyet)
+        VALUES (?, ?, ?)";
 
 $stmt = $pdo->prepare($sql);
-$stmt->execute([$mssv]);
+$stmt->execute([
+    $mssv,
+    $ip,
+    substr($trinh_duyet, 0, 255)
+]);
 
-// Lấy thống kê lượt xem trong 7 ngày gần nhất
+    // Chức năng 2: tăng lượt xem trong ngày bằng INSERT ... ON DUPLICATE KEY UPDATE.
+    $sql = "INSERT INTO tv_luot_xem (mssv, ngay_xem, so_luot)
+            VALUES (?, CURDATE(), 1)
+            ON DUPLICATE KEY UPDATE so_luot = so_luot + 1";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$mssv]);
+
+    // PRG: chuyển hướng sau POST để tránh gửi lại biểu mẫu khi tải lại trang.
+    header('Location: ' . strtok($_SERVER['REQUEST_URI'], '?'), true, 303);
+    exit;
+}
+
+// GET: chỉ đọc dữ liệu, tuyệt đối không ghi CSDL hoặc tệp.
 $sql = "SELECT ngay_xem, so_luot
         FROM tv_luot_xem
         WHERE mssv = ?
           AND ngay_xem >= CURDATE() - INTERVAL 6 DAY
           AND ngay_xem <= CURDATE()
         ORDER BY ngay_xem DESC";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([$mssv]);
+$luotXem = $stmt->fetchAll();
+
+// Đọc 5 nhật ký truy cập gần nhất từ CSDL.
+$sql = "SELECT dia_chi_ip, trinh_duyet, thoi_gian_tao
+        FROM tv_nhat_ky
+        WHERE mssv = ?
+        ORDER BY thoi_gian_tao DESC
+        LIMIT 5";
 
 $stmt = $pdo->prepare($sql);
 $stmt->execute([$mssv]);
-
-$luotXem = $stmt->fetchAll();
-
-
-// --- CHỨC NĂNG 1: Nhật ký truy cập cá nhân ---
-// Dùng đường dẫn tuyệt đối theo __DIR__ để chạy từ thư mục nào cũng ghi đúng chỗ.
-$thu_muc_storage = __DIR__ . '/../../storage/';
-$file_nhat_ky = $thu_muc_storage . '3120224086_nhatky.txt';
-
-if (!is_dir($thu_muc_storage)) {
-    mkdir($thu_muc_storage, 0777, true);
-}
-
-$thoi_gian = date('Y-m-d H:i:s');
-$ip = $_SERVER['REMOTE_ADDR'] ?? 'Không rõ';
-$trinh_duyet = $_SERVER['HTTP_USER_AGENT'] ?? 'Không rõ';
-$dong_nhat_ky = "[$thoi_gian] - IP: $ip - Trình duyệt: $trinh_duyet" . PHP_EOL;
-
-file_put_contents($file_nhat_ky, $dong_nhat_ky, FILE_APPEND | LOCK_EX);
-
-// Đọc lại nhật ký để hiển thị (tối đa 5 lượt truy cập gần nhất)
-$logs = [];
-if (file_exists($file_nhat_ky)) {
-    $tat_ca = file($file_nhat_ky, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    if ($tat_ca !== false) {
-        $logs = array_slice(array_reverse($tat_ca), 0, 5);
-    }
-}
+$logs = $stmt->fetchAll();
 
 // --- CHỨC NĂNG 2: Giao diện Sáng / Tối qua Cookie ---
 $currentTheme = (isset($_COOKIE['theme']) && $_COOKIE['theme'] === 'dark') ? 'dark' : 'light';
@@ -145,11 +161,22 @@ require_once $goc . 'inc/header.php';
     <!-- Section: Lịch sử nhật ký truy cập cá nhân -->
     <section class="access-log-section linh-tach-1">
         <h2>📜 Nhật ký truy cập cá nhân gần đây</h2>
+        <form method="post">
+            <?= csrfField() ?>
+            <input type="hidden" name="action" value="ghi_nhan_truy_cap">
+            <button type="submit">Ghi nhận lượt truy cập</button>
+        </form>
         <ul class="linh-tach-2">
             <?php if (!empty($logs)): ?>
                 <?php foreach ($logs as $logItem): ?>
-                    <li><small><?= e($logItem) ?></small></li>
-                <?php endforeach; ?>
+    <li>
+        <small>
+            [<?= e($logItem['thoi_gian_tao']) ?>]
+            - IP: <?= e($logItem['dia_chi_ip']) ?>
+            - Trình duyệt: <?= e($logItem['trinh_duyet']) ?>
+        </small>
+    </li>
+<?php endforeach; ?>
             <?php else: ?>
                 <li>Chưa có lịch sử truy cập nào.</li>
             <?php endif; ?>
