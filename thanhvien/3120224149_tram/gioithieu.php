@@ -23,6 +23,7 @@ $mssvTram = '3120224149'; // MSSV cố định của chủ trang, không nhận 
 $pdo = db();
 
 $thong_bao = "";
+$thongBaoPopup = [];
 
 if (isset($_POST['btn_them'])) {
   $tieu_de           = trim((string) ($_POST['tieu_de'] ?? ''));
@@ -30,7 +31,7 @@ if (isset($_POST['btn_them'])) {
   $noi_dung_chi_tiet = trim((string) ($_POST['noi_dung_chi_tiet'] ?? ''));
 
   if ($tieu_de === '' || $noi_dung_chi_tiet === '') {
-    $thong_bao = "<p style='color: red;'> Vui lòng nhập tiêu đề và nội dung chi tiết.</p>";
+    $thong_bao = "<p class='tram-tach-1'> Vui lòng nhập tiêu đề và nội dung chi tiết.</p>";
   } else {
     try {
       $st = $pdo->prepare(
@@ -42,14 +43,16 @@ if (isset($_POST['btn_them'])) {
       exit;
     } catch (PDOException $e) {
       error_log('Trâm - thêm tv_blog: ' . $e->getMessage());
-      $thong_bao = "<p style='color: red;'> Không lưu được bài viết. Vui lòng thử lại.</p>";
+      $thong_bao = "<p class='tram-tach-1'> Không lưu được bài viết. Vui lòng thử lại.</p>";
     }
   }
 }
 
 // Kiểm tra xem có thông báo thành công được lưu trong Session hay không để hiển thị popup
+// CSP không cho <script> nội tuyến: lưu lại, in ra thẻ data-thong-bao trong <body>
+// (đã qua e()); js/canhan.js đọc thẻ này rồi gọi alert().
 if (isset($_SESSION['success_message'])) {
-  echo "<script>alert('" . $_SESSION['success_message'] . "');</script>";
+  $thongBaoPopup[] = (string) $_SESSION['success_message'];
   // Hiển thị xong thì xóa đi để lần sau tải lại trang không bị hiện lại popup
   unset($_SESSION['success_message']);
 }
@@ -62,7 +65,7 @@ if (isset($_POST['btn_submit'])) {
   $noi_dung = trim((string) ($_POST['noi_dung'] ?? ''));
 
   if ($ho_ten === '' || $noi_dung === '') {
-    $message = "<div style='color: red;'>Vui lòng nhập họ tên và nội dung góp ý.</div>";
+    $message = "<div class='tram-tach-1'>Vui lòng nhập họ tên và nội dung góp ý.</div>";
   } else {
     try {
       $st = $pdo->prepare(
@@ -74,14 +77,16 @@ if (isset($_POST['btn_submit'])) {
       exit;
     } catch (PDOException $e) {
       error_log('Trâm - thêm tv_gop_y: ' . $e->getMessage());
-      $message = "<div style='color: red;'>Không gửi được góp ý. Vui lòng thử lại.</div>";
+      $message = "<div class='tram-tach-1'>Không gửi được góp ý. Vui lòng thử lại.</div>";
     }
   }
 }
 
 // Kiểm tra xem có thông báo thành công được lưu trong Session hay không để hiển thị popup
+// CSP không cho <script> nội tuyến: lưu lại, in ra thẻ data-thong-bao trong <body>
+// (đã qua e()); js/canhan.js đọc thẻ này rồi gọi alert().
 if (isset($_SESSION['success_message'])) {
-  echo "<script>alert('" . $_SESSION['success_message'] . "');</script>";
+  $thongBaoPopup[] = (string) $_SESSION['success_message'];
   // Hiển thị xong thì xóa đi để lần sau tải lại trang không bị hiện lại popup
   unset($_SESSION['success_message']);
 }
@@ -233,7 +238,7 @@ $footerHtml = (string)preg_replace('#</body\s*>|</html\s*>#i', '', (string)ob_ge
 
 $headerHtml = (string)preg_replace(
   '/<header\b/i',
-  '<header style="background: #143d75 !important; color: #ffffff !important;"',
+  '<header data-tram-header',
   $headerHtml,
   1
 );
@@ -249,33 +254,26 @@ $headerHtml = (string)preg_replace(
   <title>Giới thiệu Cá nhân | MiniPos</title>
   <link rel="stylesheet" href="<?php echo e($goc); ?>css/style.css">
   <link rel="stylesheet" href="tram_style.css">
-  <!-- Đoạn code CSS dùng để xóa nhanh viền dọc xanh -->
-  <style>
-    .page-title-banner ul li,
-    .page-title-banner nav a,
-    .page-title-banner [class*="menu"] li {
-      border: none !important;
-      border-left: none !important;
-      border-right: none !important;
-    }
-  </style>
 </head>
 
 <body>
+  <?php foreach ($thongBaoPopup as $tb): ?>
+    <div hidden data-thong-bao="<?= e($tb) ?>"></div>
+  <?php endforeach; ?>
   <div class="page-title-banner">
     <?php echo $headerHtml; ?>
 
-    <h1 style="text-align: center; width: 100%; max-width: 1170px; margin: 0 auto; background-color: #ffffff; color: #0056b3; border: 2px solid #0056b3; padding: 15px 0; border-radius: 8px;">Trang giới thiệu cá nhân</h1>
+    <h1 class="tram-tach-3">Trang giới thiệu cá nhân</h1>
 
 
   </div>
-  <nav aria-label="Liên kết nhóm" style="max-width: 1170px;margin: 0 auto">
+  <nav aria-label="Liên kết nhóm" class="tram-tach-4">
     <a href="https://sgtr1108.github.io/ltweb-doan-nhom05/index.html">Quay về Trang chủ Nhóm</a> |
     <a href="https://sgtr1108.github.io/ltweb-doan-nhom05/gioi-thieu.html">Quay lại Giới thiệu Nhóm</a>
   </nav>
 
   <main>
-    <section class="profile-header" style="width:530px;">
+    <section class="profile-header tram-tach-5">
       <div class="khoi-thong-tin-chinh">
         <button type="button" class="profile-img-btn" aria-label="Phóng to ảnh chân dung đại diện">
           <img src="avatar.png" alt="Ảnh chân dung của Đoàn Thùy Thảo Trâm" class="profile-img">
@@ -302,7 +300,7 @@ $headerHtml = (string)preg_replace(
     </section>
 
 
-    <article style="height: 1027px; width:600px;">
+    <article class="tram-tach-6">
       <h2>Định hướng và Sở thích</h2>
       <p>
         Trong đồ án nhóm MiniPos, mình đảm nhận việc thiết kế và
@@ -313,13 +311,13 @@ $headerHtml = (string)preg_replace(
       <p>Sở thích cá nhân của mình là tham gia các hoạt động tập thể, tìm hiểu những kiến thức mới phục vụ cho học tập và giao lưu với bạn bè, sinh viên.</p>
 
       <div class="container">
-        <div style="text-align: right; margin-bottom: 20px;">
+        <div class="tram-tach-7">
           <span class="view-badge">👀 Tổng số lượt xem: <?php echo e($current_views); ?></span>
         </div>
 
         <div class="box" id="may-tinh-diem">
           <h3>Máy Tính Điểm Học Phần</h3>
-          <p style="font-size: 0.9em; color: gray;">Công thức: ĐTB = 0.2×A1 + 0.3×A2 + 0.5×A3</p>
+          <p class="tram-tach-8">Công thức: ĐTB = 0.2×A1 + 0.3×A2 + 0.5×A3</p>
 
           <?php if ($error_msg !== ''): ?>
             <p class="alert-error">❌ <?php echo e($error_msg); ?></p>
@@ -348,7 +346,7 @@ $headerHtml = (string)preg_replace(
 
           <?php if ($diem_tb !== ''): ?>
             <div class="result-box">
-              <p><strong>Điểm trung bình học phần:</strong> <span style="font-size: 1.2em; color: #007bff;"><?php echo e($diem_tb); ?></span></p>
+              <p><strong>Điểm trung bình học phần:</strong> <span class="tram-tach-9"><?php echo e($diem_tb); ?></span></p>
               <p><strong>Kết quả xếp loại môn học:</strong> <strong><?php echo e($ket_qua); ?></strong></p>
             </div>
           <?php endif; ?>
@@ -365,29 +363,29 @@ $headerHtml = (string)preg_replace(
       <form method="POST">
         <?= csrfField() ?>
         <label>Tiêu đề bài viết:</label><br>
-        <input type="text" name="tieu_de" required style="width: 300px;"><br><br>
+        <input type="text" name="tieu_de" required class="tram-tach-10"><br><br>
 
         <label>Nội dung ngắn:</label><br>
-        <input type="text" name="noi_dung_ngan" style="width: 300px;"><br><br>
+        <input type="text" name="noi_dung_ngan" class="tram-tach-10"><br><br>
 
         <label>Nội dung chi tiết:</label><br>
-        <textarea name="noi_dung_chi_tiet" required rows="5" style="width: 300px;"></textarea><br><br>
+        <textarea name="noi_dung_chi_tiet" required rows="5" class="tram-tach-10"></textarea><br><br>
 
         <!-- Nút bấm kích hoạt hành động chèn -->
         <button type="submit" name="btn_them">Bấm để chèn dữ liệu</button>
       </form>
 
       <br>
-      <div style="overflow-x:auto; width:500px;">
-        <table border="1" cellpadding="10" style="white-space:nowrap; font-size:18px; width:100%; min-width:1800px;">
+      <div class="tram-tach-11">
+        <table border="1" cellpadding="10" class="tram-tach-12">
           <thead>
             <tr>
-              <th style="min-width:60px;">ID</th>
-              <th style="min-width:150px;">MSSV</th>
-              <th style="min-width:300px;">Tiêu đề</th>
-              <th style="min-width:350px;">Nội dung ngắn</th>
-              <th style="min-width:450px;">Nội dung chi tiết</th>
-              <th style="min-width:200px;">Ngày đăng</th>
+              <th class="tram-tach-13">ID</th>
+              <th class="tram-tach-14">MSSV</th>
+              <th class="tram-tach-15">Tiêu đề</th>
+              <th class="tram-tach-16">Nội dung ngắn</th>
+              <th class="tram-tach-17">Nội dung chi tiết</th>
+              <th class="tram-tach-18">Ngày đăng</th>
             </tr>
           </thead>
           <tbody>
@@ -435,23 +433,23 @@ $headerHtml = (string)preg_replace(
         </p>
 
         <!-- Nút bấm thực hiện thao tác -->
-        <button type="submit" name="btn_submit" style="padding: 8px 15px; cursor: pointer;">
+        <button type="submit" name="btn_submit" class="tram-tach-19">
           Gửi góp ý
         </button>
 
         <br>
         <br>
-        <div style="overflow-x:auto;">
-          <table border="1" cellpadding="10" style="white-space:nowrap; font-size:18px; width:100%; min-width:1800px;">
+        <div class="tram-tach-20">
+          <table border="1" cellpadding="10" class="tram-tach-12">
             <thead>
               <tr>
-                <th style="min-width:60px;">ID</th>
-                <th style="min-width:150px;">MSSV</th>
-                <th style="min-width:250px;">Họ tên</th>
-                <th style="min-width:300px;">Email</th>
-                <th style="min-width:550px;">Nội dung</th>
-                <th style="min-width:120px;">Trạng thái</th>
-                <th style="min-width:200px;">Ngày gửi</th>
+                <th class="tram-tach-13">ID</th>
+                <th class="tram-tach-14">MSSV</th>
+                <th class="tram-tach-21">Họ tên</th>
+                <th class="tram-tach-15">Email</th>
+                <th class="tram-tach-22">Nội dung</th>
+                <th class="tram-tach-23">Trạng thái</th>
+                <th class="tram-tach-18">Ngày gửi</th>
               </tr>
             </thead>
             <tbody>
@@ -617,23 +615,6 @@ $headerHtml = (string)preg_replace(
 
   <script src="js/canhan.js" defer></script>
 
-  <script>
-    document.getElementById('btn-view').addEventListener('click', function() {
-      // Gửi yêu cầu ngầm đến file backend xử lý (ví dụ: luot_xem.php)
-      fetch('luot_xem.php', {
-          method: 'POST',
-          headers: {
-            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.content ?? ''
-          }
-        })
-        .then(response => response.text())
-        .then(data => {
-          console.log(data); // Log kết quả "Ghi nhận lượt xem thành công!"
-          alert("Đã ghi nhận 1 lượt xem tự do!");
-        })
-        .catch(error => console.error('Lỗi:', error));
-    });
-  </script>
 </body>
 
 </html>

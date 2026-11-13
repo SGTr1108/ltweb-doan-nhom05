@@ -2,19 +2,16 @@
    1. BẢNG MÀU CHUNG CỦA NHÓM (Cập nhật mã màu của nhóm bạn vào đây nếu cần)
    ========================================================================== */
 :root {
-  --primary-color: #0056b3;       /* Màu chủ đạo (Xanh dương) */
-  --secondary-color: #f8f9fa;     /* Màu nền phụ (Xám nhạt) */
-  --accent-color: #e9ecef;        /* Màu tạo điểm nhấn */
-  --text-color: #212529;          /* Màu chữ chính */
-  --text-light: #6c757d;          /* Màu chữ phụ */
-  --border-color: #dee2e6;        /* Màu đường viền */
-  --bg-color: #ffffff;            /* Màu nền trang */
+  --primary-color: #0056b3; /* Màu chủ đạo (Xanh dương) */
+  --secondary-color: #f8f9fa; /* Màu nền phụ (Xám nhạt) */
+  --accent-color: #e9ecef; /* Màu tạo điểm nhấn */
+  --text-color: #212529; /* Màu chữ chính */
+  --text-light: #6c757d; /* Màu chữ phụ */
+  --border-color: #dee2e6; /* Màu đường viền */
+  --bg-color: #ffffff; /* Màu nền trang */
   --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   --border-radius: 8px;
 }
-
-
-
 
 /* ==========================================================================
    2. RESET & CẤU HÌNH CHUNG
@@ -25,19 +22,15 @@
   padding: 0;
 }
 
-
-
-
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
   line-height: 1.6;
   color: var(--text-color);
   background-color: var(--secondary-color);
   padding: 20px;
 }
-
-
-
 
 /* ==========================================================================
    3. BỐ CỤC CHÍNH (FLEXBOX & GRID)
@@ -51,16 +44,10 @@ header {
   margin-bottom: 20px;
 }
 
-
-
-
 header h1 {
   color: var(--primary-color);
   font-size: 1.8rem;
 }
-
-
-
 
 nav {
   display: flex;
@@ -73,24 +60,15 @@ nav {
   box-shadow: var(--shadow);
 }
 
-
-
-
 nav a {
   color: var(--primary-color);
   text-decoration: none;
   font-weight: 500;
 }
 
-
-
-
 nav a:hover {
   text-decoration: underline;
 }
-
-
-
 
 /* Bố cục vùng nội dung chính bằng Grid */
 main {
@@ -101,27 +79,24 @@ main {
   margin: 0 auto;
 }
 
-
-
-
 @media (min-width: 768px) {
   main {
     grid-template-columns: 1.2fr 0.8fr; /* Chia làm 2 cột trên máy tính */
   }
- 
+
   /* Cho phần thời khóa biểu trải dài hết cả 2 cột */
   main > section:last-of-type {
     grid-column: 1 / -1;
   }
 }
 
-
 @media (max-width: 767px) {
   body {
     padding: 10px;
   }
 
-  section, article {
+  section,
+  article {
     padding: 12px;
   }
 
@@ -134,25 +109,21 @@ main {
   }
 }
 
-section, article {
+section,
+article {
   background-color: var(--bg-color);
   padding: 20px;
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
 }
 
-
-
-
-section h2, article h2 {
+section h2,
+article h2 {
   color: var(--primary-color);
   border-bottom: 2px solid var(--accent-color);
   padding-bottom: 8px;
   margin-bottom: 15px;
 }
-
-
-
 
 /* ==========================================================================
    4. CHI TIẾT THÔNG TIN CÁ NHÂN & KỸ NĂNG
@@ -166,22 +137,13 @@ img {
   border: 3px solid var(--accent-color);
 }
 
-
-
-
 main p {
   margin-bottom: 10px;
 }
 
-
-
-
 main p strong {
   color: var(--primary-color);
 }
-
-
-
 
 /* Biến đổi danh sách kỹ năng thành dạng lưới (Grid) dễ đọc trên mobile */
 ul {
@@ -192,9 +154,6 @@ ul {
   margin-top: 10px;
 }
 
-
-
-
 ul li {
   background-color: var(--secondary-color);
   padding: 10px;
@@ -202,9 +161,6 @@ ul li {
   border-left: 4px solid var(--primary-color);
   font-size: 0.9rem;
 }
-
-
-
 
 /* ==========================================================================
    5. THỜI KHÓA BIỂU TRÊN MOBILE (CUỘN NGANG KHUNG RIÊNG)
@@ -214,8 +170,8 @@ ul li {
   width: 100%;
   max-width: 100%;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;  /* cuộn mượt trên iOS */
-  overscroll-behavior-x: contain;     /* không "truyền" cuộn sang trang */
+  -webkit-overflow-scrolling: touch; /* cuộn mượt trên iOS */
+  overscroll-behavior-x: contain; /* không "truyền" cuộn sang trang */
   margin-top: 15px;
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
@@ -223,14 +179,14 @@ ul li {
 table {
   border-collapse: collapse;
   width: 100%;
-  min-width: 600px;      /* trả lại dòng này */
-  table-layout: auto;    /* hoặc bỏ fixed */
+  min-width: 600px; /* trả lại dòng này */
+  table-layout: auto; /* hoặc bỏ fixed */
   background-color: var(--bg-color);
 }
 
 main > section,
 main > article {
-  min-width: 0;   /* QUAN TRỌNG: cho phép grid item co lại */
+  min-width: 0; /* QUAN TRỌNG: cho phép grid item co lại */
 }
 
 caption {
@@ -239,36 +195,25 @@ caption {
   color: var(--primary-color);
 }
 
-
-
-
-th, td {
+th,
+td {
   border: 1px solid var(--border-color);
   padding: 6px 4px;
   text-align: center;
   font-size: clamp(0.65rem, 2.5vw, 0.85rem); /* chữ tự co theo màn hình */
   word-wrap: break-word;
-  overflow-wrap: anywhere;  /* cho phép xuống dòng chữ dài */
+  overflow-wrap: anywhere; /* cho phép xuống dòng chữ dài */
 }
-
-
-
 
 thead th {
   background-color: var(--primary-color);
   color: white;
 }
 
-
-
-
 tbody th {
   background-color: var(--accent-color);
   font-weight: bold;
 }
-
-
-
 
 /* Định dạng các ô có môn học */
 tbody td[rowspan] {
@@ -277,9 +222,6 @@ tbody td[rowspan] {
   font-weight: 500;
   border: 1px solid #b8daff;
 }
-
-
-
 
 /* ==========================================================================
    6. FOOTER
@@ -292,115 +234,88 @@ footer {
   font-size: 0.9rem;
 }
 
-
-
-
 .khung-anh-dai-dien {
-    width: 100%;
-    max-width: 180px; /* Thu nhỏ ảnh một chút trên mobile cho cân đối */
-    margin: 0 auto; /* Căn giữa khối ảnh khi ở màn hình dọc */
+  width: 100%;
+  max-width: 180px; /* Thu nhỏ ảnh một chút trên mobile cho cân đối */
+  margin: 0 auto; /* Căn giữa khối ảnh khi ở màn hình dọc */
 }
-
-
-
 
 .khung-anh-dai-dien img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    border-radius: var(--bo-goc); /* Giữ bo góc vuông bo nhẹ theo style nhóm */
-    border: 3px solid var(--mau-nen-phu);
-    transition: transform 0.2s ease;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--bo-goc); /* Giữ bo góc vuông bo nhẹ theo style nhóm */
+  border: 3px solid var(--mau-nen-phu);
+  transition: transform 0.2s ease;
 }
-
-
-
 
 .chi-tiet-ca-nhan {
-    width: 100%;
+  width: 100%;
 }
-
-
-
 
 .chi-tiet-ca-nhan p {
-    margin-bottom: 10px; /* Khoảng cách đều giữa các dòng thông tin */
+  margin-bottom: 10px; /* Khoảng cách đều giữa các dòng thông tin */
 }
-
-
-
 
 /* Định dạng riêng cho danh sách kỹ năng mới */
 .tieu-de-ky-nang {
-    margin-top: 18px;
-    color: var(--mau-chinh);
+  margin-top: 18px;
+  color: var(--mau-chinh);
 }
-
-
-
 
 .chi-tiet-ca-nhan ul {
-    padding-left: 20px;
+  padding-left: 20px;
 }
-
-
-
 
 .chi-tiet-ca-nhan li {
-    margin-bottom: 6px;
+  margin-bottom: 6px;
 }
-
-
-
 
 /* ==========================================================================
    ĐIỂM NGẮT RESPONSIVE (Màn hình máy tính từ 768px trở lên)
    ========================================================================== */
 @media (min-width: 768px) {
-    .khoi-thong-tin-chinh {
-            display: flex;
+  .khoi-thong-tin-chinh {
+    display: flex;
     flex-direction: column;
-       /* align-items: flex-start;*/
-        gap: 20px;
-    }
-    .khung-anh-dai-dien {
-        flex: 0 0 200px;
-        margin: 0;
-        /* THÊM DÒNG NÀY: Đẩy ảnh xuống dưới khoảng 10px - 15px cho vừa tầm mắt */
-        margin-top: 60px;
-    }
-   
-    .chi-tiet-ca-nhan {
-        flex: 1;
-    }
+    /* align-items: flex-start;*/
+    gap: 20px;
+  }
+  .khung-anh-dai-dien {
+    flex: 0 0 200px;
+    margin: 0;
+    /* THÊM DÒNG NÀY: Đẩy ảnh xuống dưới khoảng 10px - 15px cho vừa tầm mắt */
+    margin-top: 60px;
+  }
 
+  .chi-tiet-ca-nhan {
+    flex: 1;
+  }
 
-     .profile-header {
-        display: grid;
-        grid-template-columns: 300px 1fr; /* Grid layout cho màn hình lớn */
-        gap: 30px;
-        align-items: center;
-    }
-
+  .profile-header {
+    display: grid;
+    grid-template-columns: 300px 1fr; /* Grid layout cho màn hình lớn */
+    gap: 30px;
+    align-items: center;
+  }
 }
 
 .profile-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 15px;
-    max-width: 1200px;
-    margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 15px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 /* Ảnh chân dung co giãn theo khung */
 .profile-img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    object-fit: cover;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
 }
-
 
 /* --- CSS CHO NÚT LÊN ĐẦU TRANG --- */
 #scrollToTopBtn {
@@ -419,7 +334,9 @@ footer {
   font-size: 18px;
   transform: rotate(-90deg); /* Quay mũi tên hướng lên trên */
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
-  transition: background-color 0.2s, transform 0.2s;
+  transition:
+    background-color 0.2s,
+    transform 0.2s;
 }
 /* Hiển thị nút khi JavaScript thêm Class active */
 #scrollToTopBtn.active {
@@ -457,8 +374,14 @@ footer {
   animation: zoomEffect 0.25s ease-out;
 }
 @keyframes zoomEffect {
-  from { transform: scale(0.85); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .lightbox-close {
@@ -493,10 +416,111 @@ footer {
 }
 
 /* Hiển thị viền rõ ràng khi người dùng dùng phím Tab di chuyển tới ảnh */
-.profile-img-btn:focus-visible, 
+.profile-img-btn:focus-visible,
 .lightbox-close:focus-visible {
   outline: 3px solid #007bff;
   outline-offset: 2px;
 }
 
+/* Chương 7 (CSP): style nội tuyến đã tách ra từ gioithieu.php */
+body .tram-tach-1 {
+  color: red;
+}
+body .tram-tach-2 {
+  background: #143d75 !important;
+  color: #ffffff !important;
+}
+body .tram-tach-3 {
+  text-align: center;
+  width: 100%;
+  max-width: 1170px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  color: #0056b3;
+  border: 2px solid #0056b3;
+  padding: 15px 0;
+  border-radius: 8px;
+}
+body .tram-tach-4 {
+  max-width: 1170px;
+  margin: 0 auto;
+}
+body .tram-tach-5 {
+  width: 530px;
+}
+body .tram-tach-6 {
+  height: 1027px;
+  width: 600px;
+}
+body .tram-tach-7 {
+  text-align: right;
+  margin-bottom: 20px;
+}
+body .tram-tach-8 {
+  font-size: 0.9em;
+  color: gray;
+}
+body .tram-tach-9 {
+  font-size: 1.2em;
+  color: #007bff;
+}
+body .tram-tach-10 {
+  width: 300px;
+}
+body .tram-tach-11 {
+  overflow-x: auto;
+  width: 500px;
+}
+body .tram-tach-12 {
+  white-space: nowrap;
+  font-size: 18px;
+  width: 100%;
+  min-width: 1800px;
+}
+body .tram-tach-13 {
+  min-width: 60px;
+}
+body .tram-tach-14 {
+  min-width: 150px;
+}
+body .tram-tach-15 {
+  min-width: 300px;
+}
+body .tram-tach-16 {
+  min-width: 350px;
+}
+body .tram-tach-17 {
+  min-width: 450px;
+}
+body .tram-tach-18 {
+  min-width: 200px;
+}
+body .tram-tach-19 {
+  padding: 8px 15px;
+  cursor: pointer;
+}
+body .tram-tach-20 {
+  overflow-x: auto;
+}
+body .tram-tach-21 {
+  min-width: 250px;
+}
+body .tram-tach-22 {
+  min-width: 550px;
+}
+body .tram-tach-23 {
+  min-width: 120px;
+}
 
+/* Chương 7 (CSP): chuyển từ <style> và style nội tuyến của gioithieu.php */
+body header[data-tram-header] {
+  background: #143d75 !important;
+  color: #ffffff !important;
+}
+.page-title-banner ul li,
+.page-title-banner nav a,
+.page-title-banner [class*="menu"] li {
+  border: none !important;
+  border-left: none !important;
+  border-right: none !important;
+}

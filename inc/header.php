@@ -82,7 +82,7 @@ $menuHeader['gioi-thieu'] = 'Giới thiệu Nhóm';
     <?php endif; ?>
 </head>
 
-<body>
+<body<?= isset($lopBody) && is_string($lopBody) && preg_match('/\A[a-zA-Z0-9_ -]+\z/', $lopBody) === 1 ? ' class="' . e($lopBody) . '"' : '' ?>>
 
     <header class="dau-trang">
         <strong>

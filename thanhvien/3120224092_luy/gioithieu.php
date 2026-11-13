@@ -691,7 +691,7 @@ require_once __DIR__ . '/../../inc/header.php';
                                 type="submit"
                                 name="hanh_dong_han_nop"
                                 value="xoa"
-                                onclick="return confirm('Bạn có chắc muốn xóa bài tập này không?')">Xóa</button>
+                                data-xac-nhan="Bạn có chắc muốn xóa bài tập này không?">Xóa</button>
                         </form>
                     </li>
                 <?php endforeach; ?>

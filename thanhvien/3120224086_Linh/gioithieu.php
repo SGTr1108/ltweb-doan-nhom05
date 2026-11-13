@@ -70,14 +70,12 @@ if (file_exists($file_nhat_ky)) {
 // --- CHỨC NĂNG 2: Giao diện Sáng / Tối qua Cookie ---
 $currentTheme = (isset($_COOKIE['theme']) && $_COOKIE['theme'] === 'dark') ? 'dark' : 'light';
 
+// header.php nhận $lopBody để gán class cho <body> (CSP không cho script nội tuyến).
+$lopBody = $currentTheme === 'dark' ? 'dark-mode' : '';
+
 // Gọi header dùng chung của nhóm
 require_once $goc . 'inc/header.php';
 ?>
-
-<?php if ($currentTheme === 'dark'): ?>
-    <!-- header.php chưa hỗ trợ class cho <body>, nên gán dark-mode ngay khi trang nạp -->
-    <script>document.body.classList.add('dark-mode');</script>
-<?php endif; ?>
 
 <!-- ================= PHẦN HTML CỦA BẠN ================= -->
 <main class="profile-container">
@@ -145,9 +143,9 @@ require_once $goc . 'inc/header.php';
     </article>
 
     <!-- Section: Lịch sử nhật ký truy cập cá nhân -->
-    <section class="access-log-section" style="margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 8px;">
+    <section class="access-log-section linh-tach-1">
         <h2>📜 Nhật ký truy cập cá nhân gần đây</h2>
-        <ul style="list-style-type: disc; padding-left: 20px;">
+        <ul class="linh-tach-2">
             <?php if (!empty($logs)): ?>
                 <?php foreach ($logs as $logItem): ?>
                     <li><small><?= e($logItem) ?></small></li>

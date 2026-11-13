@@ -4,205 +4,233 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/inc/config.php';
 
-// Kiểm tra quyền quan_tri
-$user = yeuCauQuyen('quan_tri');
+$tieuDeTrang  = 'Giỏ hàng | MiniPos';
+$moTaTrang    = 'Kiểm tra sản phẩm, số lượng và tổng tiền trong giỏ hàng MiniPos.';
+$scriptsTrang = ['js/gio-hang.js'];
+
+$thongBao = $_SESSION['flash_gio_hang'] ?? '';
+unset($_SESSION['flash_gio_hang']);
 
 $khoSanPham = new \App\Data\KhoSanPham(db());
-$khoDonHang = new \App\Data\KhoDonHang(db());
-$khoLienHe  = new \App\Data\KhoLienHe(db());
+$gioHang    = new \App\Services\GioHang($khoSanPham);
 
-// Cập nhật trạng thái đơn hàng (POST)
-if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && isset($_POST['cap_nhat_trang_thai'])) {
-    $donId        = filter_var($_POST['don_id'] ?? null, FILTER_VALIDATE_INT);
-    $trangThaiMoi = (string) ($_POST['trang_thai'] ?? '');
+if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
+    $hanhDong  = is_string($_POST['hanh_dong'] ?? null) ? $_POST['hanh_dong'] : '';
+    $idSanPham = is_string($_POST['id'] ?? null) ? trim($_POST['id']) : '';
 
-    if ($donId !== false && $donId > 0 && $khoDonHang->doiTrangThai($donId, $trangThaiMoi)) {
-        $_SESSION['flash_quan_tri'] = "Đã cập nhật trạng thái đơn hàng #{$donId}.";
-    } else {
-        $_SESSION['flash_quan_tri_loi'] = "Cập nhật trạng thái đơn hàng #{$donId} thất bại.";
+    try {
+        switch ($hanhDong) {
+            case 'them':
+                $soLuong = filter_var($_POST['so_luong'] ?? 1, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+                if ($idSanPham === '' || $soLuong === false) {
+                    throw new \InvalidArgumentException('Mã sản phẩm hoặc số lượng không hợp lệ.');
+                }
+                $gioHang->them($idSanPham, $soLuong);
+                $_SESSION['flash_gio_hang'] = 'Đã thêm sản phẩm vào giỏ hàng.';
+                break;
+
+            case 'cap-nhat':
+                $soLuong = filter_var($_POST['so_luong'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+                if ($idSanPham === '' || $soLuong === false) {
+                    throw new \InvalidArgumentException('Vui lòng nhập số lượng hợp lệ.');
+                }
+                $gioHang->capNhatSoLuong($idSanPham, $soLuong);
+                $_SESSION['flash_gio_hang'] = 'Đã cập nhật số lượng sản phẩm.';
+                break;
+
+            case 'xoa':
+                if ($idSanPham === '') {
+                    throw new \InvalidArgumentException('Không xác định được sản phẩm cần xóa.');
+                }
+                $gioHang->xoa($idSanPham);
+                $_SESSION['flash_gio_hang'] = 'Đã xóa sản phẩm khỏi giỏ hàng.';
+                break;
+
+            case 'xoa-tat-ca':
+                $gioHang->xoaTatCa();
+                $_SESSION['flash_gio_hang'] = 'Đã xóa toàn bộ giỏ hàng.';
+                break;
+
+            default:
+                throw new \InvalidArgumentException('Thao tác không hợp lệ.');
+        }
+    } catch (\InvalidArgumentException | \RuntimeException $loi) {
+        $_SESSION['flash_gio_hang'] = $loi->getMessage();
+    } catch (\Throwable $loi) {
+        error_log('Lỗi xử lý giỏ hàng: ' . $loi->getMessage());
+        $_SESSION['flash_gio_hang'] = 'Không thể xử lý giỏ hàng. Vui lòng thử lại.';
     }
 
-    header('Location: quan-tri.php', true, 303);
+    header('Location: gio-hang.php', true, 303);
     exit;
 }
 
-// Phân trang sản phẩm
-$trang = max(1, filter_var($_GET['trang'] ?? 1, FILTER_VALIDATE_INT) ?: 1);
-$soDong = 10;
-$boQua  = ($trang - 1) * $soDong;
+$danhSachMatHang = [];
+$tongTien        = 0;
+$tongSoLuong     = 0;
+$loiDuLieu       = false;
 
-$tongSanPham     = $khoSanPham->dem([]);
-$tongTrang       = max(1, (int) ceil($tongSanPham / $soDong));
-$danhSachSanPham = $khoSanPham->trang([], 'moi', $soDong, $boQua);
-
-$danhSachDonHang = $khoDonHang->tatCa();
-$danhSachLienHe  = $khoLienHe->layDanhSach();
-
-$tieuDeTrang  = 'Trang Quản Trị | MiniPos';
-$moTaTrang    = 'Trang quản trị sản phẩm, đơn hàng và phản hồi liên hệ.';
-$scriptsTrang = [];
+try {
+    $danhSachMatHang = $gioHang->layDanhSach();
+    $tongTien        = $gioHang->tinhTongTien();
+    $tongSoLuong     = $gioHang->demSoLuong();
+} catch (\Throwable $loi) {
+    error_log('Lỗi tải giỏ hàng: ' . $loi->getMessage());
+    $loiDuLieu = true;
+}
 
 require __DIR__ . '/inc/header.php';
 ?>
 
-<main class="bao trang-quan-tri">
-    <h1>Trang Quản Trị Hệ Thống MiniPos</h1>
+<main class="gio-hang-page-v2">
 
-    <p>Xin chào, <strong><?= e($user['ho_ten']) ?></strong> (Quản trị viên).</p>
+    <div class="gio-hang-heading-v2">
+        <span class="gio-hang-icon-v2" aria-hidden="true">🛒</span>
+        <div>
+            <h1>Giỏ hàng của bạn</h1>
+            <p>Kiểm tra sản phẩm và hoàn tất đơn hàng của bạn.</p>
+        </div>
+    </div>
 
-    <?php if (isset($_SESSION['flash_quan_tri'])): ?>
-        <p class="thong-bao-thanh-cong" role="status"><?= e($_SESSION['flash_quan_tri']) ?></p>
-        <?php unset($_SESSION['flash_quan_tri']); ?>
+    <?php if (is_string($thongBao) && $thongBao !== ''): ?>
+        <p class="gio-hang-notice-v2" role="status">
+            <?= e($thongBao) ?>
+        </p>
     <?php endif; ?>
 
-    <?php if (isset($_SESSION['flash_quan_tri_loi'])): ?>
-        <p class="thong-bao-loi" role="alert"><?= e($_SESSION['flash_quan_tri_loi']) ?></p>
-        <?php unset($_SESSION['flash_quan_tri_loi']); ?>
-    <?php endif; ?>
+    <?php if ($loiDuLieu): ?>
+        <p role="alert">Chưa thể tải giỏ hàng. Vui lòng thử lại sau.</p>
+    <?php elseif ($danhSachMatHang === []): ?>
+        <section class="gio-hang-empty-v2">
+            <div class="gio-hang-empty-icon-v2" aria-hidden="true">🛍️</div>
+            <h2>Giỏ hàng đang trống</h2>
+            <p>Hãy chọn những sản phẩm bạn muốn mua nhé.</p>
+            <a class="gio-hang-primary-button-v2" href="danh-sach.php">
+                Khám phá sản phẩm
+            </a>
+        </section>
+    <?php else: ?>
+        <div class="gio-hang-layout-v2">
+            <section class="gio-hang-products-v2" aria-labelledby="gio-hang-products-title">
+                <div class="gio-hang-section-heading-v2">
+                    <h2 id="gio-hang-products-title">Sản phẩm đã chọn</h2>
+                    <span><?= e(count($danhSachMatHang)) ?> sản phẩm</span>
+                </div>
 
-    <!-- SECTION 1: QUẢN LÝ SẢN PHẨM -->
-    <section>
-        <h2>Quản lý sản phẩm</h2>
-        <p><a href="them-san-pham.php" class="nut-chuc-nang">+ Thêm sản phẩm mới</a></p>
+                <div class="gio-hang-columns-v2" aria-hidden="true">
+                    <span>SẢN PHẨM</span>
+                    <span>ĐƠN GIÁ</span>
+                    <span>SỐ LƯỢNG</span>
+                    <span>THÀNH TIỀN</span>
+                    <span></span>
+                </div>
 
-        <div class="bang-vo">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Mã</th>
-                        <th>Tên sản phẩm</th>
-                        <th>Danh mục</th>
-                        <th>Giá</th>
-                        <th>Tồn kho</th>
-                        <th>Thao tác</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($danhSachSanPham as $sp): ?>
-                        <tr>
-                            <td><?= e($sp->getId()) ?></td>
-                            <td><?= e($sp->getTen()) ?></td>
-                            <td><?= e($sp->getDanhMuc()) ?></td>
-                            <td><?= e(vnd($sp->getGia())) ?></td>
-                            <td><?= e($sp->getTonKho()) ?></td>
-                            <td>
-                                <a href="sua-san-pham.php?id=<?= e($sp->getId()) ?>">Sửa</a> |
-                                <form action="xoa-san-pham.php" method="post" style="display:inline;" onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">
-                                    <?= csrfField() ?>
-                                    <input type="hidden" name="id" value="<?= e($sp->getId()) ?>">
-                                    <button type="submit" class="nut-xoa-link">Xóa</button>
-                                </form>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
+                <?php foreach ($danhSachMatHang as $matHang): ?>
+                    <?php
+                    $sanPham   = $matHang['sanPham'];
+                    $id        = $sanPham->getId();
+                    $soLuong   = $matHang['soLuong'];
+                    $thanhTien = $matHang['thanhTien'];
+                    $tonKho    = $sanPham->getTonKho();
+                    ?>
 
-        <?php if ($tongTrang > 1): ?>
-            <p>Trang:
-                <?php for ($i = 1; $i <= $tongTrang; $i++): ?>
-                    <a href="quan-tri.php?trang=<?= $i ?>" style="<?= $i === $trang ? 'font-weight:bold;' : '' ?>">[<?= $i ?>]</a>
-                <?php endfor; ?>
-            </p>
-        <?php endif; ?>
-    </section>
+                    <article class="gio-hang-product-v2">
+                        <div class="gio-hang-product-info-v2">
+                            <a class="gio-hang-product-image-v2" href="chi-tiet.php?id=<?= e(rawurlencode((string) $id)) ?>">
+                                <img src="<?= e($sanPham->getAnh() ?: 'images/MiniPOS.webp') ?>" alt="<?= e($sanPham->getTen()) ?>" loading="lazy" data-anh-du-phong="images/MiniPOS.webp">
+                            </a>
 
-    <!-- SECTION 2: QUẢN LÝ ĐƠN HÀNG -->
-    <section>
-        <h2>Quản lý đơn hàng toàn hệ thống</h2>
-        <div class="bang-vo">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Mã đơn</th>
-                        <th>Nhân viên lập</th>
-                        <th>Khách hàng</th>
-                        <th>Ngày đặt</th>
-                        <th>Số món</th>
-                        <th>Tổng tiền</th>
-                        <th>Trạng thái hiện tại</th>
-                        <th>Cập nhật trạng thái</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($danhSachDonHang as $don): ?>
-                        <tr>
-                            <td>#<?= e($don['id']) ?></td>
-                            <td><?= e($don['ten_nhan_vien'] ?? 'N/A') ?></td>
-                            <td>
-                                <?= e($don['ten_khach_hang'] ?: 'Khách vãng lai') ?>
-                                <?php if (!empty($don['sdt_khach_hang'])): ?>
-                                    <br><small>(<?= e($don['sdt_khach_hang']) ?>)</small>
-                                <?php endif; ?>
-                            </td>
-                            <td><?= e($don['ngay_dat']) ?></td>
-                            <td><?= e($don['so_mon']) ?></td>
-                            <td><?= e(vnd($don['tong_tien'])) ?></td>
-                            <td><?= e(\App\Data\KhoDonHang::TRANG_THAI[$don['trang_thai']] ?? $don['trang_thai']) ?></td>
-                            <td>
-                                <form action="quan-tri.php" method="post" style="display:inline;">
-                                    <?= csrfField() ?>
-                                    <input type="hidden" name="cap_nhat_trang_thai" value="1">
-                                    <input type="hidden" name="don_id" value="<?= e($don['id']) ?>">
-                                    <select name="trang_thai">
-                                        <?php foreach (\App\Data\KhoDonHang::TRANG_THAI as $ma => $ten): ?>
-                                            <option value="<?= e($ma) ?>" <?= $don['trang_thai'] === $ma ? 'selected' : '' ?>>
-                                                <?= e($ten) ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <button type="submit">Lưu</button>
-                                </form>
-                                | <a href="chi-tiet-don.php?id=<?= e($don['id']) ?>">Xem</a>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-    <!-- SECTION 3: PHIẾU LIÊN HỆ -->
-    <section>
-        <h2>Phiếu báo cáo & Liên hệ đã nhận</h2>
-        <div class="bang-vo">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Mã phiếu</th>
-                        <th>Thời gian</th>
-                        <th>Mã NV</th>
-                        <th>Email</th>
-                        <th>Ưu tiên</th>
-                        <th>Loại</th>
-                        <th>Nội dung</th>
-                        <th>Ảnh</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($danhSachLienHe as $phieu): ?>
-                        <tr>
-                            <td><?= e($phieu['ma_phieu']) ?></td>
-                            <td><?= e($phieu['thoi_gian_tao']) ?></td>
-                            <td><?= e($phieu['manhanvien']) ?></td>
-                            <td><?= e($phieu['email']) ?></td>
-                            <td><?= e($phieu['mucdouutien']) ?>/5</td>
-                            <td><?= e($phieu['loaiyeucau']) ?></td>
-                            <td><?= e($phieu['noidung']) ?></td>
-                            <td>
-                                <?php if (!empty($phieu['anh_dinh_kem'])): ?>
-                                    <a href="uploads/<?= e($phieu['anh_dinh_kem']) ?>" target="_blank">Xem ảnh</a>
+                            <div class="gio-hang-product-name-v2">
+                                <h3>
+                                    <a href="chi-tiet.php?id=<?= e(rawurlencode((string) $id)) ?>">
+                                        <?= e($sanPham->getTen()) ?>
+                                    </a>
+                                </h3>
+                                <p class="gio-hang-product-code-v2">Mã sản phẩm: #<?= e($id) ?></p>
+                                <p class="gio-hang-category-v2"><?= e($sanPham->getDanhMuc()) ?></p>
+                                <?php if ($tonKho > 0): ?>
+                                    <span class="gio-hang-stock-v2">Còn <?= e($tonKho) ?> sản phẩm</span>
                                 <?php else: ?>
-                                    Không
+                                    <span class="gio-hang-out-stock-v2">Tạm hết hàng</span>
                                 <?php endif; ?>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                            </div>
+                        </div>
+
+                        <div class="gio-hang-unit-price-v2">
+                            <span class="gio-hang-mobile-label-v2">Đơn giá</span>
+                            <strong><?= e(vnd($sanPham->getGia())) ?></strong>
+                        </div>
+
+                        <form class="gio-hang-quantity-form-v2" method="post" action="gio-hang.php">
+                            <?= csrfField() ?>
+                            <input type="hidden" name="hanh_dong" value="cap-nhat">
+                            <input type="hidden" name="id" value="<?= e($id) ?>">
+
+                            <label class="gio-hang-mobile-label-v2" for="so-luong-<?= e($id) ?>">Số lượng</label>
+                            <div class="gio-hang-quantity-control-v2">
+                                <button type="button" class="giam-so-luong" aria-label="Giảm số lượng" <?= $soLuong <= 1 ? 'disabled' : '' ?>>−</button>
+                                <input id="so-luong-<?= e($id) ?>" type="number" name="so_luong" value="<?= e($soLuong) ?>" min="1" max="<?= e(max(1, $tonKho)) ?>" required>
+                                <button type="button" class="tang-so-luong" aria-label="Tăng số lượng" <?= $soLuong >= $tonKho ? 'disabled' : '' ?>>+</button>
+                            </div>
+                        </form>
+
+                        <div class="gio-hang-subtotal-v2">
+                            <span class="gio-hang-mobile-label-v2">Thành tiền</span>
+                            <strong><?= e(vnd($thanhTien)) ?></strong>
+                        </div>
+
+                        <form class="gio-hang-remove-form-v2" method="post" action="gio-hang.php">
+                            <?= csrfField() ?>
+                            <input type="hidden" name="hanh_dong" value="xoa">
+                            <input type="hidden" name="id" value="<?= e($id) ?>">
+                            <button type="submit" aria-label="Xóa <?= e($sanPham->getTen()) ?>" title="Xóa sản phẩm">×</button>
+                        </form>
+                    </article>
+                <?php endforeach; ?>
+
+                <div class="gio-hang-continue-v2">
+                    <a class="gio-hang-outline-button-v2" href="danh-sach.php">
+                        ← Tiếp tục mua sắm
+                    </a>
+                </div>
+            </section>
+
+            <aside class="gio-hang-summary-v2" aria-labelledby="gio-hang-summary-title">
+                <div class="gio-hang-summary-heading-v2">
+                    <span aria-hidden="true">▤</span>
+                    <h2 id="gio-hang-summary-title">Tóm tắt đơn hàng</h2>
+                </div>
+
+                <div class="gio-hang-summary-body-v2">
+                    <div class="gio-hang-summary-row-v2">
+                        <span>Số mặt hàng</span>
+                        <strong><?= e(count($danhSachMatHang)) ?></strong>
+                    </div>
+
+                    <div class="gio-hang-summary-row-v2">
+                        <span>Tổng số lượng</span>
+                        <strong><?= e($tongSoLuong) ?></strong>
+                    </div>
+
+                    <div class="gio-hang-summary-total-v2">
+                        <span>Tổng thanh toán</span>
+                        <strong><?= e(vnd($tongTien)) ?></strong>
+                    </div>
+
+                    <a class="gio-hang-primary-button-v2 gio-hang-nut-day-du" href="dat-hang.php">
+                        Tiến hành đặt hàng →
+                    </a>
+
+                    <form class="gio-hang-clear-form-v2" method="post" action="gio-hang.php" data-xac-nhan="Bạn có chắc muốn xóa toàn bộ giỏ hàng?">
+                        <?= csrfField() ?>
+                        <input type="hidden" name="hanh_dong" value="xoa-tat-ca">
+                        <button type="submit">Xóa toàn bộ giỏ hàng</button>
+                    </form>
+                </div>
+            </aside>
         </div>
-    </section>
+    <?php endif; ?>
+
 </main>
 
 <?php require __DIR__ . '/inc/footer.php'; ?>

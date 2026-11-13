@@ -137,7 +137,7 @@ require __DIR__ . '/inc/header.php';
                     <article class="gio-hang-product-v2">
                         <div class="gio-hang-product-info-v2">
                             <a class="gio-hang-product-image-v2" href="chi-tiet.php?id=<?= e(rawurlencode((string) $id)) ?>">
-                                <img src="<?= e($sanPham->getAnh() ?: 'images/MiniPOS.webp') ?>" alt="<?= e($sanPham->getTen()) ?>" loading="lazy" onerror="this.onerror=null;this.src='images/MiniPOS.webp';">
+                                <img src="<?= e($sanPham->getAnh() ?: 'images/MiniPOS.webp') ?>" alt="<?= e($sanPham->getTen()) ?>" loading="lazy" data-anh-du-phong="images/MiniPOS.webp">
                             </a>
 
                             <div class="gio-hang-product-name-v2">
@@ -217,11 +217,11 @@ require __DIR__ . '/inc/header.php';
                         <strong><?= e(vnd($tongTien)) ?></strong>
                     </div>
 
-                    <a class="gio-hang-primary-button-v2" style="width:100%" href="dat-hang.php">
+                    <a class="gio-hang-primary-button-v2 gio-hang-nut-day-du" href="dat-hang.php">
                         Tiến hành đặt hàng →
                     </a>
 
-                    <form class="gio-hang-clear-form-v2" method="post" action="gio-hang.php" onsubmit="return confirm('Bạn có chắc muốn xóa toàn bộ giỏ hàng?');">
+                    <form class="gio-hang-clear-form-v2" method="post" action="gio-hang.php" data-xac-nhan="Bạn có chắc muốn xóa toàn bộ giỏ hàng?">
                         <?= csrfField() ?>
                         <input type="hidden" name="hanh_dong" value="xoa-tat-ca">
                         <button type="submit">Xóa toàn bộ giỏ hàng</button>

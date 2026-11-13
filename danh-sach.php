@@ -107,7 +107,7 @@ require __DIR__ . '/inc/header.php';
                         <img src="<?= e($sanPham->getAnh() ?: 'images/MiniPOS.webp') ?>"
                             alt="Hình ảnh <?= e($sanPham->getTen()) ?>"
                             width="800" height="533" loading="lazy"
-                            onerror="this.onerror=null;this.src='images/MiniPOS.webp';">
+                            data-anh-du-phong="images/MiniPOS.webp">
 
                         <div class="noi-dung-san-pham">
                             <h3><?= e($sanPham->getTen()) ?></h3>

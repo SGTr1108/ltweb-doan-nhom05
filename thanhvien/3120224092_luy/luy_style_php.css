@@ -1,14 +1,12 @@
 @scope (.trang-ca-nhan-luy) {
-
-/* ========================================
+  /* ========================================
    CSS CÁ NHÂN - TRANG GIỚI THIỆU MINIPOS
    Giao diện hiện đại, tinh tế & responsive
    ======================================== */
 
+  /* ---------- 1. KHAI BÁO BIẾN MÀU ---------- */
 
-/* ---------- 1. KHAI BÁO BIẾN MÀU ---------- */
-
-:scope {
+  :scope {
     --mau-chinh: #1e3a8a;
     --mau-chinh-dam: #172554;
     --mau-chinh-nhat: #eff6ff;
@@ -27,25 +25,23 @@
     --khoang-cach: 24px;
 
     --bong-do:
-        0 10px 25px -5px rgba(30, 58, 138, 0.08),
-        0 8px 10px -6px rgba(30, 58, 138, 0.08);
+      0 10px 25px -5px rgba(30, 58, 138, 0.08),
+      0 8px 10px -6px rgba(30, 58, 138, 0.08);
 
-    --bong-hover:
-        0 20px 35px -10px rgba(30, 58, 138, 0.15);
-}
+    --bong-hover: 0 20px 35px -10px rgba(30, 58, 138, 0.15);
+  }
 
+  /* ---------- 2. THIẾT LẬP CHUNG ---------- */
 
-/* ---------- 2. THIẾT LẬP CHUNG ---------- */
-
-* {
+  * {
     box-sizing: border-box;
-}
+  }
 
-html {
+  html {
     scroll-behavior: smooth;
-}
+  }
 
-:scope {
+  :scope {
     margin: 0;
     padding: 0;
 
@@ -54,38 +50,29 @@ html {
     line-height: 1.6;
 
     color: var(--mau-chu);
-    background: linear-gradient(
-        135deg,
-        #f1f5f9 0%,
-        #f8fafc 100%
-    );
+    background: linear-gradient(135deg, #f1f5f9 0%, #f8fafc 100%);
 
     overflow-x: hidden;
-}
+  }
 
-img {
+  img {
     max-width: 100%;
-}
+  }
 
+  /* ---------- 3. HEADER ---------- */
 
-/* ---------- 3. HEADER ---------- */
-
-header {
+  header {
     padding: 36px 20px;
     text-align: center;
 
     color: white;
-    background: linear-gradient(
-        135deg,
-        var(--mau-chinh-dam),
-        var(--mau-chinh)
-    );
+    background: linear-gradient(135deg, var(--mau-chinh-dam), var(--mau-chinh));
 
     border-bottom: 5px solid var(--mau-nhan);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
+  }
 
-header h1 {
+  header h1 {
     margin: 0;
 
     font-size: clamp(1.8rem, 4vw, 2.6rem);
@@ -93,19 +80,18 @@ header h1 {
     letter-spacing: 0.5px;
 
     overflow-wrap: anywhere;
-}
+  }
 
-header p {
+  header p {
     margin: 8px 0 0;
 
     font-size: 1.05rem;
     color: #e2e8f0;
-}
+  }
 
+  /* ---------- 4. THANH ĐIỀU HƯỚNG ---------- */
 
-/* ---------- 4. THANH ĐIỀU HƯỚNG ---------- */
-
-nav {
+  nav {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -118,9 +104,9 @@ nav {
     border-bottom: 1px solid var(--mau-vien);
 
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-}
+  }
 
-nav a {
+  nav a {
     display: inline-block;
 
     padding: 8px 16px;
@@ -134,43 +120,41 @@ nav a {
     border-radius: 8px;
 
     transition:
-        color 0.25s ease,
-        background-color 0.25s ease,
-        transform 0.25s ease,
-        box-shadow 0.25s ease;
-}
+      color 0.25s ease,
+      background-color 0.25s ease,
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
 
-nav a:hover {
+  nav a:hover {
     color: white;
     background-color: var(--mau-chinh);
 
     transform: translateY(-2px);
 
     box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
-}
+  }
 
-nav a:focus-visible {
+  nav a:focus-visible {
     outline: 3px solid var(--mau-nhan);
     outline-offset: 3px;
-}
+  }
 
+  /* ---------- 5. NỘI DUNG CHÍNH ---------- */
 
-/* ---------- 5. NỘI DUNG CHÍNH ---------- */
-
-:scope {
+  :scope {
     width: min(1100px, calc(100% - 32px));
     margin: 35px auto;
 
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--khoang-cach);
-}
+  }
 
+  /* ---------- 6. SECTION VÀ ARTICLE ---------- */
 
-/* ---------- 6. SECTION VÀ ARTICLE ---------- */
-
-section,
-article {
+  section,
+  article {
     width: 100%;
     min-width: 0;
 
@@ -184,18 +168,18 @@ article {
     box-shadow: var(--bong-do);
 
     transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease;
-}
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+  }
 
-section:hover,
-article:hover {
+  section:hover,
+  article:hover {
     transform: translateY(-3px);
     box-shadow: var(--bong-hover);
-}
+  }
 
-section h2,
-article h2 {
+  section h2,
+  article h2 {
     margin-top: 0;
     margin-bottom: 22px;
     padding-bottom: 10px;
@@ -208,10 +192,10 @@ article h2 {
     position: relative;
 
     overflow-wrap: anywhere;
-}
+  }
 
-section h2::before,
-article h2::before {
+  section h2::before,
+  article h2::before {
     content: "";
 
     position: absolute;
@@ -222,39 +206,38 @@ article h2::before {
     height: 3px;
 
     background-color: var(--mau-chinh);
-}
+  }
 
-section h3,
-article h3 {
+  section h3,
+  article h3 {
     margin-top: 20px;
     margin-bottom: 10px;
 
     color: var(--mau-chinh);
     font-size: 1.15rem;
-}
+  }
 
-p {
+  p {
     margin: 12px 0;
     color: var(--mau-chu-phu);
 
     overflow-wrap: anywhere;
-}
+  }
 
-strong {
+  strong {
     color: var(--mau-chinh);
-}
+  }
 
+  /* ---------- 7. THÔNG TIN SINH VIÊN ---------- */
 
-/* ---------- 7. THÔNG TIN SINH VIÊN ---------- */
-
-/*
+  /*
    Bố cục trên máy tính:
    - Tiêu đề chiếm toàn bộ chiều rộng.
    - Ảnh nằm bên trái.
    - Thông tin nằm bên phải.
 */
 
-:scope > section.luy-thong-tin-sinh-vien {
+  :scope > section.luy-thong-tin-sinh-vien {
     display: grid;
 
     grid-template-columns: 240px minmax(0, 1fr);
@@ -263,21 +246,19 @@ strong {
     align-items: start;
 
     width: 100%;
-}
+  }
 
+  /* Tiêu đề chiếm cả hai cột */
 
-/* Tiêu đề chiếm cả hai cột */
-
-:scope > section.luy-thong-tin-sinh-vien h2 {
+  :scope > section.luy-thong-tin-sinh-vien h2 {
     grid-column: 1 / -1;
 
     margin-bottom: 0;
-}
+  }
 
+  /* Ảnh sinh viên */
 
-/* Ảnh sinh viên */
-
-:scope > section.luy-thong-tin-sinh-vien img {
+  :scope > section.luy-thong-tin-sinh-vien img {
     display: block;
 
     grid-column: 1;
@@ -298,31 +279,28 @@ strong {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
 
     transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease;
-}
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+  }
 
-:scope > section.luy-thong-tin-sinh-vien img:hover {
+  :scope > section.luy-thong-tin-sinh-vien img:hover {
     transform: scale(1.02);
 
-    box-shadow:
-        0 15px 30px rgba(30, 58, 138, 0.2);
-}
+    box-shadow: 0 15px 30px rgba(30, 58, 138, 0.2);
+  }
 
+  /* Khối thông tin sinh viên */
 
-/* Khối thông tin sinh viên */
-
-:scope > section.luy-thong-tin-sinh-vien .student-info {
+  :scope > section.luy-thong-tin-sinh-vien .student-info {
     grid-column: 2;
     grid-row: 2;
 
     min-width: 0;
-}
+  }
 
+  /* Các dòng thông tin */
 
-/* Các dòng thông tin */
-
-:scope > section.luy-thong-tin-sinh-vien .student-info p {
+  :scope > section.luy-thong-tin-sinh-vien .student-info p {
     margin: 0 0 12px;
 
     padding: 10px 14px;
@@ -337,50 +315,47 @@ strong {
     overflow-wrap: anywhere;
 
     transition:
-        background-color 0.2s ease,
-        transform 0.2s ease;
-}
+      background-color 0.2s ease,
+      transform 0.2s ease;
+  }
 
-:scope > section.luy-thong-tin-sinh-vien .student-info p:hover {
+  :scope > section.luy-thong-tin-sinh-vien .student-info p:hover {
     background-color: #e0f2fe;
     transform: translateX(4px);
-}
+  }
 
-
-/*
+  /*
    Nếu phần thông tin không có class student-info,
    các đoạn văn vẫn được hiển thị đúng cột.
 */
 
-:scope > section.luy-thong-tin-sinh-vien > p,
-:scope > section.luy-thong-tin-sinh-vien > ul {
+  :scope > section.luy-thong-tin-sinh-vien > p,
+  :scope > section.luy-thong-tin-sinh-vien > ul {
     grid-column: 2;
-}
+  }
 
+  /* ---------- 8. DANH SÁCH & KỸ NĂNG ---------- */
 
-/* ---------- 8. DANH SÁCH & KỸ NĂNG ---------- */
-
-ul {
+  ul {
     margin: 10px 0;
     padding-left: 20px;
 
     overflow-wrap: anywhere;
-}
+  }
 
-li {
+  li {
     margin-bottom: 8px;
     color: var(--mau-chu-phu);
-}
+  }
 
-section ul li::marker {
+  section ul li::marker {
     color: var(--mau-nhan);
     font-size: 1.1rem;
-}
+  }
 
+  /* ---------- 9. LIÊN KẾT ---------- */
 
-/* ---------- 9. LIÊN KẾT ---------- */
-
-:scope a {
+  :scope a {
     color: var(--mau-chinh);
 
     font-weight: 600;
@@ -389,23 +364,22 @@ section ul li::marker {
     overflow-wrap: anywhere;
 
     transition: color 0.2s ease;
-}
+  }
 
-:scope a:hover {
+  :scope a:hover {
     color: var(--mau-nhan-hover);
 
     text-decoration: underline;
     text-underline-offset: 3px;
-}
+  }
 
+  /* ---------- 10. BẢNG THỜI KHÓA BIỂU ---------- */
 
-/* ---------- 10. BẢNG THỜI KHÓA BIỂU ---------- */
-
-section:has(table) {
+  section:has(table) {
     overflow-x: auto;
-}
+  }
 
-table {
+  table {
     width: 100%;
     min-width: 700px;
 
@@ -422,9 +396,9 @@ table {
     overflow: hidden;
 
     border: 1px solid var(--mau-vien);
-}
+  }
 
-caption {
+  caption {
     margin-bottom: 14px;
 
     color: var(--mau-chinh);
@@ -432,10 +406,10 @@ caption {
     font-weight: 700;
 
     text-align: left;
-}
+  }
 
-th,
-td {
+  th,
+  td {
     padding: 12px 10px;
 
     text-align: center;
@@ -447,70 +421,68 @@ td {
     border-right: 1px solid var(--mau-vien);
 
     overflow-wrap: anywhere;
-}
+  }
 
-th:last-child,
-td:last-child {
+  th:last-child,
+  td:last-child {
     border-right: none;
-}
+  }
 
-th:first-child,
-td:first-child {
+  th:first-child,
+  td:first-child {
     width: 14%;
-}
+  }
 
-th:not(:first-child),
-td:not(:first-child) {
+  th:not(:first-child),
+  td:not(:first-child) {
     width: 12.25%;
-}
+  }
 
-thead th {
+  thead th {
     color: white;
     background-color: var(--mau-chinh);
 
     font-weight: 700;
 
     border-bottom: 2px solid var(--mau-nhan);
-}
+  }
 
-tbody th {
+  tbody th {
     color: var(--mau-chinh);
     background-color: var(--mau-chinh-nhat);
 
     font-weight: 700;
-}
+  }
 
-tbody tr:nth-child(even) {
+  tbody tr:nth-child(even) {
     background-color: #fafbfc;
-}
+  }
 
-tbody tr {
+  tbody tr {
     transition: background-color 0.2s ease;
-}
+  }
 
-tbody tr:hover {
+  tbody tr:hover {
     background-color: #fef3c7;
-}
+  }
 
+  /* ---------- 11. CÁC KHUNG BÊN DƯỚI ---------- */
 
-/* ---------- 11. CÁC KHUNG BÊN DƯỚI ---------- */
-
-/*
+  /*
    Các section từ section thứ hai trở đi
    đều chiếm toàn bộ chiều rộng :scope.
 */
 
-:scope > section:nth-child(n + 2),
-:scope > article {
+  :scope > section:nth-child(n + 2),
+  :scope > article {
     grid-column: 1 / -1;
     width: 100%;
     min-width: 0;
-}
+  }
 
+  /* ---------- 12. FOOTER ---------- */
 
-/* ---------- 12. FOOTER ---------- */
-
-footer {
+  footer {
     margin-top: 50px;
     padding: 32px 20px;
 
@@ -520,242 +492,235 @@ footer {
     background-color: var(--mau-chinh-dam);
 
     border-top: 5px solid var(--mau-nhan);
-}
+  }
 
-footer p {
+  footer p {
     margin: 0;
     color: #e2e8f0;
-}
+  }
 
-footer a {
+  footer a {
     color: var(--mau-nhan);
     font-weight: bold;
-}
+  }
 
-footer a:hover {
+  footer a:hover {
     color: white;
-}
+  }
 
+  /* ---------- 13. TABLET ---------- */
 
-/* ---------- 13. TABLET ---------- */
-
-@media (max-width: 900px) and (min-width: 768px) {
+  @media (max-width: 900px) and (min-width: 768px) {
     :scope {
-        width: calc(100% - 32px);
+      width: calc(100% - 32px);
     }
 
     section,
     article {
-        padding: 24px;
+      padding: 24px;
     }
 
     :scope > section.luy-thong-tin-sinh-vien {
-        grid-template-columns: 200px minmax(0, 1fr);
-        gap: 24px;
+      grid-template-columns: 200px minmax(0, 1fr);
+      gap: 24px;
     }
 
     :scope > section.luy-thong-tin-sinh-vien img {
-        max-width: 200px;
+      max-width: 200px;
     }
-}
+  }
 
+  /* ---------- 14. ĐIỆN THOẠI ---------- */
 
-/* ---------- 14. ĐIỆN THOẠI ---------- */
-
-@media (max-width: 767px) {
+  @media (max-width: 767px) {
     :scope {
-        font-size: 15px;
+      font-size: 15px;
     }
 
     header {
-        padding: 24px 16px;
+      padding: 24px 16px;
     }
 
     header h1 {
-        font-size: 1.7rem;
+      font-size: 1.7rem;
     }
 
     header p {
-        font-size: 0.95rem;
+      font-size: 0.95rem;
     }
 
     nav {
-        flex-direction: column;
-        align-items: stretch;
+      flex-direction: column;
+      align-items: stretch;
 
-        gap: 8px;
-        padding: 12px;
+      gap: 8px;
+      padding: 12px;
     }
 
     nav a {
-        width: 100%;
-        padding: 10px;
+      width: 100%;
+      padding: 10px;
 
-        text-align: center;
+      text-align: center;
     }
 
     :scope {
-        width: calc(100% - 20px);
+      width: calc(100% - 20px);
 
-        margin: 20px auto;
-        gap: 16px;
+      margin: 20px auto;
+      gap: 16px;
     }
 
     section,
     article {
-        width: 100%;
-        padding: 20px 16px;
+      width: 100%;
+      padding: 20px 16px;
 
-        border-radius: 12px;
+      border-radius: 12px;
     }
 
     section h2,
     article h2 {
-        font-size: 1.25rem;
-        line-height: 1.4;
+      font-size: 1.25rem;
+      line-height: 1.4;
     }
-
 
     /* Thông tin sinh viên trên điện thoại */
 
     :scope > section.luy-thong-tin-sinh-vien {
-        display: block;
-        width: 100%;
+      display: block;
+      width: 100%;
     }
 
     :scope > section.luy-thong-tin-sinh-vien h2 {
-        width: 100%;
-        margin-bottom: 20px;
+      width: 100%;
+      margin-bottom: 20px;
     }
 
     :scope > section.luy-thong-tin-sinh-vien img {
-        display: block;
+      display: block;
 
-        width: 200px;
-        max-width: 100%;
-        height: auto;
+      width: 200px;
+      max-width: 100%;
+      height: auto;
 
-        aspect-ratio: 3 / 4;
+      aspect-ratio: 3 / 4;
 
-        margin: 0 auto 24px;
+      margin: 0 auto 24px;
     }
 
     :scope > section.luy-thong-tin-sinh-vien .student-info {
-        width: 100%;
+      width: 100%;
     }
 
     :scope > section.luy-thong-tin-sinh-vien .student-info p {
-        width: 100%;
+      width: 100%;
 
-        margin-bottom: 10px;
-        padding: 9px 12px;
+      margin-bottom: 10px;
+      padding: 9px 12px;
 
-        line-height: 1.5;
+      line-height: 1.5;
     }
 
     :scope > section.luy-thong-tin-sinh-vien > p,
     :scope > section.luy-thong-tin-sinh-vien > ul {
-        width: 100%;
+      width: 100%;
     }
-
 
     /* Các khung bên dưới */
 
     :scope > section:nth-child(n + 2),
     :scope > article {
-        width: 100%;
+      width: 100%;
     }
-
 
     /* Danh sách */
 
     ul {
-        padding-left: 20px;
+      padding-left: 20px;
     }
 
     li {
-        margin-bottom: 6px;
+      margin-bottom: 6px;
     }
-
 
     /* Bảng có thể cuộn ngang */
 
     section:has(table) {
-        width: 100%;
-        overflow-x: auto;
+      width: 100%;
+      overflow-x: auto;
     }
 
     table {
-        min-width: 650px;
-        font-size: 0.82rem;
+      min-width: 650px;
+      font-size: 0.82rem;
     }
 
     th,
     td {
-        padding: 8px 6px;
+      padding: 8px 6px;
     }
-
 
     /* Footer */
 
     footer {
-        margin-top: 30px;
-        padding: 24px 16px;
+      margin-top: 30px;
+      padding: 24px 16px;
     }
-}
+  }
 
+  /* ---------- 15. ĐIỆN THOẠI RẤT NHỎ ---------- */
 
-/* ---------- 15. ĐIỆN THOẠI RẤT NHỎ ---------- */
-
-@media (max-width: 400px) {
+  @media (max-width: 400px) {
     :scope {
-        width: calc(100% - 16px);
+      width: calc(100% - 16px);
     }
 
     section,
     article {
-        padding: 16px 12px;
+      padding: 16px 12px;
     }
 
     header h1 {
-        font-size: 1.45rem;
+      font-size: 1.45rem;
     }
 
     :scope > section.luy-thong-tin-sinh-vien img {
-        width: 170px;
+      width: 170px;
     }
 
     :scope > section.luy-thong-tin-sinh-vien .student-info p {
-        font-size: 0.92rem;
-        padding: 8px 10px;
+      font-size: 0.92rem;
+      padding: 8px 10px;
     }
-}
+  }
 
+  /* ---------- 16. HỖ TRỢ TRUY CẬP BÀN PHÍM ---------- */
 
-/* ---------- 16. HỖ TRỢ TRUY CẬP BÀN PHÍM ---------- */
-
-:focus-visible {
+  :focus-visible {
     outline: 3px solid var(--mau-nhan);
     outline-offset: 3px;
-}
-/* ========================================
+  }
+  /* ========================================
    CSS BỔ SUNG CHO PHẦN C (JS TƯƠNG TÁC)
    ======================================== */
 
-/* 1. Hiệu ứng con trỏ nhấp nháy cho gõ chữ */
-.typing-cursor::after {
-    content: '|';
+  /* 1. Hiệu ứng con trỏ nhấp nháy cho gõ chữ */
+  .typing-cursor::after {
+    content: "|";
     display: inline-block;
     animation: blink 0.8s step-end infinite;
     color: var(--mau-chinh);
     margin-left: 2px;
-}
-@keyframes blink {
-    50% { opacity: 0; }
-}
+  }
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
 
-/* 2. Định dạng nút Accordion */
-.accordion-header {
+  /* 2. Định dạng nút Accordion */
+  .accordion-header {
     width: 100%;
     text-align: left;
     background: none;
@@ -770,120 +735,128 @@ footer a:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-.accordion-header::after {
-    content: '▼';
+  }
+  .accordion-header::after {
+    content: "▼";
     font-size: 0.7em;
     transition: transform 0.3s ease;
-}
-.accordion-header[aria-expanded="false"]::after {
+  }
+  .accordion-header[aria-expanded="false"]::after {
     transform: rotate(-90deg); /* Xoay mũi tên khi đóng */
-}
-.accordion-header:focus-visible {
+  }
+  .accordion-header:focus-visible {
     outline: 3px solid var(--mau-nhan);
     border-radius: 4px;
     outline-offset: 4px;
-}
-.accordion-content {
+  }
+  .accordion-content {
     display: none;
-}
-.accordion-content.open {
+  }
+  .accordion-content.open {
     display: block;
     animation: fadeIn 0.4s ease;
-}
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+  }
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 /* TIEU DE CA NHAN - LUY */
 .trang-ca-nhan-luy > .luy-profile-title {
-    display: block;
-    width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
-    grid-column: 1 / -1;
-    margin: 0 0 24px;
-    padding: 24px 16px;
-    text-align: center;
-    background: linear-gradient(135deg, #eff6ff, #ffffff);
-    border: 2px solid #1e3a8a;
-    border-bottom: 5px solid #f59e0b;
-    border-radius: 16px;
-    box-shadow: 0 8px 20px rgba(30, 58, 138, 0.12);
+  display: block;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  grid-column: 1 / -1;
+  margin: 0 0 24px;
+  padding: 24px 16px;
+  text-align: center;
+  background: linear-gradient(135deg, #eff6ff, #ffffff);
+  border: 2px solid #1e3a8a;
+  border-bottom: 5px solid #f59e0b;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(30, 58, 138, 0.12);
 }
 
 .trang-ca-nhan-luy > .luy-profile-title h1 {
-    margin: 0;
-    color: #1e3a8a;
-    font-size: clamp(1.35rem, 3vw, 2.2rem);
-    line-height: 1.4;
-    overflow-wrap: normal;
+  margin: 0;
+  color: #1e3a8a;
+  font-size: clamp(1.35rem, 3vw, 2.2rem);
+  line-height: 1.4;
+  overflow-wrap: normal;
 }
 
 /* Nen trang cua cac dong thong tin sinh vien la mau trang */
 .trang-ca-nhan-luy > .luy-thong-tin-sinh-vien > .student-info p {
-    background-color: #ffffff;
+  background-color: #ffffff;
 }
 
 /* Dam bao cac cot khong chong len nhau */
 .trang-ca-nhan-luy > .luy-thong-tin-sinh-vien {
-    grid-template-columns: 240px minmax(0, 1fr);
-    min-width: 0;
+  grid-template-columns: 240px minmax(0, 1fr);
+  min-width: 0;
 }
 
 .trang-ca-nhan-luy > .luy-thong-tin-sinh-vien > img,
 .trang-ca-nhan-luy > .luy-thong-tin-sinh-vien > .student-info {
-    min-width: 0;
+  min-width: 0;
 }
 
 @media (max-width: 767px) {
-    .trang-ca-nhan-luy > .luy-thong-tin-sinh-vien {
-        display: block;
-    }
+  .trang-ca-nhan-luy > .luy-thong-tin-sinh-vien {
+    display: block;
+  }
 
-    .trang-ca-nhan-luy > .luy-profile-title {
-        padding: 18px 12px;
-    }
+  .trang-ca-nhan-luy > .luy-profile-title {
+    padding: 18px 12px;
+  }
 }
-
 
 /* Danh sách hạn nộp: nút thao tác nằm trên một hàng */
 .luy-han-nop-bai li form {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
 }
 
 /* Hai nút: nền trắng, viền xanh */
 .luy-han-nop-bai li form button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: auto;
-    margin: 0;
-    padding: 10px 18px;
-    background-color: #ffffff;
-    color: #223f91;
-    border: 1.5px solid #223f91;
-    border-radius: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s ease, color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  margin: 0;
+  padding: 10px 18px;
+  background-color: #ffffff;
+  color: #223f91;
+  border: 1.5px solid #223f91;
+  border-radius: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 /* Hiệu ứng khi rê chuột */
 .luy-han-nop-bai li form button:hover {
-    background-color: #223f91;
-    color: #ffffff;
+  background-color: #223f91;
+  color: #ffffff;
 }
 
 /* Hiển thị rõ khi dùng bàn phím */
 .luy-han-nop-bai li form button:focus-visible {
-    outline: 3px solid #ffb000;
-    outline-offset: 3px;
+  outline: 3px solid #ffb000;
+  outline-offset: 3px;
 }
+/* Chương 7 (CSP): style nội tuyến đã tách ra từ gioithieu.php */

@@ -1,13 +1,12 @@
 /**
  * TẬP TIN: js/canhan.js
  * CHỨC NĂNG: Điều khiển nút cuộn mượt lên đầu trang và trình xem ảnh phóng to (Lightbox).
- * CÁCH THỬ: 
+ * CÁCH THỬ:
  * 1. Cuộn trang xuống hơn 300px để kiểm tra nút "Lên đầu trang", sau đó nhấn nút để cuộn lên đầu.
  * 2. LIGHTBOX: Nhấn vào ảnh chân dung để phóng to, dùng nút X hoặc nhấn ESC để đóng ảnh.
  */
 
 document.addEventListener("DOMContentLoaded", function () {
-  
   // =========================================================================
   // 1. CHỨC NĂNG: NÚT CUỘN LÊN ĐẦU TRANG (BACK TO TOP)
   // =========================================================================
@@ -15,7 +14,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (scrollToTopBtn) {
     window.addEventListener("scroll", function () {
-      if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+      if (
+        document.body.scrollTop > 300 ||
+        document.documentElement.scrollTop > 300
+      ) {
         scrollToTopBtn.classList.add("active");
       } else {
         scrollToTopBtn.classList.remove("active");
@@ -25,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
     scrollToTopBtn.addEventListener("click", function () {
       window.scrollTo({
         top: 0,
-        behavior: "smooth"
+        behavior: "smooth",
       });
     });
   }
@@ -38,7 +40,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const lightboxContainer = document.getElementById("imageLightbox");
 
   if (profileImgBtn && profileImg && lightboxContainer) {
-    
     // Tìm nút đóng có sẵn trong HTML hoặc chỉnh sửa lại thuộc tính của nó
     const closeBtn = lightboxContainer.querySelector(".lightbox-close");
 
@@ -52,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Hàm mở Lightbox
     function openLightbox() {
-      targetImg.src = profileImg.src; 
+      targetImg.src = profileImg.src;
       lightboxContainer.classList.add("open");
       lightboxContainer.setAttribute("aria-hidden", "false");
       closeBtn.focus(); // Tự động di chuyển con trỏ bàn phím vào nút đóng để tiện thao tác
@@ -82,9 +83,41 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Sự kiện 2D: Hỗ trợ phím ESC (Escape) để đóng trình xem ảnh nhanh
     document.addEventListener("keydown", function (event) {
-      if (event.key === "Escape" && lightboxContainer.classList.contains("open")) {
+      if (
+        event.key === "Escape" &&
+        lightboxContainer.classList.contains("open")
+      ) {
         closeLightbox();
       }
     });
   }
+});
+
+// Chương 7 (CSP): thay cho các <script> nội tuyến trong gioithieu.php.
+
+// Thông báo popup lấy từ thẻ data-thong-bao (nội dung đã được e() ở máy chủ).
+// Trang nạp tệp này hai lần (footer.php và thẻ <script> riêng) nên đánh dấu
+// thẻ đã hiện để popup không hiện hai lần.
+document
+  .querySelectorAll("[data-thong-bao]:not([data-da-hien])")
+  .forEach((the) => {
+    the.dataset.daHien = "1";
+    alert(the.dataset.thongBao);
+  });
+
+// Ghi nhận lượt xem (chỉ chạy khi trang có nút #btn-view).
+document.getElementById("btn-view")?.addEventListener("click", () => {
+  fetch("luot_xem.php", {
+    method: "POST",
+    headers: {
+      "X-CSRF-Token":
+        document.querySelector('meta[name="csrf-token"]')?.content ?? "",
+    },
+  })
+    .then((response) => response.text())
+    .then((data) => {
+      console.log(data); // Log kết quả "Ghi nhận lượt xem thành công!"
+      alert("Đã ghi nhận 1 lượt xem tự do!");
+    })
+    .catch((error) => console.error("Lỗi:", error));
 });

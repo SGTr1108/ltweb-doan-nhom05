@@ -41,8 +41,26 @@ ini_set('display_errors', '0');
 ini_set('log_errors', '1');
 ini_set('error_log', dirname(__DIR__) . '/logs/php-error.log');
 
-// Cookie phiên an toàn — đặt TRƯỚC session_start().
 $dangHttps = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+
+// Header bảo mật gửi kèm mọi trang — đặt trước mọi output.
+// CSP: chỉ cho tải tài nguyên từ chính website; không script, style nội tuyến.
+// Nguồn ngoài duy nhất (connect-src) là hai API mà js/trang-chu.js (thời tiết
+// Open-Meteo) và js/trang-lien-he.js (JSONPlaceholder) gọi bằng fetch.
+header(
+    "Content-Security-Policy: default-src 'self'; "
+    . "object-src 'none'; base-uri 'self'; "
+    . "form-action 'self'; frame-ancestors 'none'; "
+    . "connect-src 'self' https://api.open-meteo.com https://jsonplaceholder.typicode.com"
+);
+header('X-Content-Type-Options: nosniff');
+header('Referrer-Policy: strict-origin-when-cross-origin');
+header_remove('X-Powered-By');
+if ($dangHttps) {   // HSTS chỉ khi đang chạy HTTPS
+    header('Strict-Transport-Security: max-age=31536000');
+}
+
+// Cookie phiên an toàn — đặt TRƯỚC session_start().
 
 ini_set('session.use_strict_mode', '1');   // bỏ qua mã phiên lạ (chống cố định phiên)
 ini_set('session.use_only_cookies', '1');  // không nhận mã phiên trên URL

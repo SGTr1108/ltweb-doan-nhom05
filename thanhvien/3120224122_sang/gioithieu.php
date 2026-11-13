@@ -137,21 +137,21 @@ require_once $goc . 'inc/header.php';
     <section class="tabs-section">
         <h2>Dự án chuyên môn</h2>
 
-        <form method="GET" action="gioithieu.php" style="margin-bottom: 15px;">
-            <input type="text" name="q_duan" placeholder="Tìm theo tên hoặc công nghệ..." value="<?= e($tuKhoaDuAn) ?>" style="padding: 6px 10px; width: 250px;">
-            <button type="submit" style="padding: 6px 12px;">Tìm kiếm</button>
+        <form method="GET" action="gioithieu.php" class="sang-tach-1">
+            <input type="text" name="q_duan" placeholder="Tìm theo tên hoặc công nghệ..." value="<?= e($tuKhoaDuAn) ?>" class="sang-tach-2">
+            <button type="submit" class="sang-tach-3">Tìm kiếm</button>
             <?php if ($tuKhoaDuAn !== ''): ?>
-                <a href="gioithieu.php" style="margin-left: 10px;">Xóa lọc</a>
+                <a href="gioithieu.php" class="sang-tach-4">Xóa lọc</a>
             <?php endif; ?>
         </form>
 
-        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+        <div class="sang-tach-5">
             <?php if ($dsDuAn === []): ?>
                 <p>Không tìm thấy dự án nào phù hợp.</p>
             <?php else: ?>
                 <?php foreach ($dsDuAn as $da): ?>
-                    <div style="flex: 1; min-width: 250px; border: 1px solid #ccc; padding: 15px; border-radius: 8px; background: #fff;">
-                        <h3 style="color: #2b5c92; margin-top: 0;"><?= e($da['ten_du_an']) ?></h3>
+                    <div class="sang-tach-6">
+                        <h3 class="sang-tach-7"><?= e($da['ten_du_an']) ?></h3>
                         <p><strong>Công nghệ:</strong> <?= e($da['cong_nghe']) ?></p>
                         <p><?= e($da['mo_ta']) ?></p>
                     </div>
@@ -165,18 +165,18 @@ require_once $goc . 'inc/header.php';
         <h2>Sổ lưu bút</h2>
 
         <?php if (isset($_SESSION['flash_luu_but'])): ?>
-            <p style="color: green; font-weight: bold;"><?= e($_SESSION['flash_luu_but']) ?></p>
+            <p class="sang-tach-8"><?= e($_SESSION['flash_luu_but']) ?></p>
             <?php unset($_SESSION['flash_luu_but']); ?>
         <?php endif; ?>
 
         <?php if (isset($_SESSION['flash_luu_but_loi'])): ?>
-            <p style="color: red; font-weight: bold;"><?= e($_SESSION['flash_luu_but_loi']) ?></p>
+            <p class="sang-tach-9"><?= e($_SESSION['flash_luu_but_loi']) ?></p>
             <?php unset($_SESSION['flash_luu_but_loi']); ?>
         <?php endif; ?>
 
-        <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 15px;">
+        <div class="sang-tach-10">
             <!-- Form Gửi -->
-            <div style="flex: 1; min-width: 300px; background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #e1e8ed;">
+            <div class="sang-tach-11">
                 <form method="POST" action="gioithieu.php#so-luu-but" class="bmi-form">
                     <?= csrfField() ?>
                     <input type="hidden" name="hanh_dong" value="them_luu_but">
@@ -185,40 +185,40 @@ require_once $goc . 'inc/header.php';
                     <input type="text" id="ten" name="ten" required>
 
                     <label for="loi_nhan">Lời nhắn:</label>
-                    <textarea id="loi_nhan" name="loi_nhan" rows="4" style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;" required></textarea>
+                    <textarea id="loi_nhan" name="loi_nhan" rows="4" class="sang-tach-12" required></textarea>
 
                     <button type="submit">Gửi lời nhắn</button>
                 </form>
             </div>
 
             <!-- Danh sách -->
-            <div style="flex: 1; min-width: 300px;">
-                <h3 style="margin-top:0;">Lời nhắn mới nhất (Tổng: <?= $tongLuuBut ?>)</h3>
+            <div class="sang-tach-13">
+                <h3 class="sang-tach-14">Lời nhắn mới nhất (Tổng: <?= $tongLuuBut ?>)</h3>
                 <?php if ($dsLuuBut === []): ?>
-                    <p style="color: #777;">Chưa có lời nhắn nào.</p>
+                    <p class="sang-tach-15">Chưa có lời nhắn nào.</p>
                 <?php else: ?>
                     <?php foreach ($dsLuuBut as $lb): ?>
-                        <div style="background: #fff; border: 1px solid #eee; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
-                            <strong style="color: #2b5c92;"><?= e($lb['ten_nguoi_gui']) ?></strong>
-                            <small style="color: #888; float: right;"><?= e($lb['thoi_gian_tao']) ?></small>
-                            <p style="margin: 5px 0 0 0;"><?= e($lb['loi_nhan']) ?></p>
+                        <div class="sang-tach-16">
+                            <strong class="sang-tach-17"><?= e($lb['ten_nguoi_gui']) ?></strong>
+                            <small class="sang-tach-18"><?= e($lb['thoi_gian_tao']) ?></small>
+                            <p class="sang-tach-19"><?= e($lb['loi_nhan']) ?></p>
 
                             <?php if ($laChuTrang): ?>
-                                <form method="POST" action="gioithieu.php#so-luu-but" style="margin-top: 5px; text-align: right;" onsubmit="return confirm('Bạn có chắc muốn xóa lời nhắn này?');">
+                                <form method="POST" action="gioithieu.php#so-luu-but" class="sang-tach-20" data-xac-nhan="Bạn có chắc muốn xóa lời nhắn này?">
                                     <?= csrfField() ?>
                                     <input type="hidden" name="hanh_dong" value="xoa_luu_but">
                                     <input type="hidden" name="id_luu_but" value="<?= e($lb['id']) ?>">
-                                    <button type="submit" style="background: #d9534f; color: white; border: none; padding: 2px 8px; border-radius: 3px; cursor: pointer; font-size: 12px;">Xóa lời nhắn</button>
+                                    <button type="submit" class="sang-tach-21">Xóa lời nhắn</button>
                                 </form>
                             <?php endif; ?>
                         </div>
                     <?php endforeach; ?>
 
                     <?php if ($tongTrangLB > 1): ?>
-                        <div style="margin-top: 10px;">
+                        <div class="sang-tach-22">
                             Trang:
                             <?php for ($i = 1; $i <= $tongTrangLB; $i++): ?>
-                                <a href="gioithieu.php?trang_lb=<?= $i ?>#so-luu-but" style="<?= $i === $trangLuuBut ? 'font-weight:bold;' : '' ?>">[<?= $i ?>]</a>
+                                <a href="gioithieu.php?trang_lb=<?= $i ?>#so-luu-but"<?= $i === $trangLuuBut ? ' class="trang-hien-tai"' : '' ?>>[<?= $i ?>]</a>
                             <?php endfor; ?>
                         </div>
                     <?php endif; ?>

@@ -2,57 +2,61 @@
 
 /* Bố cục chính ưu tiên Mobile-first (Flexbox/Grid) */
 .profile-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 15px;
-    max-width: 1200px;
-    margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 15px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 /* Ảnh chân dung co giãn theo khung */
 .profile-img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    object-fit: cover;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
 }
 
 /* Trạng thái Hover và Focus-visible cho liên kết/nút */
-a, .btn-contact {
-    color: var(--primary-color, #007bff);
-    text-decoration: none;
-    transition: all 0.3s ease;
+a,
+.btn-contact {
+  color: var(--primary-color, #007bff);
+  text-decoration: none;
+  transition: all 0.3s ease;
 }
 
-a:hover, .btn-contact:hover {
-    color: var(--secondary-color, #0056b3);
-    text-decoration: underline;
+a:hover,
+.btn-contact:hover {
+  color: var(--secondary-color, #0056b3);
+  text-decoration: underline;
 }
 
-a:focus-visible, .btn-contact:focus-visible {
-    outline: 3px solid var(--accent-color, #ffc107);
-    outline-offset: 2px;
+a:focus-visible,
+.btn-contact:focus-visible {
+  outline: 3px solid var(--accent-color, #ffc107);
+  outline-offset: 2px;
 }
 
 /* Xử lý bảng thời khóa biểu trên Mobile (Cuộn ngang) */
 .table-responsive {
-    overflow-x: auto;
-    width: 100%;
-    -webkit-overflow-scrolling: touch; /* Hỗ trợ cuộn mượt trên iOS */
-    margin-bottom: 20px;
+  overflow-x: auto;
+  width: 100%;
+  -webkit-overflow-scrolling: touch; /* Hỗ trợ cuộn mượt trên iOS */
+  margin-bottom: 20px;
 }
 
 /* Bảng thông thường (nếu có) */
 table {
-    width: 100%;
-    min-width: 500px;
-    border-collapse: collapse;
+  width: 100%;
+  min-width: 500px;
+  border-collapse: collapse;
 }
 
-table th, table td {
-    border: 1px solid #ccc;
-    padding: 10px;
+table th,
+table td {
+  border: 1px solid #ccc;
+  padding: 10px;
 }
 
 /* --------------------------------------------------- */
@@ -60,50 +64,50 @@ table th, table td {
 /* --------------------------------------------------- */
 
 .schedule-table {
-    width: 100%;
-    min-width: 900px; /* Chiều rộng tối thiểu lớn hơn để không bị bóp nghẹt chữ trên mobile */
-    border-collapse: collapse;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
+  width: 100%;
+  min-width: 900px; /* Chiều rộng tối thiểu lớn hơn để không bị bóp nghẹt chữ trên mobile */
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
 }
 
-.schedule-table th, 
+.schedule-table th,
 .schedule-table td {
-    border: 1px solid #a0a0a0;
-    padding: 8px 10px;
-    vertical-align: top;
+  border: 1px solid #a0a0a0;
+  padding: 8px 10px;
+  vertical-align: top;
 }
 
 .schedule-table th {
-    background-color: #2b5c92;
-    color: white;
-    font-weight: bold;
-    text-align: center;
-    padding: 10px;
+  background-color: #2b5c92;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
 }
 
 .schedule-table .period {
-    text-align: center;
-    font-weight: normal;
-    width: 40px;
+  text-align: center;
+  font-weight: normal;
+  width: 40px;
 }
 
 .schedule-table .break-row td {
-    height: 10px;
-    padding: 0;
-    background-color: #f9f9f9;
+  height: 10px;
+  padding: 0;
+  background-color: #f9f9f9;
 }
 
 /* --------------------------------------------------- */
 
 /* Điểm ngắt Responsive (Tablet/Desktop) */
 @media (min-width: 768px) {
-    .profile-header {
-        display: grid;
-        grid-template-columns: 300px 1fr; /* Grid layout cho màn hình lớn */
-        gap: 30px;
-        align-items: center;
-    }
+  .profile-header {
+    display: grid;
+    grid-template-columns: 300px 1fr; /* Grid layout cho màn hình lớn */
+    gap: 30px;
+    align-items: center;
+  }
 }
 
 /* ========================================= */
@@ -112,102 +116,203 @@ table th, table td {
 
 /* Chức năng 1: Tabs */
 .tabs-section {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 .tab-buttons {
-    display: flex;
-    gap: 10px;
-    border-bottom: 2px solid #ccc;
-    margin-bottom: 15px;
-    overflow-x: auto; /* Hỗ trợ cuộn ngang nếu tab quá dài trên mobile */
-    -webkit-overflow-scrolling: touch;
+  display: flex;
+  gap: 10px;
+  border-bottom: 2px solid #ccc;
+  margin-bottom: 15px;
+  overflow-x: auto; /* Hỗ trợ cuộn ngang nếu tab quá dài trên mobile */
+  -webkit-overflow-scrolling: touch;
 }
 .tab-btn {
-    padding: 10px 20px;
-    border: none;
-    background: #f0f0f0;
-    cursor: pointer;
-    border-radius: 5px 5px 0 0;
-    font-weight: bold;
-    white-space: nowrap;
-    transition: background 0.3s;
+  padding: 10px 20px;
+  border: none;
+  background: #f0f0f0;
+  cursor: pointer;
+  border-radius: 5px 5px 0 0;
+  font-weight: bold;
+  white-space: nowrap;
+  transition: background 0.3s;
 }
 .tab-btn.active {
-    background: #2b5c92;
-    color: white;
+  background: #2b5c92;
+  color: white;
 }
 .tab-btn:hover:not(.active) {
-    background: #e0e0e0;
+  background: #e0e0e0;
 }
 .tab-content {
-    display: none;
-    padding: 15px;
-    border: 1px solid #eee;
-    border-radius: 0 0 5px 5px;
-    background: #fff;
+  display: none;
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 0 0 5px 5px;
+  background: #fff;
 }
 .tab-content.active {
-    display: block;
+  display: block;
 }
 
 /* Chức năng 2: Khối tính BMI */
 .bmi-section {
-    margin-top: 20px;
-    padding: 20px;
-    background: #f4f7f6;
-    border-radius: 8px;
-    border: 1px solid #e1e8ed;
+  margin-top: 20px;
+  padding: 20px;
+  background: #f4f7f6;
+  border-radius: 8px;
+  border: 1px solid #e1e8ed;
 }
 .bmi-form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    max-width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 350px;
 }
 .bmi-form label {
-    font-weight: bold;
+  font-weight: bold;
 }
 .bmi-form input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
 }
 .bmi-form input:focus {
-    outline: 2px solid #2b5c92;
+  outline: 2px solid #2b5c92;
 }
 .bmi-form button {
-    padding: 12px;
-    background: #2b5c92;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 16px;
-    transition: background 0.3s;
+  padding: 12px;
+  background: #2b5c92;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  transition: background 0.3s;
 }
 .bmi-form button:hover {
-    background: #1a3d63;
+  background: #1a3d63;
 }
 .bmi-result {
-    margin-top: 15px;
-    font-weight: bold;
-    font-size: 16px;
+  margin-top: 15px;
+  font-weight: bold;
+  font-size: 16px;
 }
 /* Khối tiêu đề dải băng xanh */
 .page-title-banner {
-    background-color: #123e6d !important; /* Màu nền xanh nhất quán với header nhóm */
-    padding: 25px 0;
-    text-align: center;
-    border-radius: 6px;
-    margin-bottom: 20px;
+  background-color: #123e6d !important; /* Màu nền xanh nhất quán với header nhóm */
+  padding: 25px 0;
+  text-align: center;
+  border-radius: 6px;
+  margin-bottom: 20px;
 }
 
 .page-title-banner h1 {
-    color: #ffffff !important; /* Chữ màu trắng tinh, không bị trùng màu nền */
-    margin: 0;
-    font-size: 2rem;
-    font-weight: bold;
-    background: transparent !important;
+  color: #ffffff !important; /* Chữ màu trắng tinh, không bị trùng màu nền */
+  margin: 0;
+  font-size: 2rem;
+  font-weight: bold;
+  background: transparent !important;
+}
+/* Chương 7 (CSP): style nội tuyến đã tách ra từ gioithieu.php */
+body .sang-tach-1 {
+  margin-bottom: 15px;
+}
+body .sang-tach-2 {
+  padding: 6px 10px;
+  width: 250px;
+}
+body .sang-tach-3 {
+  padding: 6px 12px;
+}
+body .sang-tach-4 {
+  margin-left: 10px;
+}
+body .sang-tach-5 {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+body .sang-tach-6 {
+  flex: 1;
+  min-width: 250px;
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 8px;
+  background: #fff;
+}
+body .sang-tach-7 {
+  color: #2b5c92;
+  margin-top: 0;
+}
+body .sang-tach-8 {
+  color: green;
+  font-weight: bold;
+}
+body .sang-tach-9 {
+  color: red;
+  font-weight: bold;
+}
+body .sang-tach-10 {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+body .sang-tach-11 {
+  flex: 1;
+  min-width: 300px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #e1e8ed;
+}
+body .sang-tach-12 {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+body .sang-tach-13 {
+  flex: 1;
+  min-width: 300px;
+}
+body .sang-tach-14 {
+  margin-top: 0;
+}
+body .sang-tach-15 {
+  color: #777;
+}
+body .sang-tach-16 {
+  background: #fff;
+  border: 1px solid #eee;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+body .sang-tach-17 {
+  color: #2b5c92;
+}
+body .sang-tach-18 {
+  color: #888;
+  float: right;
+}
+body .sang-tach-19 {
+  margin: 5px 0 0 0;
+}
+body .sang-tach-20 {
+  margin-top: 5px;
+  text-align: right;
+}
+body .sang-tach-21 {
+  background: #d9534f;
+  color: white;
+  border: none;
+  padding: 2px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+}
+body .sang-tach-22 {
+  margin-top: 10px;
 }

@@ -72,9 +72,9 @@ require __DIR__ . '/inc/header.php';
 
     <p>Nhân viên thực hiện: <strong><?= e($user['ho_ten']) ?></strong></p>
 
-    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+    <div class="dat-hang-bo-cuc">
         <!-- Danh sách sản phẩm -->
-        <div style="flex: 2; min-width: 300px;">
+        <div class="dat-hang-danh-sach">
             <h2>Mặt hàng đã chọn</h2>
             <table class="bang-gio-hang">
                 <thead>
@@ -96,39 +96,39 @@ require __DIR__ . '/inc/header.php';
                     <?php endforeach; ?>
                 </tbody>
             </table>
-            <p style="font-size: 1.2rem; margin-top: 10px;"><strong>Tổng tiền: <?= e(vnd($tongTien)) ?></strong></p>
+            <p class="dat-hang-tong-tien"><strong>Tổng tiền: <?= e(vnd($tongTien)) ?></strong></p>
         </div>
 
         <!-- Form nhập tiền khách đưa -->
-        <div style="flex: 1; min-width: 280px; background: #f9f9f9; padding: 15px; border-radius: 8px;">
+        <div class="dat-hang-thanh-toan">
             <h2>Thông tin thanh toán</h2>
             <form action="dat-hang.php" method="post">
                 <?= csrfField() ?>
 
                 <p>
                     <label for="ten_khach">Tên khách hàng (tùy chọn):</label><br>
-                    <input type="text" id="ten_khach" name="ten_khach" placeholder="Khách vãng lai" style="width: 100%; padding: 6px;">
+                    <input type="text" id="ten_khach" name="ten_khach" placeholder="Khách vãng lai" class="dat-hang-o-nhap">
                 </p>
 
                 <p>
                     <label for="sdt_khach">Số điện thoại (tùy chọn):</label><br>
-                    <input type="text" id="sdt_khach" name="sdt_khach" placeholder="0901234567" style="width: 100%; padding: 6px;">
+                    <input type="text" id="sdt_khach" name="sdt_khach" placeholder="0901234567" class="dat-hang-o-nhap">
                 </p>
 
                 <p>
                     <label for="tien_khach_dua"><strong>Tiền khách đưa (VNĐ) *:</strong></label><br>
-                    <input type="number" id="tien_khach_dua" name="tien_khach_dua" min="<?= $tongTien ?>" step="1000" value="<?= $tongTien ?>" required style="width: 100%; padding: 8px; font-weight: bold;">
+                    <input type="number" id="tien_khach_dua" name="tien_khach_dua" min="<?= $tongTien ?>" step="1000" value="<?= $tongTien ?>" required class="dat-hang-o-nhap dat-hang-o-tien">
                 </p>
 
                 <p>
                     <label for="ghi_chu">Ghi chú hóa đơn:</label><br>
-                    <textarea id="ghi_chu" name="ghi_chu" rows="2" style="width: 100%;"></textarea>
+                    <textarea id="ghi_chu" name="ghi_chu" rows="2" class="dat-hang-o-rong"></textarea>
                 </p>
 
-                <button type="submit" style="width: 100%; padding: 10px; background: #28a745; color: white; border: none; font-size: 1.1rem; cursor: pointer; border-radius: 4px;">
+                <button type="submit" class="dat-hang-nut-xac-nhan">
                     Xác nhận thanh toán & In hóa đơn
                 </button>
-                <p style="margin-top: 10px; text-align: center;"><a href="gio-hang.php">Quay lại giỏ hàng</a></p>
+                <p class="dat-hang-quay-lai"><a href="gio-hang.php">Quay lại giỏ hàng</a></p>
             </form>
         </div>
     </div>

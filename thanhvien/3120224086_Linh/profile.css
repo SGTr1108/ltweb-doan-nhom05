@@ -217,3 +217,15 @@ html body.dark-mode #nut-giao-dien {
     align-items: start;
   }
 }
+
+/* Chương 7 (CSP): style nội tuyến đã tách ra từ gioithieu.php */
+body .linh-tach-1 {
+  margin: 20px 0;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+body .linh-tach-2 {
+  list-style-type: disc;
+  padding-left: 20px;
+}
