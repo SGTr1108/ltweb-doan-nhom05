@@ -116,6 +116,19 @@ CREATE TABLE lien_he (
     KEY idx_lien_he_thoi_gian_tao (thoi_gian_tao)
 ) ENGINE=InnoDB;
 
+-- ---------------------------------------------------------------------
+-- 7. dang_nhap_sai — lưu từng lần đăng nhập sai để chống đoán mật khẩu.
+--    Nếu một IP + email có từ 5 lần sai trong 15 phút thì tạm khóa.
+-- ---------------------------------------------------------------------
+CREATE TABLE dang_nhap_sai (
+    id          BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    ip          VARCHAR(45) NOT NULL,
+    email       VARCHAR(100) NOT NULL,
+    thoi_gian   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    KEY idx_dang_nhap_sai_ip_email_time (ip, email, thoi_gian),
+    KEY idx_dang_nhap_sai_thoi_gian (thoi_gian)
+) ENGINE=InnoDB;
 -- =================================================--------------------
 -- Phần B: Bảng thanh_vien và các bảng riêng của thành viên (tv_...)
 -- =================================================--------------------

@@ -39,16 +39,68 @@ function traJson(array $duLieu, int $maTrangThai = 200): never
 }
 
 /**
- * Một sự kiện bảo mật = một dòng trong logs/bao-mat.log.
- * Không bao giờ ghi mật khẩu, mã phiên, mã CSRF.
+ * Ghi sự kiện bảo mật vào logs/bao-mat.log.
+ * Chỉ cho phép 3 sự kiện được quy định.
+ * Không ghi mật khẩu, mã phiên, mã CSRF hoặc dữ liệu tùy ý.
  */
 function ghiLogBaoMat(string $suKien, array $chiTiet = []): void
 {
-    $chiTiet += [
+    $suKienHopLe = [
+        'csrf_sai',
+        'cam_truy_cap',
+        'dang_nhap_sai',
+    ];
+
+    if (!in_array($suKien, $suKienHopLe, true)) {
+        return;
+    }
+
+    // Chỉ lấy các trường được phép ghi.
+    $chiTietAnToan = [];
+
+    if (isset($chiTiet['trang'])) {
+        $trang = parse_url((string) $chiTiet['trang'], PHP_URL_PATH);
+        $chiTietAnToan['trang'] = is_string($trang) ? $trang : '-';
+    }
+
+    if (isset($chiTiet['vai_tro_yeu_cau'])) {
+        $chiTietAnToan['vai_tro_yeu_cau'] =
+            (string) $chiTiet['vai_tro_yeu_cau'];
+    }
+
+    if (
+        isset($chiTiet['email_hash'])
+        && preg_match('/^[a-f0-9]{64}$/', (string) $chiTiet['email_hash'])
+    ) {
+        $chiTietAnToan['email_hash'] = $chiTiet['email_hash'];
+    }
+
+    if (isset($chiTiet['so_lan'])) {
+        $chiTietAnToan['so_lan'] = (int) $chiTiet['so_lan'];
+    }
+
+    // IP lấy trực tiếp từ kết nối; uid chỉ có khi đã đăng nhập.
+    $banGhi = [
         'ip'  => $_SERVER['REMOTE_ADDR'] ?? '-',
         'uid' => $_SESSION['uid'] ?? null,
     ];
-    $json = json_encode($chiTiet, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+    $banGhi += $chiTietAnToan;
+
+    $json = json_encode(
+        $banGhi,
+        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+    );
+
+    if ($json === false) {
+        return;
+    }
+
     $dong = date('Y-m-d H:i:s') . " $suKien $json";
-    error_log($dong . PHP_EOL, 3, __DIR__ . '/../logs/bao-mat.log');
+
+    error_log(
+        $dong . PHP_EOL,
+        3,
+        __DIR__ . '/../logs/bao-mat.log'
+    );
 }

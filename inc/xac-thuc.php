@@ -66,11 +66,19 @@ function yeuCauDangNhap(): array
     return $user;
 }
 
+
 /** Bắt buộc quyền vai_tro ('quan_tri'). */
 function yeuCauQuyen(string $vaiTro): array
 {
     $user = yeuCauDangNhap();
+
     if (($user['vai_tro'] ?? '') !== $vaiTro) {
+        // Ghi nhận truy cập trái quyền, không ghi dữ liệu nhạy cảm.
+        ghiLogBaoMat('cam_truy_cap', [
+            'trang' => $_SERVER['REQUEST_URI'] ?? '',
+            'vai_tro_yeu_cau' => $vaiTro,
+        ]);
+
         http_response_code(403);
         require __DIR__ . '/../403.php';
         exit;
