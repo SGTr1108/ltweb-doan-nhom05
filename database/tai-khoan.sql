@@ -1,5 +1,5 @@
 CREATE USER IF NOT EXISTS 'root'@'localhost'
-    IDENTIFIED BY '';
+    IDENTIFIED BY '123456';
 
 -- Chỉ cấp 4 quyền thao tác dữ liệu
 GRANT SELECT, INSERT, UPDATE, DELETE
