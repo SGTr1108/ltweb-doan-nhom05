@@ -17,12 +17,9 @@ if ($mangGioHang === []) {
     exit;
 }
 
-$_SESSION['csrf_token'] ??= bin2hex(random_bytes(32));
 $loiDatHang = '';
 
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
-    xacNhanCsrf();
-
     $tenKhach     = trim((string) ($_POST['ten_khach'] ?? ''));
     $sdtKhach     = trim((string) ($_POST['sdt_khach'] ?? ''));
     $tienKhachDua = (int) ($_POST['tien_khach_dua'] ?? 0);
@@ -106,7 +103,7 @@ require __DIR__ . '/inc/header.php';
         <div style="flex: 1; min-width: 280px; background: #f9f9f9; padding: 15px; border-radius: 8px;">
             <h2>Thông tin thanh toán</h2>
             <form action="dat-hang.php" method="post">
-                <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token']) ?>">
+                <?= csrfField() ?>
 
                 <p>
                     <label for="ten_khach">Tên khách hàng (tùy chọn):</label><br>

@@ -16,6 +16,9 @@ require_once __DIR__ . '/db.php';
 // Nạp hệ thống xác thực & phân quyền (chứa hàm nguoiDung, yeuCauDangNhap...)
 require_once __DIR__ . '/xac-thuc.php';
 
+// Mã CSRF: csrfToken(), csrfField(), csrfHopLe().
+require_once __DIR__ . '/csrf.php';
+
 // Môi trường phát triển; khi triển khai thật đổi thành 'prod'.
 const MOI_TRUONG = 'dev';
 
@@ -41,6 +44,17 @@ ini_set('error_log', dirname(__DIR__) . '/logs/php-error.log');
 // Khởi tạo session nếu chưa có.
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
+}
+
+// Mọi request POST (form hoặc fetch) phải mang mã CSRF đúng.
+if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && !csrfHopLe()) {
+    ghiLogBaoMat('csrf_sai', ['trang' => $_SERVER['REQUEST_URI'] ?? '']);
+    $loiCsrf = 'Trang đã hết hạn, hãy tải lại trang rồi gửi lại';
+    if (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'json')) {
+        traJson(['loi' => $loiCsrf], 403);
+    }
+    http_response_code(403);
+    exit($loiCsrf);
 }
 
 

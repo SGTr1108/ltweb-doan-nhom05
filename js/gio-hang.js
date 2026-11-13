@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
 
     // ==========================================
@@ -7,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const formsThemGio = document.querySelectorAll('.form-them-gio-hang');
     const badgeSoMonHeader = document.querySelector('[data-so-luong-gio-hang]');
+    const csrf = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
     formsThemGio.forEach(form => {
 
@@ -20,7 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-Token': csrf
                 },
                 body: JSON.stringify({
                     id: parseInt(idSp, 10),

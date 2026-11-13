@@ -7,15 +7,12 @@ require_once __DIR__ . '/inc/config.php';
 // Kiểm tra quyền quan_tri
 $user = yeuCauQuyen('quan_tri');
 
-$_SESSION['csrf_token'] ??= bin2hex(random_bytes(32));
-
 $khoSanPham = new \App\Data\KhoSanPham(db());
 $khoDonHang = new \App\Data\KhoDonHang(db());
 $khoLienHe  = new \App\Data\KhoLienHe(db());
 
 // Cập nhật trạng thái đơn hàng (POST)
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && isset($_POST['cap_nhat_trang_thai'])) {
-    xacNhanCsrf();
     $donId        = filter_var($_POST['don_id'] ?? null, FILTER_VALIDATE_INT);
     $trangThaiMoi = (string) ($_POST['trang_thai'] ?? '');
 
@@ -91,7 +88,7 @@ require __DIR__ . '/inc/header.php';
                             <td>
                                 <a href="sua-san-pham.php?id=<?= e($sp->getId()) ?>">Sửa</a> |
                                 <form action="xoa-san-pham.php" method="post" style="display:inline;" onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">
-                                    <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token']) ?>">
+                                    <?= csrfField() ?>
                                     <input type="hidden" name="id" value="<?= e($sp->getId()) ?>">
                                     <button type="submit" class="nut-xoa-link">Xóa</button>
                                 </form>
@@ -145,7 +142,7 @@ require __DIR__ . '/inc/header.php';
                             <td><?= e(\App\Data\KhoDonHang::TRANG_THAI[$don['trang_thai']] ?? $don['trang_thai']) ?></td>
                             <td>
                                 <form action="quan-tri.php" method="post" style="display:inline;">
-                                    <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token']) ?>">
+                                    <?= csrfField() ?>
                                     <input type="hidden" name="cap_nhat_trang_thai" value="1">
                                     <input type="hidden" name="don_id" value="<?= e($don['id']) ?>">
                                     <select name="trang_thai">

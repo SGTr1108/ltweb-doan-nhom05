@@ -245,6 +245,7 @@ $headerHtml = (string)preg_replace(
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Trang giới thiệu cá nhân sinh viên Đoàn Thùy Thảo Trâm thực hiện đồ án MiniPos.">
+  <meta name="csrf-token" content="<?= e(csrfToken()) ?>">
   <title>Giới thiệu Cá nhân | MiniPos</title>
   <link rel="stylesheet" href="<?php echo e($goc); ?>css/style.css">
   <link rel="stylesheet" href="tram_style.css">
@@ -329,6 +330,7 @@ $headerHtml = (string)preg_replace(
           <?php endif; ?>
 
           <form action="gioithieu.php" method="post">
+            <?= csrfField() ?>
             <div class="form-group">
               <label for="diem_a1">Điểm chuyên cần / Thái độ (A1):</label>
               <input type="text" id="diem_a1" name="diem_a1" value="<?php echo e($a1); ?>" placeholder="Ví dụ: 8.5">
@@ -361,6 +363,7 @@ $headerHtml = (string)preg_replace(
       <br>
       <!-- GIAO DIỆN FORM ĐỂ NHẬP VÀ BẤM NÚT -->
       <form method="POST">
+        <?= csrfField() ?>
         <label>Tiêu đề bài viết:</label><br>
         <input type="text" name="tieu_de" required style="width: 300px;"><br><br>
 
@@ -417,6 +420,7 @@ $headerHtml = (string)preg_replace(
       <?php echo $message; ?>
 
       <form method="POST">
+        <?= csrfField() ?>
         <p>
           <label>Họ tên:</label><br>
           <input type="text" name="ho_ten" required>
@@ -617,7 +621,10 @@ $headerHtml = (string)preg_replace(
     document.getElementById('btn-view').addEventListener('click', function() {
       // Gửi yêu cầu ngầm đến file backend xử lý (ví dụ: luot_xem.php)
       fetch('luot_xem.php', {
-          method: 'POST'
+          method: 'POST',
+          headers: {
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.content ?? ''
+          }
         })
         .then(response => response.text())
         .then(data => {

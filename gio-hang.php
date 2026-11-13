@@ -11,63 +11,54 @@ $scriptsTrang = ['js/gio-hang.js'];
 $thongBao = $_SESSION['flash_gio_hang'] ?? '';
 unset($_SESSION['flash_gio_hang']);
 
-$_SESSION['csrf_gio_hang'] ??= bin2hex(random_bytes(32));
-
 $khoSanPham = new \App\Data\KhoSanPham(db());
 $gioHang    = new \App\Services\GioHang($khoSanPham);
 
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
-    $tokenGui     = is_string($_POST['csrf_token'] ?? null) ? $_POST['csrf_token'] : '';
-    $tokenHienTai = is_string($_SESSION['csrf_gio_hang'] ?? null) ? $_SESSION['csrf_gio_hang'] : '';
+    $hanhDong  = is_string($_POST['hanh_dong'] ?? null) ? $_POST['hanh_dong'] : '';
+    $idSanPham = is_string($_POST['id'] ?? null) ? trim($_POST['id']) : '';
 
-    if ($tokenGui === '' || $tokenHienTai === '' || !hash_equals($tokenHienTai, $tokenGui)) {
-        $_SESSION['flash_gio_hang'] = 'Phiên thao tác không hợp lệ. Vui lòng thử lại.';
-    } else {
-        $hanhDong  = is_string($_POST['hanh_dong'] ?? null) ? $_POST['hanh_dong'] : '';
-        $idSanPham = is_string($_POST['id'] ?? null) ? trim($_POST['id']) : '';
+    try {
+        switch ($hanhDong) {
+            case 'them':
+                $soLuong = filter_var($_POST['so_luong'] ?? 1, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+                if ($idSanPham === '' || $soLuong === false) {
+                    throw new \InvalidArgumentException('Mã sản phẩm hoặc số lượng không hợp lệ.');
+                }
+                $gioHang->them($idSanPham, $soLuong);
+                $_SESSION['flash_gio_hang'] = 'Đã thêm sản phẩm vào giỏ hàng.';
+                break;
 
-        try {
-            switch ($hanhDong) {
-                case 'them':
-                    $soLuong = filter_var($_POST['so_luong'] ?? 1, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
-                    if ($idSanPham === '' || $soLuong === false) {
-                        throw new \InvalidArgumentException('Mã sản phẩm hoặc số lượng không hợp lệ.');
-                    }
-                    $gioHang->them($idSanPham, $soLuong);
-                    $_SESSION['flash_gio_hang'] = 'Đã thêm sản phẩm vào giỏ hàng.';
-                    break;
+            case 'cap-nhat':
+                $soLuong = filter_var($_POST['so_luong'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+                if ($idSanPham === '' || $soLuong === false) {
+                    throw new \InvalidArgumentException('Vui lòng nhập số lượng hợp lệ.');
+                }
+                $gioHang->capNhatSoLuong($idSanPham, $soLuong);
+                $_SESSION['flash_gio_hang'] = 'Đã cập nhật số lượng sản phẩm.';
+                break;
 
-                case 'cap-nhat':
-                    $soLuong = filter_var($_POST['so_luong'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
-                    if ($idSanPham === '' || $soLuong === false) {
-                        throw new \InvalidArgumentException('Vui lòng nhập số lượng hợp lệ.');
-                    }
-                    $gioHang->capNhatSoLuong($idSanPham, $soLuong);
-                    $_SESSION['flash_gio_hang'] = 'Đã cập nhật số lượng sản phẩm.';
-                    break;
+            case 'xoa':
+                if ($idSanPham === '') {
+                    throw new \InvalidArgumentException('Không xác định được sản phẩm cần xóa.');
+                }
+                $gioHang->xoa($idSanPham);
+                $_SESSION['flash_gio_hang'] = 'Đã xóa sản phẩm khỏi giỏ hàng.';
+                break;
 
-                case 'xoa':
-                    if ($idSanPham === '') {
-                        throw new \InvalidArgumentException('Không xác định được sản phẩm cần xóa.');
-                    }
-                    $gioHang->xoa($idSanPham);
-                    $_SESSION['flash_gio_hang'] = 'Đã xóa sản phẩm khỏi giỏ hàng.';
-                    break;
+            case 'xoa-tat-ca':
+                $gioHang->xoaTatCa();
+                $_SESSION['flash_gio_hang'] = 'Đã xóa toàn bộ giỏ hàng.';
+                break;
 
-                case 'xoa-tat-ca':
-                    $gioHang->xoaTatCa();
-                    $_SESSION['flash_gio_hang'] = 'Đã xóa toàn bộ giỏ hàng.';
-                    break;
-
-                default:
-                    throw new \InvalidArgumentException('Thao tác không hợp lệ.');
-            }
-        } catch (\InvalidArgumentException | \RuntimeException $loi) {
-            $_SESSION['flash_gio_hang'] = $loi->getMessage();
-        } catch (\Throwable $loi) {
-            error_log('Lỗi xử lý giỏ hàng: ' . $loi->getMessage());
-            $_SESSION['flash_gio_hang'] = 'Không thể xử lý giỏ hàng. Vui lòng thử lại.';
+            default:
+                throw new \InvalidArgumentException('Thao tác không hợp lệ.');
         }
+    } catch (\InvalidArgumentException | \RuntimeException $loi) {
+        $_SESSION['flash_gio_hang'] = $loi->getMessage();
+    } catch (\Throwable $loi) {
+        error_log('Lỗi xử lý giỏ hàng: ' . $loi->getMessage());
+        $_SESSION['flash_gio_hang'] = 'Không thể xử lý giỏ hàng. Vui lòng thử lại.';
     }
 
     header('Location: gio-hang.php', true, 303);
@@ -171,7 +162,7 @@ require __DIR__ . '/inc/header.php';
                         </div>
 
                         <form class="gio-hang-quantity-form-v2" method="post" action="gio-hang.php">
-                            <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_gio_hang']) ?>">
+                            <?= csrfField() ?>
                             <input type="hidden" name="hanh_dong" value="cap-nhat">
                             <input type="hidden" name="id" value="<?= e($id) ?>">
 
@@ -189,7 +180,7 @@ require __DIR__ . '/inc/header.php';
                         </div>
 
                         <form class="gio-hang-remove-form-v2" method="post" action="gio-hang.php">
-                            <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_gio_hang']) ?>">
+                            <?= csrfField() ?>
                             <input type="hidden" name="hanh_dong" value="xoa">
                             <input type="hidden" name="id" value="<?= e($id) ?>">
                             <button type="submit" aria-label="Xóa <?= e($sanPham->getTen()) ?>" title="Xóa sản phẩm">×</button>
@@ -231,7 +222,7 @@ require __DIR__ . '/inc/header.php';
                     </a>
 
                     <form class="gio-hang-clear-form-v2" method="post" action="gio-hang.php" onsubmit="return confirm('Bạn có chắc muốn xóa toàn bộ giỏ hàng?');">
-                        <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_gio_hang']) ?>">
+                        <?= csrfField() ?>
                         <input type="hidden" name="hanh_dong" value="xoa-tat-ca">
                         <button type="submit">Xóa toàn bộ giỏ hàng</button>
                     </form>

@@ -9,14 +9,10 @@ if (nguoiDung() !== null) {
     exit;
 }
 
-$_SESSION['csrf_token'] ??= bin2hex(random_bytes(32));
-
 $loiChung = '';
 $emailCu  = '';
 
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
-    xacNhanCsrf();
-
     $emailCu = trim((string) ($_POST['email'] ?? ''));
     $matKhau = (string) ($_POST['mat_khau'] ?? '');
 
@@ -64,7 +60,7 @@ require __DIR__ . '/inc/header.php';
     <?php endif; ?>
 
     <form action="dang-nhap.php" method="post" class="form-xac-thuc">
-        <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token']) ?>">
+        <?= csrfField() ?>
 
         <p>
             <label for="email">Email:</label>

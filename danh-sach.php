@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/inc/config.php';
 
-$_SESSION['csrf_gio_hang'] ??= bin2hex(random_bytes(32));
 
 $khoDanhMuc = new \App\Data\KhoDanhMuc(db());
 $khoSanPham = new \App\Data\KhoSanPham(db());
@@ -89,7 +88,7 @@ require __DIR__ . '/inc/header.php';
         </p>
 
         <div class="luoi-san-pham" id="luoi-san-pham"
-            data-csrf="<?= e($_SESSION['csrf_gio_hang']) ?>">
+            data-csrf="<?= e(csrfToken()) ?>">
             <?php if ($danhSach === []): ?>
                 <p>Không tìm thấy sản phẩm nào phù hợp với bộ lọc.</p>
             <?php else: ?>
@@ -123,7 +122,7 @@ require __DIR__ . '/inc/header.php';
                                 </a>
 
                                 <form method="post" action="gio-hang.php" class="form-them-gio-hang">
-                                    <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_gio_hang']) ?>">
+                                    <?= csrfField() ?>
                                     <input type="hidden" name="hanh_dong" value="them">
                                     <input type="hidden" name="id" value="<?= e($sanPham->getId()) ?>">
                                     <input type="hidden" name="so_luong" value="1">

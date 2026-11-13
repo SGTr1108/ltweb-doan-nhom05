@@ -3,6 +3,7 @@
  * Chức năng: Trang cá nhân MiniPos, tải ảnh và theo dõi hạn nộp bài.
  * Dữ liệu hạn nộp và kỹ năng được lưu trong cơ sở dữ liệu.
  */
+
 declare(strict_types=1);
 
 $goc = '../../';
@@ -31,7 +32,6 @@ $laChuTrangLuy = (
 );
 
 /* Xử lý tải ảnh đại diện cá nhân */
-$_SESSION['csrf_avatar_luy'] ??= bin2hex(random_bytes(32));
 $thongBaoAvatarLuy = $_SESSION['thong_bao_avatar_luy'] ?? '';
 unset($_SESSION['thong_bao_avatar_luy']);
 
@@ -45,15 +45,10 @@ if (
         exit('Bạn không có quyền thay đổi ảnh đại diện của trang này.');
     }
 
-    $tokenGui = is_string($_POST['csrf_token'] ?? null)
-        ? $_POST['csrf_token'] : '';
-
     $tep = $_FILES['avatar_moi'] ?? null;
     $loi = '';
 
-    if (!hash_equals($_SESSION['csrf_avatar_luy'], $tokenGui)) {
-        $loi = 'Phiên gửi biểu mẫu không hợp lệ. Vui lòng thử lại.';
-    } elseif (!is_array($tep)) {
+    if (!is_array($tep)) {
         $loi = 'Không nhận được ảnh tải lên.';
     } elseif (($tep['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
         $loi = 'Tải ảnh không thành công. Vui lòng chọn lại ảnh.';
@@ -99,14 +94,12 @@ if (
     }
 
     $_SESSION['thong_bao_avatar_luy'] = $thongBaoAvatarLuy;
-    $_SESSION['csrf_avatar_luy'] = bin2hex(random_bytes(32));
 
     header('Location: gioithieu.php#anh-dai-dien', true, 303);
     exit;
 }
 
 /* Xử lý theo dõi hạn nộp bài */
-$_SESSION['csrf_han_nop_luy'] ??= bin2hex(random_bytes(32));
 $thongBaoHanNopLuy = $_SESSION['thong_bao_han_nop_luy'] ?? '';
 unset($_SESSION['thong_bao_han_nop_luy']);
 
@@ -128,12 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ? $_POST['hanh_dong_han_nop'] : '';
 
     if (in_array($hanhDong, ['them', 'hoan_thanh', 'xoa'], true)) {
-        $tokenHanNop = is_string($_POST['csrf_han_nop'] ?? null)
-            ? $_POST['csrf_han_nop'] : '';
-
-        if (!hash_equals($_SESSION['csrf_han_nop_luy'], $tokenHanNop)) {
-            $thongBaoHanNopLuy = 'Phiên gửi biểu mẫu không hợp lệ. Vui lòng thử lại.';
-        } elseif (!$laChuTrangLuy) {
+        if (!$laChuTrangLuy) {
             http_response_code(403);
             exit('Bạn không có quyền chỉnh sửa hạn nộp bài.');
         } elseif ($hanhDong === 'them') {
@@ -192,7 +180,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $_SESSION['thong_bao_han_nop_luy'] = $thongBaoHanNopLuy;
-        $_SESSION['csrf_han_nop_luy'] = bin2hex(random_bytes(32));
 
         header('Location: gioithieu.php#han-nop-bai', true, 303);
         exit;
@@ -200,7 +187,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 /* Xử lý thêm kỹ năng */
-$_SESSION['csrf_ky_nang_luy'] ??= bin2hex(random_bytes(32));
 $thongBaoKyNangLuy = $_SESSION['thong_bao_ky_nang_luy'] ?? '';
 unset($_SESSION['thong_bao_ky_nang_luy']);
 
@@ -213,9 +199,6 @@ if (
         exit('Bạn không có quyền chỉnh sửa kỹ năng của trang này.');
     }
 
-    $tokenKyNang = is_string($_POST['csrf_ky_nang'] ?? null)
-        ? $_POST['csrf_ky_nang'] : '';
-
     $tenKyNang = trim(is_string($_POST['ten_ky_nang'] ?? null)
         ? $_POST['ten_ky_nang'] : '');
     $nhomKyNang = trim(is_string($_POST['nhom_ky_nang'] ?? null)
@@ -225,9 +208,7 @@ if (
     $moTaKyNang = trim(is_string($_POST['mo_ta'] ?? null)
         ? $_POST['mo_ta'] : '');
 
-    if (!hash_equals($_SESSION['csrf_ky_nang_luy'], $tokenKyNang)) {
-        $thongBaoKyNangLuy = 'Phiên gửi biểu mẫu không hợp lệ. Vui lòng thử lại.';
-    } elseif (
+    if (
         $tenKyNang === ''
         || mb_strlen($tenKyNang) > 120
         || $nhomKyNang === ''
@@ -254,7 +235,6 @@ if (
     }
 
     $_SESSION['thong_bao_ky_nang_luy'] = $thongBaoKyNangLuy;
-    $_SESSION['csrf_ky_nang_luy'] = bin2hex(random_bytes(32));
 
     header('Location: gioithieu.php#ky-nang', true, 303);
     exit;
@@ -290,12 +270,11 @@ require_once __DIR__ . '/../../inc/header.php';
             src="<?= e($anhDaiDienLuy) ?>"
             alt="Ảnh chân dung sinh viên"
             width="120"
-            height="150"
-        >
+            height="150">
 
         <form action="gioithieu.php#anh-dai-dien" method="post" enctype="multipart/form-data">
             <input type="hidden" name="hanh_dong_avatar" value="tai_len">
-            <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_avatar_luy']) ?>">
+            <?= csrfField() ?>
 
             <label for="avatar_moi">Chọn ảnh đại diện (JPG, PNG hoặc WebP, tối đa 2 MB):</label>
             <input
@@ -303,8 +282,7 @@ require_once __DIR__ . '/../../inc/header.php';
                 id="avatar_moi"
                 name="avatar_moi"
                 accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
-                required
-            >
+                required>
 
             <button type="submit">Cập nhật ảnh đại diện</button>
         </form>
@@ -320,8 +298,7 @@ require_once __DIR__ . '/../../inc/header.php';
 
             <p
                 id="typing-text"
-                data-text="Chào mừng bạn đến với trang cá nhân của mình trong dự án phát triển hệ thống quản lý bán hàng MiniPos."
-            ></p>
+                data-text="Chào mừng bạn đến với trang cá nhân của mình trong dự án phát triển hệ thống quản lý bán hàng MiniPos."></p>
 
             <!-- Kỹ năng chuyên môn -->
             <section id="ky-nang">
@@ -330,11 +307,7 @@ require_once __DIR__ . '/../../inc/header.php';
                 <?php if ($laChuTrangLuy): ?>
                     <form action="gioithieu.php#ky-nang" method="post">
                         <input type="hidden" name="hanh_dong_ky_nang" value="them">
-                        <input
-                            type="hidden"
-                            name="csrf_ky_nang"
-                            value="<?= e($_SESSION['csrf_ky_nang_luy']) ?>"
-                        >
+                        <?= csrfField() ?>
 
                         <div>
                             <label for="ten_ky_nang">Tên kỹ năng</label>
@@ -344,8 +317,7 @@ require_once __DIR__ . '/../../inc/header.php';
                                 name="ten_ky_nang"
                                 maxlength="120"
                                 required
-                                placeholder="Ví dụ: HTML"
-                            >
+                                placeholder="Ví dụ: HTML">
                         </div>
 
                         <div>
@@ -356,8 +328,7 @@ require_once __DIR__ . '/../../inc/header.php';
                                 name="nhom_ky_nang"
                                 maxlength="100"
                                 required
-                                placeholder="Ví dụ: Lập trình Web"
-                            >
+                                placeholder="Ví dụ: Lập trình Web">
                         </div>
 
                         <div>
@@ -368,8 +339,7 @@ require_once __DIR__ . '/../../inc/header.php';
                                 name="muc_do"
                                 maxlength="50"
                                 required
-                                placeholder="Ví dụ: Cơ bản"
-                            >
+                                placeholder="Ví dụ: Cơ bản">
                         </div>
 
                         <div>
@@ -378,8 +348,7 @@ require_once __DIR__ . '/../../inc/header.php';
                                 id="mo_ta"
                                 name="mo_ta"
                                 rows="3"
-                                placeholder="Mô tả thêm về kỹ năng"
-                            ></textarea>
+                                placeholder="Mô tả thêm về kỹ năng"></textarea>
                         </div>
 
                         <button type="submit">Thêm kỹ năng</button>
@@ -613,11 +582,7 @@ require_once __DIR__ . '/../../inc/header.php';
 
         <form action="gioithieu.php#han-nop-bai" method="post">
             <input type="hidden" name="hanh_dong_han_nop" value="them">
-            <input
-                type="hidden"
-                name="csrf_han_nop"
-                value="<?= e($_SESSION['csrf_han_nop_luy']) ?>"
-            >
+            <?= csrfField() ?>
 
             <div>
                 <label for="ten_bai">Tên bài tập</label>
@@ -627,8 +592,7 @@ require_once __DIR__ . '/../../inc/header.php';
                     name="ten_bai"
                     maxlength="120"
                     required
-                    placeholder="Ví dụ: Bài thực hành PHP"
-                >
+                    placeholder="Ví dụ: Bài thực hành PHP">
             </div>
 
             <div>
@@ -698,22 +662,16 @@ require_once __DIR__ . '/../../inc/header.php';
                         <?php endif; ?>
 
                         <form action="gioithieu.php#han-nop-bai" method="post">
-                            <input
-                                type="hidden"
-                                name="csrf_han_nop"
-                                value="<?= e($_SESSION['csrf_han_nop_luy']) ?>"
-                            >
+                            <?= csrfField() ?>
                             <input
                                 type="hidden"
                                 name="id_bai"
-                                value="<?= e($bai['id']) ?>"
-                            >
+                                value="<?= e($bai['id']) ?>">
 
                             <button
                                 type="submit"
                                 name="hanh_dong_han_nop"
-                                value="hoan_thanh"
-                            >
+                                value="hoan_thanh">
                                 <?= $daHoanThanh ? 'Bỏ hoàn thành' : 'Đánh dấu hoàn thành' ?>
                             </button>
 
@@ -721,8 +679,7 @@ require_once __DIR__ . '/../../inc/header.php';
                                 type="submit"
                                 name="hanh_dong_han_nop"
                                 value="xoa"
-                                onclick="return confirm('Bạn có chắc muốn xóa bài tập này không?')"
-                            >Xóa</button>
+                                onclick="return confirm('Bạn có chắc muốn xóa bài tập này không?')">Xóa</button>
                         </form>
                     </li>
                 <?php endforeach; ?>

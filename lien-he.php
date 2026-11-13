@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 require_once __DIR__ . '/inc/config.php';
@@ -18,9 +19,6 @@ $old = $_SESSION['old_lien_he'] ?? [
 
 unset($_SESSION['errors_lien_he'], $_SESSION['old_lien_he']);
 
-$_SESSION['csrf_lien_he'] ??= bin2hex(random_bytes(32));
-$csrfToken = $_SESSION['csrf_lien_he'];
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $old = [
         'manhanvien' => is_string($_POST['manhanvien'] ?? null)
@@ -38,13 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ];
 
     $errors = [];
-
-    $tokenGui = is_string($_POST['csrf_token'] ?? null)
-        ? $_POST['csrf_token'] : '';
-
-    if (!hash_equals($csrfToken, $tokenGui)) {
-        $errors['chung'] = 'Phiên gửi biểu mẫu không hợp lệ. Vui lòng thử lại.';
-    }
 
     if (!preg_match('/\ANV[0-9]{3}\z/', $old['manhanvien'])) {
         $errors['manhanvien'] = 'Mã nhân viên phải có dạng NV001.';
@@ -190,7 +181,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $_SESSION['flash_lien_he'] =
             'Phiếu báo cáo đã được lưu thành công trên máy chủ.';
-        $_SESSION['csrf_lien_he'] = bin2hex(random_bytes(32));
     }
 
     header('Location: lien-he.php', true, 303);
@@ -221,7 +211,7 @@ require __DIR__ . '/inc/header.php';
     <?php endif; ?>
 
     <form action="lien-he.php" method="post" enctype="multipart/form-data" novalidate>
-        <input type="hidden" name="csrf_token" value="<?= e($csrfToken) ?>">
+        <?= csrfField() ?>
 
         <fieldset>
             <legend>Thông tin phiếu báo cáo</legend>

@@ -9,14 +9,10 @@ if (nguoiDung() !== null) {
     exit;
 }
 
-$_SESSION['csrf_token'] ??= bin2hex(random_bytes(32));
-
 $loi = [];
 $old = ['email' => '', 'ho_ten' => ''];
 
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
-    xacNhanCsrf();
-
     $old['email']  = trim((string) ($_POST['email'] ?? ''));
     $old['ho_ten'] = trim((string) ($_POST['ho_ten'] ?? ''));
     $matKhau       = (string) ($_POST['mat_khau'] ?? '');
@@ -64,7 +60,7 @@ require __DIR__ . '/inc/header.php';
     <h1>Đăng ký tài khoản</h1>
 
     <form action="dang-ky.php" method="post" class="form-xac-thuc" novalidate>
-        <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token']) ?>">
+        <?= csrfField() ?>
 
         <p>
             <label for="email">Email *:</label>

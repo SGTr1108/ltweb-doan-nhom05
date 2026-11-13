@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="hang-nut-san-pham">
                     <a class="nut-xem-chi-tiet" href="chi-tiet.php?id=${encodeURIComponent(sp.id)}">Xem chi tiết</a>
                     <form method="post" action="gio-hang.php" class="form-them-gio-hang">
-                        <input type="hidden" name="csrf_token" value="${esc(luoi.dataset.csrf)}">
+                        <input type="hidden" name="csrf" value="${esc(luoi.dataset.csrf)}">
                         <input type="hidden" name="hanh_dong" value="them">
                         <input type="hidden" name="id" value="${esc(sp.id)}">
                         <input type="hidden" name="so_luong" value="1">

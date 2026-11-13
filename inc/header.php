@@ -50,10 +50,6 @@ if (empty($khongGoiCsdl)) {
 }
 $dangNhapHeader = ($uHeader !== null);
 
-if ($dangNhapHeader && empty($_SESSION['csrf_dang_xuat'])) {
-    $_SESSION['csrf_dang_xuat'] = bin2hex(random_bytes(32));
-}
-
 // Xây dựng Menu
 $menuHeader = [
     'index'     => 'Trang chủ',
@@ -78,6 +74,7 @@ $menuHeader['gioi-thieu'] = 'Giới thiệu Nhóm';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="<?= e($moTaTrang) ?>">
+    <meta name="csrf-token" content="<?= e(csrfToken()) ?>">
     <title><?= e($tieuDeTrang) ?></title>
     <link rel="stylesheet" href="<?= e($goc) ?>css/style.css">
     <?php if (isset($cssTrang) && is_string($cssTrang) && preg_match('/\A[a-zA-Z0-9_-]+\.css\z/', $cssTrang) === 1): ?>
@@ -126,7 +123,7 @@ $menuHeader['gioi-thieu'] = 'Giới thiệu Nhóm';
             <li class="muc-tai-khoan-header">
                 <?php if ($dangNhapHeader): ?>
                     <form method="post" action="<?= e($goc) ?>dang-xuat.php" class="form-dang-xuat-header">
-                        <input type="hidden" name="csrf_token" value="<?= e((string) $_SESSION['csrf_dang_xuat']) ?>">
+                        <?= csrfField() ?>
                         <button type="submit">Đăng xuất</button>
                     </form>
                 <?php else: ?>

@@ -24,11 +24,8 @@ $u = nguoiDung();
 // Kiểm tra quyền chủ trang / quản trị viên
 $laChuTrang = ($u !== null && (($u['vai_tro'] ?? '') === 'quan_tri' || (int) ($u['id'] ?? 0) === 1));
 
-$_SESSION['csrf_token'] ??= bin2hex(random_bytes(32));
-
 // --- XỬ LÝ POST: THÊM / XÓA LỜI NHẮN SỔ LƯU BÚT ---
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
-    xacNhanCsrf();
     $hanhDong = $_POST['hanh_dong'] ?? '';
 
     if ($hanhDong === 'them_luu_but') {
@@ -181,7 +178,7 @@ require_once $goc . 'inc/header.php';
             <!-- Form Gửi -->
             <div style="flex: 1; min-width: 300px; background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #e1e8ed;">
                 <form method="POST" action="gioithieu.php#so-luu-but" class="bmi-form">
-                    <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token']) ?>">
+                    <?= csrfField() ?>
                     <input type="hidden" name="hanh_dong" value="them_luu_but">
 
                     <label for="ten">Tên của bạn:</label>
@@ -208,7 +205,7 @@ require_once $goc . 'inc/header.php';
 
                             <?php if ($laChuTrang): ?>
                                 <form method="POST" action="gioithieu.php#so-luu-but" style="margin-top: 5px; text-align: right;" onsubmit="return confirm('Bạn có chắc muốn xóa lời nhắn này?');">
-                                    <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token']) ?>">
+                                    <?= csrfField() ?>
                                     <input type="hidden" name="hanh_dong" value="xoa_luu_but">
                                     <input type="hidden" name="id_luu_but" value="<?= e($lb['id']) ?>">
                                     <button type="submit" style="background: #d9534f; color: white; border: none; padding: 2px 8px; border-radius: 3px; cursor: pointer; font-size: 12px;">Xóa lời nhắn</button>

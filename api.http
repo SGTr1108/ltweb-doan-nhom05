@@ -1,3 +1,11 @@
+# Mã CSRF: chạy request 0 để nhận cookie phiên, rồi chép giá trị trong thẻ
+# <meta name="csrf-token"> (hoặc ô csrf của form) vào biến @csrf bên dưới.
+# Không ghi giá trị thật vào tệp — điền khi chạy.
+@csrf = DIEN_MA_CSRF_KHI_CHAY
+
+### 0. Lấy cookie phiên + mã CSRF
+GET http://localhost:8000/index.php
+
 ### 1. Lấy danh sách sản phẩm thành công (200)
 GET http://localhost:8000/api/san-pham.php?q=snack
 
@@ -16,6 +24,7 @@ GET http://localhost:8000/api/gio-hang.php
 ### 6. Thêm sản phẩm vào giỏ hàng bằng JSON (200)
 POST http://localhost:8000/api/gio-hang.php
 Content-Type: application/json
+X-CSRF-Token: {{csrf}}
 
 {
     "id": 1,
@@ -25,12 +34,14 @@ Content-Type: application/json
 ### 7. Lỗi thân gửi không phải JSON (400)
 POST http://localhost:8000/api/gio-hang.php
 Content-Type: application/json
+X-CSRF-Token: {{csrf}}
 
 chuoi_khong_phai_json
 
 ### 8. Lỗi số lượng âm (422)
 POST http://localhost:8000/api/gio-hang.php
 Content-Type: application/json
+X-CSRF-Token: {{csrf}}
 
 {
     "id": 1,
@@ -40,6 +51,7 @@ Content-Type: application/json
 ### 9. Lỗi id không có trong CSDL (404)
 POST http://localhost:8000/api/gio-hang.php
 Content-Type: application/json
+X-CSRF-Token: {{csrf}}
 
 {
     "id": 999999,
@@ -49,6 +61,7 @@ Content-Type: application/json
 ### 10. Lỗi số lượng vượt quá tồn kho (422)
 POST http://localhost:8000/api/gio-hang.php
 Content-Type: application/json
+X-CSRF-Token: {{csrf}}
 
 {
     "id": 22,
@@ -57,3 +70,12 @@ Content-Type: application/json
 
 ### 11. Phương thức DELETE không được hỗ trợ (405)
 DELETE http://localhost:8000/api/gio-hang.php
+
+### 12. POST thiếu mã CSRF (403, JSON {"loi": "..."})
+POST http://localhost:8000/api/gio-hang.php
+Content-Type: application/json
+
+{
+    "id": 1,
+    "so_luong": 1
+}

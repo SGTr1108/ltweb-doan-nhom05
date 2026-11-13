@@ -69,15 +69,3 @@ function yeuCauPost(): void
         exit;
     }
 }
-
-/** Kiểm tra CSRF token. */
-function xacNhanCsrf(): void
-{
-    $tokenGui = $_POST['csrf_token'] ?? '';
-    $tokenSession = $_SESSION['csrf_token'] ?? '';
-
-    if (!is_string($tokenGui) || $tokenGui === '' || !hash_equals($tokenSession, $tokenGui)) {
-        http_response_code(400);
-        die('Lỗi CSRF: Phiên làm việc không hợp lệ hoặc đã hết hạn.');
-    }
-}

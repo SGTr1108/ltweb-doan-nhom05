@@ -6,8 +6,6 @@ require_once __DIR__ . '/inc/config.php';
 
 yeuCauQuyen('quan_tri');
 
-$_SESSION['csrf_token'] ??= bin2hex(random_bytes(32));
-
 $khoDanhMuc  = new \App\Data\KhoDanhMuc(db());
 $danhMucList = $khoDanhMuc->tatCa();
 
@@ -21,8 +19,6 @@ $old = [
 ];
 
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
-    xacNhanCsrf();
-
     $old['ten']         = trim((string) ($_POST['ten'] ?? ''));
     $old['danh_muc_id'] = (string) ($_POST['danh_muc_id'] ?? '');
     $old['gia']         = (string) ($_POST['gia'] ?? '');
@@ -111,7 +107,7 @@ require __DIR__ . '/inc/header.php';
     <h1>Thêm sản phẩm mới</h1>
 
     <form action="them-san-pham.php" method="post" enctype="multipart/form-data" novalidate>
-        <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token']) ?>">
+        <?= csrfField() ?>
 
         <p>
             <label for="ten">Tên sản phẩm *:</label>
