@@ -215,3 +215,38 @@ CREATE TABLE tv_ky_nang (
         REFERENCES thanh_vien(mssv)
         ON DELETE CASCADE
 ) ENGINE=InnoDB;
+
+-- 8. Bảng riêng của Đoàn Thùy Thảo Trâm (3120224149): tv_blog
+CREATE TABLE tv_blog (
+    id                 INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    mssv               VARCHAR(15) NOT NULL,
+    tieu_de            VARCHAR(255) NOT NULL,
+    noi_dung_ngan      VARCHAR(500) NOT NULL DEFAULT '',
+    noi_dung_chi_tiet  TEXT NOT NULL,
+    ngay_dang          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    KEY idx_tv_blog_ngay_dang (ngay_dang),
+
+    CONSTRAINT fk_tv_blog_thanh_vien
+        FOREIGN KEY (mssv)
+        REFERENCES thanh_vien(mssv)
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- 9. Bảng riêng của Đoàn Thùy Thảo Trâm: tv_gop_y
+CREATE TABLE tv_gop_y (
+    id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    mssv        VARCHAR(15) NOT NULL,
+    ho_ten      VARCHAR(100) NOT NULL,
+    email       VARCHAR(150) NULL,
+    noi_dung    TEXT NOT NULL,
+    trang_thai  TINYINT(1) NOT NULL DEFAULT 0,
+    ngay_gui    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    KEY idx_tv_gop_y_ngay_gui (ngay_gui),
+
+    CONSTRAINT fk_tv_gop_y_thanh_vien
+        FOREIGN KEY (mssv)
+        REFERENCES thanh_vien(mssv)
+        ON DELETE CASCADE
+) ENGINE=InnoDB;

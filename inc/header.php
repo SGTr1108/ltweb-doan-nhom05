@@ -35,7 +35,7 @@ try {
 }
 
 // Trạng thái đăng nhập
-$uHeader = nguoiDung();
+$uHeader = empty($khongGoiCsdl) ? nguoiDung() : null; // 500.php đặt $khongGoiCsdl để khỏi truy vấn CSDL
 $dangNhapHeader = ($uHeader !== null);
 
 if ($dangNhapHeader && empty($_SESSION['csrf_dang_xuat'])) {

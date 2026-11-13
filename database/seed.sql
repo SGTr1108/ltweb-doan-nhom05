@@ -118,3 +118,14 @@ INSERT INTO tv_ky_nang (mssv, ten_ky_nang, nhom_ky_nang, muc_do, mo_ta) VALUES
 ('3120224092', 'HTML và CSS', 'Lập trình Web', 'Cơ bản', 'Xây dựng cấu trúc và giao diện trang web'),
 ('3120224092', 'PHP', 'Lập trình Web', 'Cơ bản', 'Xử lý dữ liệu phía máy chủ'),
 ('3120224092', 'SQL', 'Cơ sở dữ liệu', 'Cơ bản', 'Truy vấn và quản lý cơ sở dữ liệu');
+
+
+-- Dữ liệu mẫu Phần B của Đoàn Thùy Thảo Trâm (3120224149)
+INSERT INTO thanh_vien (mssv, ho_ten, nguoi_dung_id) VALUES
+('3120224149', 'Đoàn Thùy Thảo Trâm', NULL);
+
+INSERT INTO tv_blog (mssv, tieu_de, noi_dung_ngan, noi_dung_chi_tiet, ngay_dang) VALUES
+('3120224149', 'Làm quen PDO và prepared statement', 'Ghi chú khi chuyển từ mysqli sang PDO.', 'Dùng prepared statement giúp tách câu SQL khỏi dữ liệu người dùng nhập, tránh SQL injection.', '2026-10-30 09:00:00');
+
+INSERT INTO tv_gop_y (mssv, ho_ten, email, noi_dung, trang_thai, ngay_gui) VALUES
+('3120224149', 'Khách tham quan', 'khach@example.com', 'Trang giới thiệu rõ ràng, dễ xem.', 0, '2026-10-31 10:30:00');

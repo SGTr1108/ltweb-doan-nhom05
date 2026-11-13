@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 http_response_code(500);
@@ -8,6 +9,9 @@ require_once __DIR__ . '/inc/config.php';
 $tieuDeTrang = '500 - Lỗi máy chủ | MiniPos';
 $moTaTrang = 'Hệ thống đang gặp sự cố.';
 $scriptsTrang = [];
+
+// Trang lỗi không được chạm CSDL (CSDL có thể là nguyên nhân gây lỗi): header.php bỏ qua nguoiDung().
+$khongGoiCsdl = true;
 
 require __DIR__ . '/inc/header.php';
 ?>
