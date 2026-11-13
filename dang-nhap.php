@@ -12,25 +12,77 @@ if (nguoiDung() !== null) {
 $loiChung = '';
 $emailCu  = '';
 
+
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
     $emailCu = trim((string) ($_POST['email'] ?? ''));
     $matKhau = (string) ($_POST['mat_khau'] ?? '');
 
-    $khoNguoiDung = new \App\Data\KhoNguoiDung(db());
-    $user         = $khoNguoiDung->timTheoEmail($emailCu);
+    // Chuẩn hóa thông tin dùng để giới hạn đăng nhập.
+    $ip = substr((string) ($_SERVER['REMOTE_ADDR'] ?? 'unknown'), 0, 45);
+    $emailKhoa = substr(strtolower($emailCu), 0, 100);
 
-    // Thông báo lỗi chung bảo mật
-    if ($user === null || !password_verify($matKhau, $user['mat_khau'])) {
-        $loiChung = 'Email hoặc mật khẩu không chính xác.';
+    $pdo = db();
+
+    // Xóa các lần đăng nhập sai đã quá 15 phút.
+    $pdo->exec(
+        'DELETE FROM dang_nhap_sai
+         WHERE thoi_gian < DATE_SUB(NOW(), INTERVAL 15 MINUTE)'
+    );
+
+    // Đếm số lần đăng nhập sai của IP + email trong 15 phút.
+    $st = $pdo->prepare(
+        'SELECT COUNT(*)
+         FROM dang_nhap_sai
+         WHERE ip = ? AND email = ?
+           AND thoi_gian >= DATE_SUB(NOW(), INTERVAL 15 MINUTE)'
+    );
+    $st->execute([$ip, $emailKhoa]);
+    $soLanSai = (int) $st->fetchColumn();
+
+    if ($soLanSai >= 5) {
+        // Đã sai đủ 5 lần: tạm khóa, không kiểm tra mật khẩu nữa.
+        http_response_code(429);
+        $loiChung = 'Email hoặc mật khẩu không chính xác. Vui lòng thử lại sau 15 phút.';
     } else {
-        dangNhap((int) $user['id']); // đổi mã phiên rồi lưu uid
+        $khoNguoiDung = new \App\Data\KhoNguoiDung($pdo);
+        $user = $khoNguoiDung->timTheoEmail($emailCu);
 
-        if (password_needs_rehash($user['mat_khau'], PASSWORD_DEFAULT)) {
-            $khoNguoiDung->capNhatMatKhau((int) $user['id'], password_hash($matKhau, PASSWORD_DEFAULT));
+        // Email không tồn tại và mật khẩu sai đều có cùng thông báo.
+        if ($user === null || !password_verify($matKhau, $user['mat_khau'])) {
+            $soLanSai++;
+
+            // Lưu lần đăng nhập sai vào CSDL.
+            $st = $pdo->prepare(
+                'INSERT INTO dang_nhap_sai (ip, email) VALUES (?, ?)'
+            );
+            $st->execute([$ip, $emailKhoa]);
+
+            // Ghi log bảo mật, chỉ lưu mã băm email, không lưu email/mật khẩu.
+            ghiLogBaoMat('dang_nhap_sai', [
+                'email_hash' => hash('sha256', $emailKhoa),
+                'so_lan' => $soLanSai,
+            ]);
+
+            $loiChung = 'Email hoặc mật khẩu không chính xác.';
+        } else {
+            // Đăng nhập thành công: xóa lịch sử sai của IP + email.
+            $st = $pdo->prepare(
+                'DELETE FROM dang_nhap_sai WHERE ip = ? AND email = ?'
+            );
+            $st->execute([$ip, $emailKhoa]);
+
+            dangNhap((int) $user['id']);
+
+            if (password_needs_rehash($user['mat_khau'], PASSWORD_DEFAULT)) {
+                $khoNguoiDung->capNhatMatKhau(
+                    (int) $user['id'],
+                    password_hash($matKhau, PASSWORD_DEFAULT)
+                );
+            }
+
+            header('Location: index.php', true, 303);
+            exit;
         }
-
-        header('Location: index.php', true, 303);
-        exit;
     }
 }
 
