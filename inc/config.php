@@ -36,9 +36,6 @@ require_once __DIR__ . '/xac-thuc.php';
 // Mã CSRF: csrfToken(), csrfField(), csrfHopLe().
 require_once __DIR__ . '/csrf.php';
 
-// Môi trường phát triển; khi triển khai thật đổi thành 'prod'.
-const MOI_TRUONG = 'dev';
-
 // ----- ĐOẠN BỔ SUNG: TỰ ĐỘNG TẠO THƯ MỤC NẾU CHƯA CÓ -----
 $log_dir = dirname(__DIR__) . '/logs';
 $storage_dir = dirname(__DIR__) . '/storage';
@@ -66,9 +63,15 @@ $dangHttps = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
 // Open-Meteo) và js/trang-lien-he.js (JSONPlaceholder) gọi bằng fetch.
 header(
     "Content-Security-Policy: default-src 'self'; "
-    . "object-src 'none'; base-uri 'self'; "
-    . "form-action 'self'; frame-ancestors 'none'; "
-    . "connect-src 'self' https://api.open-meteo.com https://jsonplaceholder.typicode.com"
+    . "script-src 'self'; "
+    . "style-src 'self'; "
+    . "font-src 'self'; "
+    . "img-src 'self' data:; "
+    . "connect-src 'self' https://api.open-meteo.com https://jsonplaceholder.typicode.com; "
+    . "object-src 'none'; "
+    . "base-uri 'self'; "
+    . "form-action 'self'; "
+    . "frame-ancestors 'none'"
 );
 header('X-Content-Type-Options: nosniff');
 header('Referrer-Policy: strict-origin-when-cross-origin');

@@ -46,6 +46,30 @@ cp .env.example .env
 
 Thiếu biến bắt buộc, trang trả về lỗi 500 và nguyên nhân được ghi vào log PHP.
 
+Tạo tài khoản CSDL riêng cho ứng dụng
+
+Để hạn chế quyền truy cập CSDL, ứng dụng có thể sử dụng tài khoản riêng nhom05_app thay vì tài khoản quản trị root.
+
+Thực hiện các bước sau:
+
+Đăng nhập phpMyAdmin hoặc MySQL bằng tài khoản quản trị CSDL (mặc định XAMPP là root).
+
+Mở và thực thi tệp database/tai-khoan.sql.
+
+Trước khi thực thi, thay chuỗi CHUOI_GIU_CHO_NAY trong tệp SQL bằng mật khẩu riêng cho tài khoản nhom05_app.
+
+Sau khi tạo tài khoản thành công, cập nhật thông tin kết nối trong .env:
+
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=ltweb_nhom05
+DB_USERNAME=nhom05_app
+DB_PASSWORD=MAT_KHAU_DA_TAO
+
+Thay MAT_KHAU_DA_TAO bằng mật khẩu đã sử dụng khi tạo tài khoản.
+
+Tài khoản nhom05_app chỉ được cấp bốn quyền SELECT, INSERT, UPDATE, DELETE trên CSDL ltweb_nhom05. Tài khoản này không được sử dụng để quản trị hoặc thay đổi cấu trúc CSDL.
+
 ### Chạy bằng PHP built-in server
 
 ```bash
@@ -136,7 +160,7 @@ Các ví dụ yêu cầu nằm trong `api.http`.
 
 ## 7. Ghi chú
 
-- Môi trường nộp bài sử dụng `MOI_TRUONG = 'dev'` theo yêu cầu của đề.
+- Chế độ gỡ lỗi được điều khiển bằng biến `APP_DEBUG` trong tệp `.env`; đặt `true` khi phát triển trên máy cá nhân và `false` khi triển khai thực tế.
 - Giỏ hàng hiện hỗ trợ quản lý sản phẩm và tính tổng tiền; thanh toán trực tuyến chưa được triển khai.
 - Tìm kiếm tức thì trên trang danh sách gọi API và hiển thị tối đa 20 kết quả; bấm "Áp dụng" để xem đầy đủ và phân trang.
 - Trước khi nộp: clone lại repo vào thư mục mới, chạy `composer install`, tạo CSDL từ `schema.sql` và `seed.sql`, rồi mở thử các trang.
