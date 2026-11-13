@@ -1,0 +1,19 @@
+# Cấm liệt kê thư mục, cấm chạy CGI
+Options -Indexes -ExecCGI
+
+# Cấm chạy mã trong thư mục tải lên
+<FilesMatch "(?i)\.(php[0-9]?|phtml|phar|pl|py|cgi|sh)$">
+    Require all denied
+</FilesMatch>
+
+# Tắt trình xử lý script (nếu có)
+RemoveHandler .php .phtml .phar
+RemoveType .php .phtml .phar
+
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+</IfModule>
