@@ -47,8 +47,7 @@ unset($_SESSION['thong_bao_avatar_luy']);
 
 if (
     $_SERVER['REQUEST_METHOD'] === 'POST'
-    && isset($_POST['hanh_dong_avatar'])
-    && $_POST['hanh_dong_avatar'] === 'tai_len'
+    && chuoi($_POST['hanh_dong_avatar'] ?? null) === 'tai_len'
 ) {
     if (!$duocDoiAvatarLuy) {
         http_response_code(403);
@@ -127,18 +126,15 @@ if ($idChuTrang !== false) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $hanhDong = is_string($_POST['hanh_dong_han_nop'] ?? null)
-        ? $_POST['hanh_dong_han_nop'] : '';
+    $hanhDong = chuoi($_POST['hanh_dong_han_nop'] ?? null);
 
     if (in_array($hanhDong, ['them', 'hoan_thanh', 'xoa'], true)) {
         if (!$duocQuanLyHanNopLuy) {
             http_response_code(403);
             exit('Bạn không có quyền chỉnh sửa hạn nộp bài.');
         } elseif ($hanhDong === 'them') {
-            $tenBai = trim(is_string($_POST['ten_bai'] ?? null)
-                ? $_POST['ten_bai'] : '');
-            $ngayHan = is_string($_POST['ngay_han'] ?? null)
-                ? $_POST['ngay_han'] : '';
+            $tenBai = trim(chuoi($_POST['ten_bai'] ?? null));
+            $ngayHan = trim(chuoi($_POST['ngay_han'] ?? null));
 
             if ($tenBai === '' || mb_strlen($tenBai) > 120) {
                 $thongBaoHanNopLuy = 'Tên bài tập không được để trống và tối đa 120 ký tự.';
@@ -202,21 +198,17 @@ unset($_SESSION['thong_bao_ky_nang_luy']);
 
 if (
     $_SERVER['REQUEST_METHOD'] === 'POST'
-    && ($_POST['hanh_dong_ky_nang'] ?? '') === 'them'
+    && chuoi($_POST['hanh_dong_ky_nang'] ?? null) === 'them'
 ) {
     if (!$laChuTrangLuy) {
         http_response_code(403);
         exit('Bạn không có quyền chỉnh sửa kỹ năng của trang này.');
     }
 
-    $tenKyNang = trim(is_string($_POST['ten_ky_nang'] ?? null)
-        ? $_POST['ten_ky_nang'] : '');
-    $nhomKyNang = trim(is_string($_POST['nhom_ky_nang'] ?? null)
-        ? $_POST['nhom_ky_nang'] : '');
-    $mucDoKyNang = trim(is_string($_POST['muc_do'] ?? null)
-        ? $_POST['muc_do'] : '');
-    $moTaKyNang = trim(is_string($_POST['mo_ta'] ?? null)
-        ? $_POST['mo_ta'] : '');
+    $tenKyNang = trim(chuoi($_POST['ten_ky_nang'] ?? null));
+    $nhomKyNang = trim(chuoi($_POST['nhom_ky_nang'] ?? null));
+    $mucDoKyNang = trim(chuoi($_POST['muc_do'] ?? null));
+    $moTaKyNang = trim(chuoi($_POST['mo_ta'] ?? null));
 
     if (
         $tenKyNang === ''
