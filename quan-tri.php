@@ -14,7 +14,7 @@ $khoLienHe  = new \App\Data\KhoLienHe(db());
 // Cập nhật trạng thái đơn hàng (POST)
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && isset($_POST['cap_nhat_trang_thai'])) {
     $donId        = filter_var($_POST['don_id'] ?? null, FILTER_VALIDATE_INT);
-    $trangThaiMoi = (string) ($_POST['trang_thai'] ?? '');
+    $trangThaiMoi = chuoi($_POST['trang_thai'] ?? '');
 
     if ($donId !== false && $donId > 0 && $khoDonHang->doiTrangThai($donId, $trangThaiMoi)) {
         $_SESSION['flash_quan_tri'] = "Đã cập nhật trạng thái đơn hàng #{$donId}.";
@@ -102,7 +102,7 @@ require __DIR__ . '/inc/header.php';
         <?php if ($tongTrang > 1): ?>
             <p>Trang:
                 <?php for ($i = 1; $i <= $tongTrang; $i++): ?>
-                    <a href="quan-tri.php?trang=<?= $i ?>"<?= $i === $trang ? ' class="trang-hien-tai"' : '' ?>>[<?= $i ?>]</a>
+                    <a href="quan-tri.php?trang=<?= $i ?>" <?= $i === $trang ? ' class="trang-hien-tai"' : '' ?>>[<?= $i ?>]</a>
                 <?php endfor; ?>
             </p>
         <?php endif; ?>

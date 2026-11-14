@@ -20,13 +20,19 @@ if ($mangGioHang === []) {
 $loiDatHang = '';
 
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
-    $tenKhach     = trim((string) ($_POST['ten_khach'] ?? ''));
-    $sdtKhach     = trim((string) ($_POST['sdt_khach'] ?? ''));
-    $tienKhachDua = (int) ($_POST['tien_khach_dua'] ?? 0);
-    $ghiChu       = trim((string) ($_POST['ghi_chu'] ?? ''));
+    $tenKhach     = trim(chuoi($_POST['ten_khach'] ?? ''));
+    $sdtKhach     = trim(chuoi($_POST['sdt_khach'] ?? ''));
+    $tienKhachDua = filter_var(
+        $_POST['tien_khach_dua'] ?? null,
+        FILTER_VALIDATE_INT,
+        ['options' => ['min_range' => 0]]
+    );
+    $ghiChu       = trim(chuoi($_POST['ghi_chu'] ?? ''));
     $tongTien     = $gioHang->tinhTongTien();
 
-    if ($tienKhachDua < $tongTien) {
+    if ($tienKhachDua === false) {
+        $loiDatHang = 'Số tiền khách đưa phải là số nguyên không âm.';
+    } elseif ($tienKhachDua < $tongTien) {
         $loiDatHang = 'Số tiền khách đưa chưa đủ để thanh toán hóa đơn.';
     } else {
         try {

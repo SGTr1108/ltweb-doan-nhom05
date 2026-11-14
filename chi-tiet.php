@@ -40,6 +40,7 @@ if ($sanPham !== null) {
     setcookie('da_xem', implode(',', $lichSuXem), [
         'expires' => time() + 30 * 24 * 60 * 60,
         'path' => '/',
+        'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
         'httponly' => true,
         'samesite' => 'Lax',
     ]);

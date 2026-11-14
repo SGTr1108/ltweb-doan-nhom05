@@ -14,8 +14,8 @@ $emailCu  = '';
 
 
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
-    $emailCu = trim((string) ($_POST['email'] ?? ''));
-    $matKhau = (string) ($_POST['mat_khau'] ?? '');
+    $emailCu = trim(chuoi($_POST['email'] ?? ''));
+    $matKhau = chuoi($_POST['mat_khau'] ?? '');
 
     // Chuẩn hóa thông tin dùng để giới hạn đăng nhập.
     $ip = substr((string) ($_SERVER['REMOTE_ADDR'] ?? 'unknown'), 0, 45);

@@ -9,10 +9,10 @@ $khoDanhMuc = new \App\Data\KhoDanhMuc(db());
 $khoSanPham = new \App\Data\KhoSanPham(db());
 
 // Lấy giá trị bộ lọc từ URL
-$q        = trim((string) ($_GET['q'] ?? $_GET['tu_khoa'] ?? $_GET['tim-kiem'] ?? ''));
+$q        = trim(chuoi($_GET['q'] ?? $_GET['tu_khoa'] ?? $_GET['tim-kiem'] ?? ''));
 $dm       = filter_var($_GET['danh-muc'] ?? $_GET['danh_muc_id'] ?? $_GET['danh_muc'] ?? null, FILTER_VALIDATE_INT) ?: null;
 $giaToiDa = filter_var($_GET['giaToiDa'] ?? $_GET['gia_toi_da'] ?? $_GET['gia'] ?? null, FILTER_VALIDATE_INT) ?: null;
-$sx       = (string) ($_GET['sap-xep'] ?? $_GET['sap_xep'] ?? $_GET['sx'] ?? 'moi');
+$sx       = chuoi($_GET['sap-xep'] ?? $_GET['sap_xep'] ?? $_GET['sx'] ?? 'moi');
 
 if (!in_array($sx, ['moi', 'gia-tang', 'gia-giam', 'ten'], true)) {
     $sx = 'moi';

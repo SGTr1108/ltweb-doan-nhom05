@@ -35,11 +35,11 @@ $old = [
 ];
 
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
-    $old['ten']         = trim((string) ($_POST['ten'] ?? ''));
-    $old['danh_muc_id'] = (string) ($_POST['danh_muc_id'] ?? '');
-    $old['gia']         = (string) ($_POST['gia'] ?? '');
-    $old['ton_kho']     = (string) ($_POST['ton_kho'] ?? '0');
-    $old['mo_ta']       = trim((string) ($_POST['mo_ta'] ?? ''));
+    $old['ten']         = trim(chuoi($_POST['ten'] ?? ''));
+    $old['danh_muc_id'] = chuoi($_POST['danh_muc_id'] ?? '');
+    $old['gia']         = chuoi($_POST['gia'] ?? '');
+    $old['ton_kho']     = chuoi($_POST['ton_kho'] ?? '0');
+    $old['mo_ta']       = trim(chuoi($_POST['mo_ta'] ?? ''));
 
     if ($old['ten'] === '') {
         $loi['ten'] = 'Vui lòng nhập tên sản phẩm.';

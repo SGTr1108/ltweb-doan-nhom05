@@ -1,22 +1,17 @@
-# Không liệt kê thư mục
 Options -Indexes
 
-# Cần mod_rewrite; dùng R=404 để trả đúng 404 (không phải 403)
 RewriteEngine On
 
-# Thư mục ẩn và tệp ẩn (.env, .git/, .htaccess...), trừ .well-known
-RewriteRule (^|/)\.(?!well-known) - [R=404,L]
+# Chặn tệp và thư mục ẩn, trừ .well-known.
+RewriteRule (^|/)\.(?!well-known(?:/|$)) - [R=404,L]
 
-# Thư mục nội bộ (thêm thư mục riêng của nhóm vào trong dấu ngoặc)
+# Chặn truy cập trực tiếp vào tệp cấu hình và dữ liệu nhạy cảm.
+RewriteRule \.(sql|log|bak|ini|lock)$ - [F,L,NC]
+RewriteRule ^composer\.json$ - [F,L,NC]
+
+# Chặn truy cập vào các thư mục nội bộ.
 RewriteRule ^(inc|src|vendor|database|logs|storage)(/|$) - [R=404,L]
 
-# Tệp nhạy cảm theo phần mở rộng
-RewriteRule \.(sql|log|bak|ini|lock)$ - [R=404,L]
-
-# composer.json
-RewriteRule ^composer\.json$ - [R=404,L]
-
 <IfModule mod_headers.c>
-    # Chống trình duyệt đoán kiểu nội dung
     Header set X-Content-Type-Options "nosniff"
 </IfModule>

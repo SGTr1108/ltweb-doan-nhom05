@@ -13,9 +13,9 @@ $loi = [];
 $old = ['email' => '', 'ho_ten' => ''];
 
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
-    $old['email']  = trim((string) ($_POST['email'] ?? ''));
-    $old['ho_ten'] = trim((string) ($_POST['ho_ten'] ?? ''));
-    $matKhau       = (string) ($_POST['mat_khau'] ?? '');
+    $old['email']  = trim(chuoi($_POST['email'] ?? ''));
+    $old['ho_ten'] = trim(chuoi($_POST['ho_ten'] ?? ''));
+    $matKhau       = chuoi($_POST['mat_khau'] ?? '');
 
     if (!filter_var($old['email'], FILTER_VALIDATE_EMAIL)) {
         $loi['email'] = 'Email không hợp lệ.';

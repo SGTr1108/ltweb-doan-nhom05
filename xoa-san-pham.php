@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/inc/config.php';
 
-yeuCauQuyen('quan_tri');
 yeuCauPost();
+yeuCauQuyen('quan_tri');
 $spId = filter_var($_POST['id'] ?? null, FILTER_VALIDATE_INT);
 if ($spId === false || $spId < 1) {
     $_SESSION['flash_quan_tri_loi'] = 'Mã sản phẩm không hợp lệ.';

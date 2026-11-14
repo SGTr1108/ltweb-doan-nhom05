@@ -49,12 +49,12 @@ if (isset($_GET['id'])) {
 }
 
 // Trường hợp 2: Tìm kiếm danh sách (?q=...)
-$q        = trim((string) ($_GET['q'] ?? ''));
+$q        = trim(chuoi($_GET['q'] ?? ''));
 $dm       = filter_var($_GET['dm'] ?? null, FILTER_VALIDATE_INT) ?: null;
 $giaToiDa = filter_var($_GET['giaToiDa'] ?? null, FILTER_VALIDATE_INT) ?: null;
 
 $loc      = ['q' => $q, 'dm' => $dm, 'giaToiDa' => $giaToiDa];
-$sx       = (string) ($_GET['sx'] ?? 'moi');   // giá trị lạ → trang() rơi về 'moi'
+$sx       = chuoi($_GET['sx'] ?? 'moi');   // giá trị lạ → trang() rơi về 'moi'
 $danhSach = $khoSanPham->trang($loc, $sx, 20, 0);
 
 echo json_encode($danhSach, JSON_UNESCAPED_UNICODE);
