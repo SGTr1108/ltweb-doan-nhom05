@@ -12,26 +12,87 @@
  */
 
 
-// gioithieu.php - Trang giới thiệu cá nhân gồm bộ đếm lượt xem và máy tính điểm học phần.
 declare(strict_types=1);
 
-
 $goc = '../../'; // Đường dẫn quay về gốc dự án từ thư mục thanhvien/3120224149_tram/
-require_once $goc . 'inc/config.php';
+require_once $goc . 'inc/config.php'; // nạp .env, session, header bảo mật, kiểm tra CSRF tập trung
+require_once $goc . 'inc/ham.php';
 
-$mssvTram = '3120224149'; // MSSV cố định của chủ trang, không nhận từ form (khóa ngoại tv_* → thanh_vien)
+/** Thoát ký tự đặc biệt (chỉ định nghĩa nếu inc/ham.php chưa có) */
+if (!function_exists('e')) {
+  function e($value): string
+  {
+    return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+  }
+}
+
+/** Chỉ nhận chuỗi; mảng (?x[]=…) → '' (chống TypeError / "Array to string conversion") */
+if (!function_exists('chuoi')) {
+  function chuoi(mixed $v): string
+  {
+    return is_string($v) ? $v : '';
+  }
+}
+
+/** Lấy giá trị POST dạng chuỗi đã trim */
+if (!function_exists('post_str')) {
+  function post_str(string $key): string
+  {
+    return trim(chuoi($_POST[$key] ?? ''));
+  }
+}
+
+/** Email tài khoản của chủ trang (bảng nguoi_dung không có cột mssv nên nhận diện bằng email) */
+const EMAIL_CHU_TRANG = 'doanthuythaotram@gmail.com';
+
+/**
+ * Người đang đăng nhập có phải chủ trang không? Kiểm tra ở máy chủ:
+ * lấy id đăng nhập trong phiên → đọc email thật từ CSDL → so với email chủ trang.
+ * Không tin bất kỳ giá trị nào từ form hay cookie ngoài mã phiên.
+ */
+function laChuTrang(): bool
+{
+  $uid = $_SESSION['uid'] ?? null; // khóa phiên do dangNhap() đặt; sửa tên nếu nhóm dùng khóa khác
+  if ($uid === null && function_exists('nguoiDung')) {
+    $nd = nguoiDung();
+    $uid = is_array($nd) ? ($nd['id'] ?? null) : null;
+  }
+  if (!is_int($uid) && !(is_string($uid) && ctype_digit($uid))) {
+    return false;
+  }
+  $st = db()->prepare('SELECT email FROM nguoi_dung WHERE id = ?');
+  $st->execute([$uid]);
+  $email = $st->fetchColumn();
+  return is_string($email) && strcasecmp($email, EMAIL_CHU_TRANG) === 0;
+}
+
+$mssvTram = '3120224149'; // MSSV cố định của chủ trang, KHÔNG nhận từ form (khóa ngoại tv_* → thanh_vien)
 $pdo = db();
+$laChu = laChuTrang();
 
-$thong_bao = "";
+$thong_bao = '';
+$message = '';
 $thongBaoPopup = [];
 
+// ==========================================
+// XỬ LÝ 1: ĐĂNG NHẬT KÝ (chỉ chủ trang)
+// ==========================================
 if (isset($_POST['btn_them'])) {
-  $tieu_de           = trim((string) ($_POST['tieu_de'] ?? ''));
-  $noi_dung_ngan     = trim((string) ($_POST['noi_dung_ngan'] ?? ''));
-  $noi_dung_chi_tiet = trim((string) ($_POST['noi_dung_chi_tiet'] ?? ''));
+  if (!$laChu) {
+    ghiLogBaoMat('cam_truy_cap', ['trang' => $_SERVER['REQUEST_URI'] ?? '', 'hanh_dong' => 'them_tv_blog']);
+    http_response_code(403);
+    exit('Chỉ chủ trang mới được đăng nhật ký.');
+  }
+
+  $tieu_de           = post_str('tieu_de');
+  $noi_dung_ngan     = post_str('noi_dung_ngan');
+  $noi_dung_chi_tiet = post_str('noi_dung_chi_tiet');
 
   if ($tieu_de === '' || $noi_dung_chi_tiet === '') {
     $thong_bao = "<p class='tram-tach-1'> Vui lòng nhập tiêu đề và nội dung chi tiết.</p>";
+  } elseif (mb_strlen($tieu_de) > 255 || mb_strlen($noi_dung_ngan) > 500 || mb_strlen($noi_dung_chi_tiet) > 5000) {
+    // Giới hạn tạm: chỉnh cho khớp độ dài cột trong schema.sql của nhóm
+    $thong_bao = "<p class='tram-tach-1'> Nội dung quá dài. Vui lòng rút gọn.</p>";
   } else {
     try {
       $st = $pdo->prepare(
@@ -39,6 +100,7 @@ if (isset($_POST['btn_them'])) {
       );
       $st->execute([$mssvTram, $tieu_de, $noi_dung_ngan, $noi_dung_chi_tiet]);
 
+      $_SESSION['success_message'] = 'Đã đăng bài viết thành công.';
       header('Location: gioithieu.php', true, 303);
       exit;
     } catch (PDOException $e) {
@@ -48,24 +110,20 @@ if (isset($_POST['btn_them'])) {
   }
 }
 
-// Kiểm tra xem có thông báo thành công được lưu trong Session hay không để hiển thị popup
-// CSP không cho <script> nội tuyến: lưu lại, in ra thẻ data-thong-bao trong <body>
-// (đã qua e()); js/canhan.js đọc thẻ này rồi gọi alert().
-if (isset($_SESSION['success_message'])) {
-  $thongBaoPopup[] = (string) $_SESSION['success_message'];
-  // Hiển thị xong thì xóa đi để lần sau tải lại trang không bị hiện lại popup
-  unset($_SESSION['success_message']);
-}
-
-// Xử lý khi người dùng bấm nút Gửi
-$message = "";
+// ==========================================
+// XỬ LÝ 2: GỬI GÓP Ý (ai cũng gửi được)
+// ==========================================
 if (isset($_POST['btn_submit'])) {
-  $ho_ten   = trim((string) ($_POST['ho_ten'] ?? ''));
-  $email    = trim((string) ($_POST['email'] ?? ''));
-  $noi_dung = trim((string) ($_POST['noi_dung'] ?? ''));
+  $ho_ten   = post_str('ho_ten');
+  $email    = post_str('email');
+  $noi_dung = post_str('noi_dung');
 
   if ($ho_ten === '' || $noi_dung === '') {
     $message = "<div class='tram-tach-1'>Vui lòng nhập họ tên và nội dung góp ý.</div>";
+  } elseif (mb_strlen($ho_ten) > 100 || mb_strlen($email) > 255 || mb_strlen($noi_dung) > 2000) {
+    $message = "<div class='tram-tach-1'>Nội dung quá dài. Vui lòng rút gọn.</div>";
+  } elseif ($email !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+    $message = "<div class='tram-tach-1'>Email không hợp lệ.</div>";
   } else {
     try {
       $st = $pdo->prepare(
@@ -73,6 +131,7 @@ if (isset($_POST['btn_submit'])) {
       );
       $st->execute([$mssvTram, $ho_ten, $email !== '' ? $email : null, $noi_dung]);
 
+      $_SESSION['success_message'] = 'Cảm ơn bạn, góp ý đã được gửi.';
       header('Location: gioithieu.php', true, 303);
       exit;
     } catch (PDOException $e) {
@@ -82,56 +141,36 @@ if (isset($_POST['btn_submit'])) {
   }
 }
 
-// Kiểm tra xem có thông báo thành công được lưu trong Session hay không để hiển thị popup
-// CSP không cho <script> nội tuyến: lưu lại, in ra thẻ data-thong-bao trong <body>
-// (đã qua e()); js/canhan.js đọc thẻ này rồi gọi alert().
+// Thông báo thành công lưu trong Session → in ra thẻ data-thong-bao (đã qua e());
+// js/canhan.js đọc thẻ này rồi gọi alert() (CSP không cho <script> nội tuyến).
 if (isset($_SESSION['success_message'])) {
-  $thongBaoPopup[] = (string) $_SESSION['success_message'];
-  // Hiển thị xong thì xóa đi để lần sau tải lại trang không bị hiện lại popup
+  $thongBaoPopup[] = chuoi($_SESSION['success_message']);
   unset($_SESSION['success_message']);
 }
 
-// Lấy dữ liệu từ bảng tv_blog
-$dsBlog = $pdo->query(
+// Chỉ lấy dữ liệu của CHÍNH trang này (WHERE mssv = ?)
+$st = $pdo->prepare(
   'SELECT id, mssv, tieu_de, noi_dung_ngan, noi_dung_chi_tiet, ngay_dang
      FROM tv_blog
-     ORDER BY ngay_dang DESC, id DESC'
-)->fetchAll(PDO::FETCH_ASSOC);
+    WHERE mssv = ?
+    ORDER BY ngay_dang DESC, id DESC'
+);
+$st->execute([$mssvTram]);
+$dsBlog = $st->fetchAll(PDO::FETCH_ASSOC);
 
-// Lấy dữ liệu từ bảng tv_gop_y
-$dsGopY = $pdo->query(
+$st = $pdo->prepare(
   'SELECT id, mssv, ho_ten, email, noi_dung, trang_thai, ngay_gui
      FROM tv_gop_y
-     ORDER BY ngay_gui DESC, id DESC'
-)->fetchAll(PDO::FETCH_ASSOC);
+    WHERE mssv = ?
+    ORDER BY ngay_gui DESC, id DESC'
+);
+$st->execute([$mssvTram]);
+$dsGopY = $st->fetchAll(PDO::FETCH_ASSOC);
 
 // --- CẤU HÌNH ĐƯỜNG DẪN VÀ GIAO DIỆN DÙNG CHUNG ---
 $tieuDeTrang = 'Giới thiệu Cá nhân | MiniPos';
-$cssTrang = 'thanhvien/3120224149_tram/tram_style.css'; // Đường dẫn file CSS tính từ gốc dự án
-$scriptsTrang = ['thanhvien/3120224149_tram/js/canhan.js']; // Đường dẫn file JS tính từ gốc dự án
-
-// Nạp các hàm dùng chung của nhóm (config.php đã được nạp ở đầu tệp)
-require_once $goc . 'inc/ham.php';
-
-if (session_status() === PHP_SESSION_NONE) {
-  session_start();
-}
-
-/** Thoát ký tự đặc biệt: Kiểm tra nếu chưa khai báo để tránh lỗi trùng lặp */
-if (!function_exists('e')) {
-  function e($value): string
-  {
-    return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-  }
-}
-
-/** Lấy giá trị POST dạng chuỗi */
-if (!function_exists('post_str')) {
-  function post_str(string $key): string
-  {
-    return (isset($_POST[$key]) && is_string($_POST[$key])) ? trim($_POST[$key]) : '';
-  }
-}
+$cssTrang = 'thanhvien/3120224149_tram/tram_style.css';
+$scriptsTrang = ['thanhvien/3120224149_tram/js/canhan.js'];
 
 // ==========================================
 // CHỨC NĂNG 1: BỘ ĐẾM LƯỢT XEM (FILE + SESSION)
@@ -139,12 +178,12 @@ if (!function_exists('post_str')) {
 $counter_dir  = __DIR__ . '/storage';
 $counter_file = $counter_dir . '/3120224149_counter.txt';
 
-if (!is_dir($counter_dir)) {
-  mkdir($counter_dir, 0755, true);
+if (!is_dir($counter_dir) && !mkdir($counter_dir, 0755, true) && !is_dir($counter_dir)) {
+  error_log('Trâm - không tạo được thư mục ' . $counter_dir);
 }
 
-$fp = fopen($counter_file, 'c+');
 $current_views = 0;
+$fp = is_dir($counter_dir) ? fopen($counter_file, 'c+') : false;
 if ($fp !== false) {
   flock($fp, LOCK_EX);
   $current_views = (int)trim((string)stream_get_contents($fp));
@@ -211,10 +250,8 @@ if (isset($_SESSION['flash']) && is_array($_SESSION['flash'])) {
 }
 
 // ==========================================
-// NẠP HEADER / FOOTER CHUNG (BẮT ĐẦU RA ĐỂ KHÔNG LẶP DOCTYPE/HTML/HEAD/BODY)
+// NẠP HEADER / FOOTER CHUNG (BỎ DOCTYPE/HTML/HEAD/BODY LẶP)
 // ==========================================
-// header.php tự in cả <!DOCTYPE>, <html>, <head>, <body> rồi mới đến <header>/<nav>.
-// Trang này đã có khung riêng nên chỉ lấy phần nằm sau thẻ <body> của header.
 ob_start();
 include __DIR__ . '/../../inc/header.php';
 $headerHtml = (string)ob_get_clean();
@@ -231,7 +268,6 @@ if (preg_match('/<header\b.*$/is', $headerHtml, $khop)) {
   );
 }
 
-// footer.php: bỏ </body> và </html> (nếu có) vì trang tự đóng một lần ở cuối.
 ob_start();
 require_once $goc . 'inc/footer.php';
 $footerHtml = (string)preg_replace('#</body\s*>|</html\s*>#i', '', (string)ob_get_clean());
@@ -355,27 +391,31 @@ $headerHtml = (string)preg_replace(
     </article>
 
     <article class="profile-header">
-      <h2>Nhập nhật ký Blog</h2>
+      <h2>Nhật ký công nghệ / Blog</h2>
       <br>
       <?php echo $thong_bao; ?>
       <br>
-      <!-- GIAO DIỆN FORM ĐỂ NHẬP VÀ BẤM NÚT -->
-      <form method="POST">
-        <?= csrfField() ?>
-        <label>Tiêu đề bài viết:</label><br>
-        <input type="text" name="tieu_de" required class="tram-tach-10"><br><br>
 
-        <label>Nội dung ngắn:</label><br>
-        <input type="text" name="noi_dung_ngan" class="tram-tach-10"><br><br>
+      <?php if ($laChu): ?>
+        <!-- Chỉ chủ trang thấy form; máy chủ vẫn kiểm tra lại quyền khi nhận POST -->
+        <form method="post" action="gioithieu.php">
+          <?= csrfField() ?>
+          <label for="tieu_de">Tiêu đề bài viết:</label><br>
+          <input type="text" id="tieu_de" name="tieu_de" required maxlength="255" class="tram-tach-10"><br><br>
 
-        <label>Nội dung chi tiết:</label><br>
-        <textarea name="noi_dung_chi_tiet" required rows="5" class="tram-tach-10"></textarea><br><br>
+          <label for="noi_dung_ngan">Nội dung ngắn:</label><br>
+          <input type="text" id="noi_dung_ngan" name="noi_dung_ngan" maxlength="500" class="tram-tach-10"><br><br>
 
-        <!-- Nút bấm kích hoạt hành động chèn -->
-        <button type="submit" name="btn_them">Bấm để chèn dữ liệu</button>
-      </form>
+          <label for="noi_dung_chi_tiet">Nội dung chi tiết:</label><br>
+          <textarea id="noi_dung_chi_tiet" name="noi_dung_chi_tiet" required rows="5" maxlength="5000" class="tram-tach-10"></textarea><br><br>
 
-      <br>
+          <button type="submit" name="btn_them">Đăng bài viết</button>
+        </form>
+        <br>
+      <?php else: ?>
+        <p>Chỉ chủ trang đăng nhập mới đăng được nhật ký.</p>
+      <?php endif; ?>
+
       <div class="tram-tach-11">
         <table border="1" cellpadding="10" class="tram-tach-12">
           <thead>
@@ -396,7 +436,7 @@ $headerHtml = (string)preg_replace(
                   <td><?= e($row['mssv']) ?></td>
                   <td><?= e($row['tieu_de']) ?></td>
                   <td><?= e($row['noi_dung_ngan']) ?></td>
-                  <td><?= e($row['noi_dung_chi_tiet']) ?></td>
+                  <td><?= nl2br(e($row['noi_dung_chi_tiet'])) ?></td>
                   <td><?= e($row['ngay_dang']) ?></td>
                 </tr>
               <?php endforeach; ?>
@@ -414,68 +454,65 @@ $headerHtml = (string)preg_replace(
     <article>
       <h2>Hộp thư góp ý</h2>
 
-      <!-- Hiển thị thông báo kết quả sau khi bấm nút -->
       <?php echo $message; ?>
 
-      <form method="POST">
+      <form method="post" action="gioithieu.php">
         <?= csrfField() ?>
         <p>
-          <label>Họ tên:</label><br>
-          <input type="text" name="ho_ten" required>
+          <label for="ho_ten">Họ tên:</label><br>
+          <input type="text" id="ho_ten" name="ho_ten" required maxlength="100">
         </p>
         <p>
-          <label>Email:</label><br>
-          <input type="email" name="email">
+          <label for="email">Email:</label><br>
+          <input type="email" id="email" name="email" maxlength="255">
         </p>
         <p>
-          <label>Nội dung góp ý:</label><br>
-          <textarea name="noi_dung" rows="5" required></textarea>
+          <label for="noi_dung">Nội dung góp ý:</label><br>
+          <textarea id="noi_dung" name="noi_dung" rows="5" required maxlength="2000"></textarea>
         </p>
 
-        <!-- Nút bấm thực hiện thao tác -->
         <button type="submit" name="btn_submit" class="tram-tach-19">
           Gửi góp ý
         </button>
-
-        <br>
-        <br>
-        <div class="tram-tach-20">
-          <table border="1" cellpadding="10" class="tram-tach-12">
-            <thead>
-              <tr>
-                <th class="tram-tach-13">ID</th>
-                <th class="tram-tach-14">MSSV</th>
-                <th class="tram-tach-21">Họ tên</th>
-                <th class="tram-tach-15">Email</th>
-                <th class="tram-tach-22">Nội dung</th>
-                <th class="tram-tach-23">Trạng thái</th>
-                <th class="tram-tach-18">Ngày gửi</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php if ($dsGopY !== []): ?>
-                <?php foreach ($dsGopY as $row): ?>
-                  <tr>
-                    <td><?= e($row['id']) ?></td>
-                    <td><?= e($row['mssv']) ?></td>
-                    <td><?= e($row['ho_ten']) ?></td>
-                    <td><?= e($row['email']) ?></td>
-                    <td><?= e($row['noi_dung']) ?></td>
-                    <td><?= e($row['trang_thai']) ?></td>
-                    <td><?= e($row['ngay_gui']) ?></td>
-                  </tr>
-                <?php endforeach; ?>
-              <?php else: ?>
-                <tr>
-                  <td colspan="7">Chưa có góp ý nào.</td>
-                </tr>
-              <?php endif; ?>
-            </tbody>
-          </table>
-        </div>
       </form>
 
-
+      <br>
+      <br>
+      <div class="tram-tach-20">
+        <table border="1" cellpadding="10" class="tram-tach-12">
+          <thead>
+            <tr>
+              <th class="tram-tach-13">ID</th>
+              <th class="tram-tach-14">MSSV</th>
+              <th class="tram-tach-21">Họ tên</th>
+              <th class="tram-tach-15">Email</th>
+              <th class="tram-tach-22">Nội dung</th>
+              <th class="tram-tach-23">Trạng thái</th>
+              <th class="tram-tach-18">Ngày gửi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php if ($dsGopY !== []): ?>
+              <?php foreach ($dsGopY as $row): ?>
+                <tr>
+                  <td><?= e($row['id']) ?></td>
+                  <td><?= e($row['mssv']) ?></td>
+                  <td><?= e($row['ho_ten']) ?></td>
+                  <!-- Email là dữ liệu cá nhân: chỉ chủ trang xem được -->
+                  <td><?= $laChu ? e($row['email']) : '—' ?></td>
+                  <td><?= nl2br(e($row['noi_dung'])) ?></td>
+                  <td><?= e($row['trang_thai']) ?></td>
+                  <td><?= e($row['ngay_gui']) ?></td>
+                </tr>
+              <?php endforeach; ?>
+            <?php else: ?>
+              <tr>
+                <td colspan="7">Chưa có góp ý nào.</td>
+              </tr>
+            <?php endif; ?>
+          </tbody>
+        </table>
+      </div>
     </article>
     <section>
       <h2>Thời khóa biểu tuần</h2>
