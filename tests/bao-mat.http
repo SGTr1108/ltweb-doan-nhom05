@@ -1,0 +1,383 @@
+# MiniPos - Kiểm thử phủ định Bảng 3, đủ 14 ca.
+# Tệp tái dựng request từ Bảng 3 do nhóm cung cấp, dùng để chạy lại.
+# VS Code + REST Client. Chạy từng request riêng.
+# Đặt rest-client.followredirect = false và rest-client.rememberCookiesForSubsequentRequests = false
+# trong Settings của VS Code để quan sát 303 và dùng đúng Cookie khai báo.
+# Chép PHPSESSID và csrf cùng một phiên từ trình duyệt vào biến tương ứng khi chạy.
+# Các giá trị dưới đây là chỗ giữ chỗ. Xóa giá trị thật trước khi commit.
+# Có thể lấy phiên mới bằng request 0, đọc Set-Cookie và meta csrf-token.
+# GET 0 chỉ tạo phiên khách. sidNv/csrfNv và sidAdmin/csrfAdmin lấy sau đăng nhập.
+@base = http://localhost/ltweb-doan-nhom05
+@sid = DIEN_PHIEN_KHACH
+@csrf = DIEN_CSRF_KHACH
+@sidNv = DIEN_PHIEN_NHAN_VIEN
+@csrfNv = DIEN_CSRF_NHAN_VIEN
+@sidAdmin = DIEN_PHIEN_QUAN_TRI
+@csrfAdmin = DIEN_CSRF_QUAN_TRI
+@emailThu = nv01@minipos.vn
+@emailKhac = nv02@minipos.vn
+@matKhauThu = DIEN_MAT_KHAU_TAI_KHOAN_THU
+@sanPhamId = 1
+@danhMucId = 1
+# Dùng sản phẩm thử có tồn tại khi kiểm tra quyền xóa.
+# Request xóa chỉ chạy với sidNv, xác nhận phiên thuộc nhân viên trước khi gửi.
+@sanPhamThuId = DIEN_ID_SAN_PHAM_THU
+# Chọn hóa đơn lớn hơn 10.000đ cho ca 13.
+# Ca 14 dùng nội dung TXT vô hại nhúng sẵn, không cần tệp phụ.
+
+
+### 0 - Nhận phiên khách và CSRF
+GET {{base}}/dang-nhap.php
+
+### 1 - Header (200), kiểm tra cookie bằng trình duyệt
+# Kiểm tra CSP, nosniff, Referrer-Policy, HttpOnly, SameSite=Lax.
+# Trong Console chạy document.cookie và xác nhận không thấy PHPSESSID.
+HEAD {{base}}/
+
+### 2 - Thiếu CSRF (403)
+# Đối chiếu sự kiện csrf_sai và không có lỗi 500.
+POST {{base}}/dang-nhap.php
+Cookie: PHPSESSID={{sid}}
+Content-Type: application/x-www-form-urlencoded
+
+email=&mat_khau=
+
+### 2 - Sai CSRF (403)
+# Đối chiếu sự kiện csrf_sai và không có lỗi 500.
+POST {{base}}/dang-nhap.php
+Cookie: PHPSESSID={{sid}}
+Content-Type: application/x-www-form-urlencoded
+
+csrf=abc&email=&mat_khau=
+
+### 2 - CSRF dạng mảng (403)
+# Đối chiếu sự kiện csrf_sai và không có lỗi 500.
+POST {{base}}/dang-nhap.php
+Cookie: PHPSESSID={{sid}}
+Content-Type: application/x-www-form-urlencoded
+
+csrf%5B%5D=abc&email=&mat_khau=
+
+### 3 - API thiếu mã (403 JSON)
+POST {{base}}/api/gio-hang.php
+Cookie: PHPSESSID={{sid}}
+Content-Type: application/json
+
+{"id": {{sanPhamId}}, "so_luong": 1}
+
+### 3 - API có mã đúng (200)
+POST {{base}}/api/gio-hang.php
+Cookie: PHPSESSID={{sid}}
+X-CSRF-Token: {{csrf}}
+Content-Type: application/json
+
+{"id": {{sanPhamId}}, "so_luong": 1}
+
+### 4 - GET bị từ chối (405, Allow: POST)
+GET {{base}}/dang-xuat.php
+Cookie: PHPSESSID={{sidNv}}
+
+### 4 - GET bị từ chối (405, Allow: POST)
+GET {{base}}/xoa-san-pham.php?id={{sanPhamThuId}}
+Cookie: PHPSESSID={{sidNv}}
+
+### 4 - Nhân viên POST xóa (403)
+# Đối chiếu log cam_truy_cap và sản phẩm vẫn tồn tại.
+POST {{base}}/xoa-san-pham.php
+Cookie: PHPSESSID={{sidNv}}
+Content-Type: application/x-www-form-urlencoded
+
+csrf={{csrfNv}}&id={{sanPhamThuId}}
+
+### 5 - Cookie tự đặt bị thay bằng mã mới
+HEAD {{base}}/dang-nhap.php
+Cookie: PHPSESSID=ca5-session-tu-dat-2026
+
+### 5 - Đăng nhập hợp lệ đổi PHPSESSID (303)
+# Dùng phiên khách mới. Ghi mã trước/sau Set-Cookie. Cập nhật sidNv/csrfNv sau đăng nhập.
+POST {{base}}/dang-nhap.php
+Cookie: PHPSESSID={{sid}}
+Content-Type: application/x-www-form-urlencoded
+
+csrf={{csrf}}&email={{emailThu}}&mat_khau={{matKhauThu}}
+
+### 6 - POST form cũ sau 65 giây (403)
+# Tạm giảm ngưỡng về 60 giây, đăng nhập và mở form.
+# Chờ 65 giây không gửi request trong phiên này, rồi chạy request.
+# Khôi phục 30 * 60 sau thử. Ghi nhận ID mới từ Set-Cookie.
+POST {{base}}/lien-he.php
+Cookie: PHPSESSID={{sidNv}}
+Content-Type: application/x-www-form-urlencoded
+
+csrf={{csrfNv}}&manhanvien=NV001&email=nv01%40minipos.vn
+
+### 6 - Trang cần đăng nhập sau hết hạn (303)
+GET {{base}}/don-hang.php
+Cookie: PHPSESSID={{sidNv}}
+
+### 7 - Tìm kiếm thẻ HTML hiển thị dạng văn bản (200)
+GET {{base}}/danh-sach.php?q=%3Cb%3Eao%3C%2Fb%3E
+
+### 7 - Nội dung phiếu báo cáo (303 rồi GET xem lại)
+# Trang nhóm dùng manhanvien và noidung. Quản trị xem phiếu: văn bản được escape.
+# Đối chiếu CSDL lưu đúng nội dung. Kiểm tra CSP riêng bằng script nội tuyến tạm
+# trên bản cài thử và Console, sau đó xóa script thử.
+POST {{base}}/lien-he.php
+Cookie: PHPSESSID={{sid}}
+Content-Type: application/x-www-form-urlencoded
+
+csrf={{csrf}}&manhanvien=NV001&email=nv01%40minipos.vn&ngaybaocao=2026-11-15&mucdouutien=3&loaiyeucau=loi&noidung=%3Cscript%3Ealert%281%29%3C%2Fscript%3E+%22+%27+%26
+
+### 8 - Tham số dạng mảng
+GET {{base}}/danh-sach.php?q%5B%5D=ao
+
+### 8 - Tham số dạng mảng
+GET {{base}}/chi-tiet.php?id%5B%5D=1
+
+### 8 - Tham số dạng mảng
+GET {{base}}/danh-sach.php?sx%5B%5D=x
+
+### 8 - Form nhận mảng, có CSRF (303 và lỗi xác thực)
+# Theo dõi GET sau chuyển hướng bằng cùng cookie. So sánh php-error.log trước/sau.
+POST {{base}}/lien-he.php
+Cookie: PHPSESSID={{sid}}
+Content-Type: application/x-www-form-urlencoded
+
+csrf={{csrf}}&manhanvien%5B%5D=NV001&email%5B%5D=nv01%40minipos.vn&ngaybaocao=2026-11-15&mucdouutien=3&loaiyeucau=loi&noidung=Thu+ca+8
+
+### 8 - Xem thông báo form sau POST
+GET {{base}}/lien-he.php
+Cookie: PHPSESSID={{sid}}
+
+### 9 - Lỗi kết nối CSDL
+# Chạy git ls-files -- .env và git log --all --oneline -- .env.
+# Tạm APP_DEBUG=false và DB_PASSWORD sai. Đề mong đợi 500, ghi đúng HTTP thực tế.
+# Đối chiếu php-error.log và khôi phục .env sau thử.
+GET {{base}}/
+
+### 9 - Lỗi kết nối CSDL
+# Chạy git ls-files -- .env và git log --all --oneline -- .env.
+# Tạm APP_DEBUG=false và DB_PASSWORD sai. Đề mong đợi 500, ghi đúng HTTP thực tế.
+# Đối chiếu php-error.log và khôi phục .env sau thử.
+GET {{base}}/api/san-pham.php
+
+### 10 - Apache /.env
+# Tạo uploads/ca10-test.php chỉ chứa <?php /* ca10 */ và chép ảnh thử trước khi chạy.
+# Tệp ẩn/nội bộ: 404. SQL, log, composer.json, uploads/ và PHP thử: 403.
+# Ảnh/CSS: 200, ảnh uploads có nosniff. Dọn tệp thử sau ca.
+GET {{base}}/.env
+
+### 10 - Apache /.git/config
+# Tạo uploads/ca10-test.php chỉ chứa <?php /* ca10 */ và chép ảnh thử trước khi chạy.
+# Tệp ẩn/nội bộ: 404. SQL, log, composer.json, uploads/ và PHP thử: 403.
+# Ảnh/CSS: 200, ảnh uploads có nosniff. Dọn tệp thử sau ca.
+GET {{base}}/.git/config
+
+### 10 - Apache /inc/db.php
+# Tạo uploads/ca10-test.php chỉ chứa <?php /* ca10 */ và chép ảnh thử trước khi chạy.
+# Tệp ẩn/nội bộ: 404. SQL, log, composer.json, uploads/ và PHP thử: 403.
+# Ảnh/CSS: 200, ảnh uploads có nosniff. Dọn tệp thử sau ca.
+GET {{base}}/inc/db.php
+
+### 10 - Apache /vendor/autoload.php
+# Tạo uploads/ca10-test.php chỉ chứa <?php /* ca10 */ và chép ảnh thử trước khi chạy.
+# Tệp ẩn/nội bộ: 404. SQL, log, composer.json, uploads/ và PHP thử: 403.
+# Ảnh/CSS: 200, ảnh uploads có nosniff. Dọn tệp thử sau ca.
+GET {{base}}/vendor/autoload.php
+
+### 10 - Apache /database/schema.sql
+# Tạo uploads/ca10-test.php chỉ chứa <?php /* ca10 */ và chép ảnh thử trước khi chạy.
+# Tệp ẩn/nội bộ: 404. SQL, log, composer.json, uploads/ và PHP thử: 403.
+# Ảnh/CSS: 200, ảnh uploads có nosniff. Dọn tệp thử sau ca.
+GET {{base}}/database/schema.sql
+
+### 10 - Apache /logs/bao-mat.log
+# Tạo uploads/ca10-test.php chỉ chứa <?php /* ca10 */ và chép ảnh thử trước khi chạy.
+# Tệp ẩn/nội bộ: 404. SQL, log, composer.json, uploads/ và PHP thử: 403.
+# Ảnh/CSS: 200, ảnh uploads có nosniff. Dọn tệp thử sau ca.
+GET {{base}}/logs/bao-mat.log
+
+### 10 - Apache /composer.json
+# Tạo uploads/ca10-test.php chỉ chứa <?php /* ca10 */ và chép ảnh thử trước khi chạy.
+# Tệp ẩn/nội bộ: 404. SQL, log, composer.json, uploads/ và PHP thử: 403.
+# Ảnh/CSS: 200, ảnh uploads có nosniff. Dọn tệp thử sau ca.
+GET {{base}}/composer.json
+
+### 10 - Apache /uploads/
+# Tạo uploads/ca10-test.php chỉ chứa <?php /* ca10 */ và chép ảnh thử trước khi chạy.
+# Tệp ẩn/nội bộ: 404. SQL, log, composer.json, uploads/ và PHP thử: 403.
+# Ảnh/CSS: 200, ảnh uploads có nosniff. Dọn tệp thử sau ca.
+GET {{base}}/uploads/
+
+### 10 - Apache /uploads/ca10-test.php
+# Tạo uploads/ca10-test.php chỉ chứa <?php /* ca10 */ và chép ảnh thử trước khi chạy.
+# Tệp ẩn/nội bộ: 404. SQL, log, composer.json, uploads/ và PHP thử: 403.
+# Ảnh/CSS: 200, ảnh uploads có nosniff. Dọn tệp thử sau ca.
+GET {{base}}/uploads/ca10-test.php
+
+### 10 - Apache /css/style.css
+# Tạo uploads/ca10-test.php chỉ chứa <?php /* ca10 */ và chép ảnh thử trước khi chạy.
+# Tệp ẩn/nội bộ: 404. SQL, log, composer.json, uploads/ và PHP thử: 403.
+# Ảnh/CSS: 200, ảnh uploads có nosniff. Dọn tệp thử sau ca.
+GET {{base}}/css/style.css
+
+### 10 - Apache /images/MiniPOS.webp
+# Tạo uploads/ca10-test.php chỉ chứa <?php /* ca10 */ và chép ảnh thử trước khi chạy.
+# Tệp ẩn/nội bộ: 404. SQL, log, composer.json, uploads/ và PHP thử: 403.
+# Ảnh/CSS: 200, ảnh uploads có nosniff. Dọn tệp thử sau ca.
+GET {{base}}/images/MiniPOS.webp
+
+### 10 - Apache /uploads/MiniPOS.webp
+# Tạo uploads/ca10-test.php chỉ chứa <?php /* ca10 */ và chép ảnh thử trước khi chạy.
+# Tệp ẩn/nội bộ: 404. SQL, log, composer.json, uploads/ và PHP thử: 403.
+# Ảnh/CSS: 200, ảnh uploads có nosniff. Dọn tệp thử sau ca.
+GET {{base}}/uploads/MiniPOS.webp
+
+### 11 - Kiểm tra thủ công trong MariaDB và trình duyệt
+# Đổi .env sang nhom05_app rồi thao tác lại chức năng Bài tập 6.
+# mysql -h localhost -P 3306 -u nhom05_app -p ltweb_nhom05
+# SELECT CURRENT_USER(), DATABASE();
+# SHOW GRANTS;
+# Root tạo riêng bảng thử: CREATE TABLE ltweb_nhom05.ca11_bang_thu (id INT PRIMARY KEY);
+# Với nhom05_app:
+# CREATE TABLE ca11_tao_thu (id INT PRIMARY KEY);
+# DROP TABLE ca11_bang_thu;
+# SHOW TABLES LIKE 'ca11_bang_thu';
+# Mong đợi 1142 cho CREATE/DROP, bảng thử vẫn tồn tại. Root dọn bảng thử sau ca.
+
+
+### 12 - Lần 1 sai mật khẩu
+# Dùng phiên khách và tài khoản thử chưa có lịch sử sai trong 15 phút.
+POST {{base}}/dang-nhap.php
+Cookie: PHPSESSID={{sid}}
+Content-Type: application/x-www-form-urlencoded
+
+csrf={{csrf}}&email={{emailThu}}&mat_khau=sai-mat-khau-ca12
+
+### 12 - Lần 2 sai mật khẩu
+# Dùng phiên khách và tài khoản thử chưa có lịch sử sai trong 15 phút.
+POST {{base}}/dang-nhap.php
+Cookie: PHPSESSID={{sid}}
+Content-Type: application/x-www-form-urlencoded
+
+csrf={{csrf}}&email={{emailThu}}&mat_khau=sai-mat-khau-ca12
+
+### 12 - Lần 3 sai mật khẩu
+# Dùng phiên khách và tài khoản thử chưa có lịch sử sai trong 15 phút.
+POST {{base}}/dang-nhap.php
+Cookie: PHPSESSID={{sid}}
+Content-Type: application/x-www-form-urlencoded
+
+csrf={{csrf}}&email={{emailThu}}&mat_khau=sai-mat-khau-ca12
+
+### 12 - Lần 4 sai mật khẩu
+# Dùng phiên khách và tài khoản thử chưa có lịch sử sai trong 15 phút.
+POST {{base}}/dang-nhap.php
+Cookie: PHPSESSID={{sid}}
+Content-Type: application/x-www-form-urlencoded
+
+csrf={{csrf}}&email={{emailThu}}&mat_khau=sai-mat-khau-ca12
+
+### 12 - Lần 5 sai mật khẩu
+# Dùng phiên khách và tài khoản thử chưa có lịch sử sai trong 15 phút.
+POST {{base}}/dang-nhap.php
+Cookie: PHPSESSID={{sid}}
+Content-Type: application/x-www-form-urlencoded
+
+csrf={{csrf}}&email={{emailThu}}&mat_khau=sai-mat-khau-ca12
+
+### 12 - Lần 6 đúng mật khẩu nhưng bị khóa (429)
+# Dùng phiên khách và tài khoản thử chưa có lịch sử sai trong 15 phút.
+POST {{base}}/dang-nhap.php
+Cookie: PHPSESSID={{sid}}
+Content-Type: application/x-www-form-urlencoded
+
+csrf={{csrf}}&email={{emailThu}}&mat_khau={{matKhauThu}}
+
+### 12 - Email khác đăng nhập được (303)
+# Giả định hai tài khoản thử có cùng mật khẩu. Nếu khác, điền riêng khi chạy.
+# Sau thành công phải lấy lại phiên khách mới cho yêu cầu tiếp theo.
+POST {{base}}/dang-nhap.php
+Cookie: PHPSESSID={{sid}}
+Content-Type: application/x-www-form-urlencoded
+
+csrf={{csrf}}&email={{emailKhac}}&mat_khau={{matKhauThu}}
+
+### 12 - Email ban đầu sau thời gian khóa (303)
+# Chờ hơn 15 phút hoặc lùi thoi_gian các bản ghi thử trong phpMyAdmin.
+# Kiểm tra bản ghi sai bị xóa và log dang_nhap_sai không chứa mật khẩu.
+POST {{base}}/dang-nhap.php
+Cookie: PHPSESSID={{sid}}
+Content-Type: application/x-www-form-urlencoded
+
+csrf={{csrf}}&email={{emailThu}}&mat_khau={{matKhauThu}}
+
+### 13 - Chuẩn bị giỏ nhân viên
+POST {{base}}/api/gio-hang.php
+Cookie: PHPSESSID={{sidNv}}
+X-CSRF-Token: {{csrfNv}}
+Content-Type: application/json
+
+{"id": {{sanPhamId}}, "so_luong": 1}
+
+### 13 - Xem tổng giỏ trước thử
+# Tổng phải lớn hơn 10000. Ghi số đơn, chi tiết đơn và tồn kho trước thử.
+GET {{base}}/api/gio-hang.php
+Cookie: PHPSESSID={{sidNv}}
+
+### 13 - Gửi thiếu tiền trực tiếp đến máy chủ
+# Mong đợi thông báo thiếu tiền, số đơn/chi tiết/tồn kho/giỏ giữ nguyên.
+# SQL trước và sau: SELECT COUNT(*) FROM don_hang; SELECT COUNT(*) FROM chi_tiet_don;
+# SELECT id, ton_kho FROM san_pham WHERE id = <ID đã chọn>;
+POST {{base}}/dat-hang.php
+Cookie: PHPSESSID={{sidNv}}
+Content-Type: application/x-www-form-urlencoded
+
+csrf={{csrfNv}}&ten_khach=Khach+thu+ca13&sdt_khach=&tien_khach_dua=10000&ghi_chu=Thu+thieu+tien
+
+### 13 - Xem lại giỏ sau thử
+GET {{base}}/api/gio-hang.php
+Cookie: PHPSESSID={{sidNv}}
+
+### 14 - Tải TXT giả ảnh (dữ liệu multipart nhúng sẵn)
+# Chọn danhMucId có tồn tại, các trường còn lại hợp lệ.
+# Mong đợi thông báo chỉ nhận JPG/PNG/WebP, không tạo sản phẩm và không lưu ảnh.
+# SQL: SELECT id, ten, anh FROM san_pham WHERE ten = 'San pham thu ca 14';
+POST {{base}}/them-san-pham.php
+Cookie: PHPSESSID={{sidAdmin}}
+Content-Type: multipart/form-data; boundary=MiniPosCa14Boundary
+
+--MiniPosCa14Boundary
+Content-Disposition: form-data; name="csrf"
+
+{{csrfAdmin}}
+--MiniPosCa14Boundary
+Content-Disposition: form-data; name="ten"
+
+San pham thu ca 14
+--MiniPosCa14Boundary
+Content-Disposition: form-data; name="danh_muc_id"
+
+{{danhMucId}}
+--MiniPosCa14Boundary
+Content-Disposition: form-data; name="gia"
+
+15000
+--MiniPosCa14Boundary
+Content-Disposition: form-data; name="ton_kho"
+
+1
+--MiniPosCa14Boundary
+Content-Disposition: form-data; name="mo_ta"
+
+Thu tep TXT
+--MiniPosCa14Boundary
+Content-Disposition: form-data; name="anh"; filename="ca14-test.txt"
+Content-Type: text/plain
+
+Tep van ban vo hai dung cho ca 14.
+--MiniPosCa14Boundary--
+
+# Tùy chọn ca 14: gửi ảnh JPG/PNG/WebP thật lớn hơn 2MB bằng form trình duyệt.
+# Ghi thông báo thực tế, kiểm tra sản phẩm và images/ trước/sau.
+# Khôi phục cấu hình thử. Bỏ cookie, CSRF và mật khẩu thật khỏi biến trước khi commit.
